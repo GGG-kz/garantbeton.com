@@ -53,10 +53,10 @@ export default function MaterialsPage() {
       cement: 'Цемент',
       sand: 'Песок',
       gravel: 'Щебень',
+      water: 'Вода',
       additive: 'Добавка',
-      concrete: 'Бетон',
     }
-    return labels[type]
+    return labels[type] || type
   }
 
   const getTypeColor = (type: Material['type']) => {
@@ -64,10 +64,10 @@ export default function MaterialsPage() {
       cement: 'bg-gray-100 text-gray-800',
       sand: 'bg-yellow-100 text-yellow-800',
       gravel: 'bg-stone-100 text-stone-800',
+      water: 'bg-blue-100 text-blue-800',
       additive: 'bg-purple-100 text-purple-800',
-      concrete: 'bg-blue-100 text-blue-800',
     }
-    return colors[type]
+    return colors[type] || 'bg-gray-100 text-gray-800'
   }
 
   const getUnitLabel = (unit: Material['unit']) => {
@@ -238,7 +238,7 @@ export default function MaterialsPage() {
               >
                 Все
               </button>
-                     {['cement', 'sand', 'gravel', 'additive', 'concrete'].map((type) => (
+                     {['cement', 'sand', 'gravel', 'water', 'additive'].map((type) => (
                 <button
                   key={type}
                   onClick={() => {
