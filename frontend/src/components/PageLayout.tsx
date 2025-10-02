@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 import BackButton from './BackButton'
+import UserMenu from './UserMenu'
 
 interface PageLayoutProps {
   children: ReactNode
@@ -28,13 +29,18 @@ export default function PageLayout({
 
         {/* Заголовок */}
         <div className="mb-8 animate-fade-in">
-          <div className="card-primary p-8 text-center">
+          <div className="card-primary p-8 text-center relative">
             <h1 className="text-4xl font-bold text-black">
               {title}
             </h1>
             {subtitle && (
               <p className="text-mono-600 mt-3 text-lg font-semibold">{subtitle}</p>
             )}
+            
+            {/* UserMenu в правом верхнем углу */}
+            <div className="absolute top-4 right-4">
+              <UserMenu />
+            </div>
           </div>
         </div>
 

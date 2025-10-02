@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../../stores/authStore';
 import { 
   Home, 
   FileText, 
@@ -8,7 +9,8 @@ import {
   MessageCircle, 
   Settings,
   Menu,
-  X
+  X,
+  LogOut
 } from 'lucide-react';
 
 const navigationItems = [
@@ -23,8 +25,16 @@ const navigationItems = [
 export default function MobileNavigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuthStore();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+    setIsMenuOpen(false);
+  };
 
   return (
     <>
@@ -77,6 +87,15 @@ export default function MobileNavigation() {
                   </Link>
                 );
               })}
+              
+              {/* Кнопка выхода */}
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-red-600 hover:bg-red-50"
+              >
+                <LogOut className="h-5 w-5" />
+                <span className="font-medium">Выйти</span>
+              </button>
             </nav>
           </div>
         </div>
