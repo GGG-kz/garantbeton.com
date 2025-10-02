@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { HealthModule } from './health/health.module';
 import { PerformanceModule } from './common/performance.module';
 import { PerformanceController } from './common/performance.controller';
+import { RequestsModule } from './requests/requests.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { PerformanceController } from './common/performance.controller';
     AuthModule,
     UsersModule,
     HealthModule,
+    RequestsModule,
   ],
   controllers: [PerformanceController],
 })

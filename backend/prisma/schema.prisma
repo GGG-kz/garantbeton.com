@@ -35,3 +35,40 @@ model Driver {
 
   @@map("drivers")
 }
+
+model InternalRequest {
+  id              String   @id @default(cuid())
+  title           String
+  description     String
+  category        String
+  priority        String   // 'low' | 'medium' | 'high' | 'urgent'
+  status          String   // 'pending' | 'in_progress' | 'completed' | 'cancelled'
+  userId          String
+  userName        String
+  userRole        String
+  supplierDetails String?  // JSON string
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("internal_requests")
+}
+
+model ConcreteOrder {
+  id                String   @id @default(cuid())
+  orderNumber       String   @unique
+  customerName      String
+  customerPhone     String
+  customerAddress   String
+  concreteGrade     String
+  quantity          Float
+  price             Float
+  totalAmount       Float
+  status            String   // 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled'
+  deliveryDate      DateTime
+  notes             String?
+  createdBy         String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("concrete_orders")
+}
