@@ -34,8 +34,8 @@ export class DatabaseService extends PrismaClient implements OnModuleInit {
     await this.$connect();
     this.logger.log('Database connected successfully');
 
-    // Создаем индексы для оптимизации
-    await this.createOptimizationIndexes();
+    // Временно отключаем создание индексов для продакшена
+    // await this.createOptimizationIndexes();
   }
 
   async onModuleDestroy() {
