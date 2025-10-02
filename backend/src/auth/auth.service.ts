@@ -39,6 +39,7 @@ export class AuthService {
         login,
         password_hash: passwordHash,
         role: role, // Используем строку напрямую
+        updatedAt: new Date(),
       },
     });
 
