@@ -8,7 +8,7 @@ import { CompressionMiddleware, PerformanceMiddleware } from './compression.midd
   providers: [
     CacheService,
     DatabaseService,
-    CompressionMiddleware,
+    // CompressionMiddleware, // Временно отключен из-за проблем с импортом
     PerformanceMiddleware,
   ],
   exports: [
@@ -22,7 +22,7 @@ export class PerformanceModule implements NestModule {
     consumer
       .apply(
         PerformanceMiddleware,
-        CompressionMiddleware,
+        // CompressionMiddleware, // Временно отключен из-за проблем с импортом
       )
       .forRoutes('*');
   }
