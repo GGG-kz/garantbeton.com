@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Создание PWA иконок</title>
+</head>
+<body>
+    <h1>Создание PWA иконок</h1>
+    <canvas id="canvas192" width="192" height="192" style="border: 1px solid #ccc; margin: 10px;"></canvas>
+    <canvas id="canvas512" width="512" height="512" style="border: 1px solid #ccc; margin: 10px;"></canvas>
+    <br>
+    <button onclick="createIcons()">Создать иконки</button>
+    <button onclick="downloadIcons()">Скачать иконки</button>
+
+    <script>
+        function createIcons() {
+            // Создаем иконку 192x192
+            const canvas192 = document.getElementById('canvas192');
+            const ctx192 = canvas192.getContext('2d');
+            
+            // Белый фон
+            ctx192.fillStyle = '#ffffff';
+            ctx192.fillRect(0, 0, 192, 192);
+            
+            // Черная рамка
+            ctx192.strokeStyle = '#000000';
+            ctx192.lineWidth = 4;
+            ctx192.strokeRect(8, 8, 176, 176);
+            
+            // Буква Б
+            ctx192.fillStyle = '#000000';
+            ctx192.font = 'bold 80px Arial';
+            ctx192.textAlign = 'center';
+            ctx192.fillText('Б', 96, 120);
+            
+            // Создаем иконку 512x512
+            const canvas512 = document.getElementById('canvas512');
+            const ctx512 = canvas512.getContext('2d');
+            
+            // Белый фон
+            ctx512.fillStyle = '#ffffff';
+            ctx512.fillRect(0, 0, 512, 512);
+            
+            // Черная рамка
+            ctx512.strokeStyle = '#000000';
+            ctx512.lineWidth = 12;
+            ctx512.strokeRect(20, 20, 472, 472);
+            
+            // Буква Б
+            ctx512.fillStyle = '#000000';
+            ctx512.font = 'bold 200px Arial';
+            ctx512.textAlign = 'center';
+            ctx512.fillText('Б', 256, 320);
+            
+            console.log('Иконки созданы!');
+        }
+
+        function downloadIcons() {
+            // Скачиваем 192x192
+            const canvas192 = document.getElementById('canvas192');
+            const link192 = document.createElement('a');
+            link192.download = 'pwa-192x192.png';
+            link192.href = canvas192.toDataURL();
+            link192.click();
+            
+            // Скачиваем 512x512
+            const canvas512 = document.getElementById('canvas512');
+            const link512 = document.createElement('a');
+            link512.download = 'pwa-512x512.png';
+            link512.href = canvas512.toDataURL();
+            link512.click();
+        }
+
+        // Автоматически создаем иконки при загрузке
+        window.onload = createIcons;
+    </script>
+</body>
+</html>
