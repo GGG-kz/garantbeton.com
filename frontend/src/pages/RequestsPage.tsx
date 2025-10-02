@@ -24,8 +24,8 @@ export default function RequestsPage() {
   const canAccessRequests = !!user
   
   // Определяем, является ли пользователь руководителем (видит все заявки)
-  // ТОЛЬКО директор, бухгалтер и снабженец видят все заявки
-  const isManager = user && ['director', 'accountant', 'supply'].includes(user.role)
+  // Директор, бухгалтер, снабженец и разработчик видят все заявки
+  const isManager = user && ['director', 'accountant', 'supply', 'developer'].includes(user.role)
 
   // Получаем заявки в зависимости от роли
   // Руководители видят все заявки, остальные - только свои

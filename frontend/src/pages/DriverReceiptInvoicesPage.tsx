@@ -131,8 +131,8 @@ export default function DriverReceiptInvoicesPage() {
     }
   }
 
-  // Проверяем права доступа - только для водителей
-  if (user?.role !== UserRole.DRIVER) {
+  // Проверяем права доступа - для водителей и разработчиков
+  if (user?.role !== UserRole.DRIVER && user?.role !== UserRole.DEVELOPER) {
     return (
       <PageLayout title="Доступ ограничен">
         <div className="flex items-center justify-center h-64">

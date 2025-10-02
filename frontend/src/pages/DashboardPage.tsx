@@ -146,7 +146,7 @@ export default function DashboardPage() {
   const hasRequests = requests.some(request => request.userId === user.id)
   
   // Определяем, является ли пользователь руководителем
-  const isManager = ['director', 'accountant', 'supply'].includes(user.role)
+  const isManager = ['director', 'accountant', 'supply', 'developer'].includes(user.role)
 
   const roleInfo = getRoleInfo(user.role)
   const IconComponent = roleInfo.icon

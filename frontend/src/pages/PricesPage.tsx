@@ -20,7 +20,7 @@ export default function PricesPage() {
   const [viewingPrice, setViewingPrice] = useState<Price | null>(null)
 
   // Проверяем доступ к странице
-  const allowedRoles = ['accountant', 'director', 'supply']
+  const allowedRoles = ['accountant', 'director', 'supply', 'developer']
   if (!user || !allowedRoles.includes(user.role)) {
     return (
       <div className="flex items-center justify-center min-h-screen">

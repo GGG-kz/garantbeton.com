@@ -156,7 +156,7 @@ export default function UsersPage() {
   const [statusFilter, setStatusFilter] = useState<string>('all')
 
   // Проверяем права доступа
-  if (!user || user.role !== UserRole.ADMIN) {
+  if (!user || (user.role !== UserRole.ADMIN && user.role !== UserRole.DEVELOPER)) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">

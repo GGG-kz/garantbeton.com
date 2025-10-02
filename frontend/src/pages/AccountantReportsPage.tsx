@@ -62,8 +62,8 @@ export default function AccountantReportsPage() {
     const [reportType, setReportType] = useState<'financial' | 'expenses' | 'customers'>('financial')
     const [searchTerm, setSearchTerm] = useState('')
 
-    // Проверяем права доступа - только бухгалтер и директор
-    const canAccessReports = user?.role === 'accountant' || user?.role === 'director'
+    // Проверяем права доступа - бухгалтер, директор и разработчик
+    const canAccessReports = user?.role === 'accountant' || user?.role === 'director' || user?.role === 'developer'
 
     if (!canAccessReports) {
         return (
