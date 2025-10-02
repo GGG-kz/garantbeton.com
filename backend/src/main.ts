@@ -13,7 +13,12 @@ async function bootstrap() {
 
   // Включаем CORS для фронтенда
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost:5173'],
+    origin: [
+      'http://localhost:3000', 
+      'http://localhost:5173',
+      'https://garantbeton-frontend.onrender.com',
+      'https://garantbeton-com.onrender.com'
+    ],
     credentials: true,
   });
 
