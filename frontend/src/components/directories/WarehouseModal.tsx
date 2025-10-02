@@ -14,12 +14,7 @@ export default function WarehouseModal({ isOpen, onClose, onSave, warehouse, tit
   const [formData, setFormData] = useState({
     name: '',
     address: '',
-    coordinates: '',
     phone: '',
-    materials: [] as string[],
-    scalesComPort: '',
-    scalesModel: '',
-    scalesEnabled: false,
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -29,23 +24,13 @@ export default function WarehouseModal({ isOpen, onClose, onSave, warehouse, tit
       setFormData({
         name: warehouse.name,
         address: warehouse.address,
-        coordinates: warehouse.coordinates || '',
         phone: warehouse.phone || '',
-        materials: warehouse.materials || [],
-        scalesComPort: warehouse.scalesComPort || '',
-        scalesModel: warehouse.scalesModel || '',
-        scalesEnabled: warehouse.scalesEnabled || false,
       })
     } else {
       setFormData({
         name: '',
         address: '',
-        coordinates: '',
         phone: '',
-        materials: [],
-        scalesComPort: '',
-        scalesModel: '',
-        scalesEnabled: false,
       })
     }
     setErrors({})

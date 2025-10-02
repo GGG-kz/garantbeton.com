@@ -27,11 +27,13 @@ model Driver {
   login              String   @unique
   tempPassword       String?
   hasChangedPassword Boolean  @default(false)
-  vehicleIds         String[]
-  status             String   @default("active")
+  licenseNumber      String?  // номер водительского удостоверения
+  licenseExpiry      DateTime?
+  vehicleIds         String[] // ID транспорта, которым может управлять
+  status             String   @default("active") // 'active' | 'sick' | 'vacation' | 'inactive'
   isActive           Boolean  @default(true)
   createdAt          DateTime @default(now())
-  updatedAt          DateTime
+  updatedAt          DateTime @updatedAt
 
   @@map("drivers")
 }
@@ -115,7 +117,6 @@ model Warehouse {
   address      String
   capacity     Float
   currentStock Float
-  manager      String
   phone        String
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
@@ -138,3 +139,23 @@ model Material {
 
   @@map("materials")
 }
+
+model Transport {
+  id            String   @id @default(cuid())
+  name          String   @unique
+  type          String   // 'truck' | 'mixer' | 'crane' | 'loader' | 'other'
+  model         String
+  licensePlate  String   @unique
+  capacity      Float?   // в тоннах или м3
+  year          Int?
+  vin           String?  // VIN номер
+  status        String   @default("active") // 'active' | 'maintenance' | 'inactive'
+  driverId      String?  // текущий водитель
+  notes         String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("transports")
+}
+

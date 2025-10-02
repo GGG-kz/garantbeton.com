@@ -61,6 +61,40 @@ export interface Material {
   updatedAt: string;
 }
 
+export interface Transport {
+  id: string;
+  name: string;
+  type: 'truck' | 'mixer' | 'crane' | 'loader' | 'other';
+  model: string;
+  licensePlate: string;
+  capacity?: number;
+  year?: number;
+  vin?: string;
+  status: 'active' | 'maintenance' | 'inactive';
+  driverId?: string;
+  notes?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Driver {
+  id: string;
+  name: string;
+  fullName: string;
+  phone: string;
+  login: string;
+  tempPassword?: string;
+  hasChangedPassword: boolean;
+  licenseNumber?: string;
+  licenseExpiry?: string;
+  transportIds: string[];
+  status: 'active' | 'sick' | 'vacation' | 'inactive';
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 @Controller('api/directories')
 @UseGuards(JwtAuthGuard)
 export class DirectoriesController {
@@ -173,5 +207,91 @@ export class DirectoriesController {
       }
     });
     return material;
+  }
+
+  // ===== ТРАНСПОРТ =====
+  @Get('transports')
+  async getTransports() {
+    const transports = await this.prisma.transport.findMany({
+      where: { isActive: true },
+      orderBy: { name: 'asc' }
+    });
+    return transports;
+  }
+
+  @Post('transports')
+  async createTransport(@Body() data: Omit<Transport, 'id' | 'createdAt' | 'updatedAt'>) {
+    const transport = await this.prisma.transport.create({
+      data: {
+        ...data,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    });
+    return transport;
+  }
+
+  @Put('transports/:id')
+  async updateTransport(@Param('id') id: string, @Body() data: Partial<Transport>) {
+    const transport = await this.prisma.transport.update({
+      where: { id },
+      data: {
+        ...data,
+        updatedAt: new Date()
+      }
+    });
+    return transport;
+  }
+
+  @Delete('transports/:id')
+  async deleteTransport(@Param('id') id: string) {
+    await this.prisma.transport.update({
+      where: { id },
+      data: { isActive: false, updatedAt: new Date() }
+    });
+    return { message: 'Транспорт удален' };
+  }
+
+  // ===== ВОДИТЕЛИ =====
+  @Get('drivers')
+  async getDrivers() {
+    const drivers = await this.prisma.driver.findMany({
+      where: { isActive: true },
+      orderBy: { name: 'asc' }
+    });
+    return drivers;
+  }
+
+  @Post('drivers')
+  async createDriver(@Body() data: Omit<Driver, 'id' | 'createdAt' | 'updatedAt'>) {
+    const driver = await this.prisma.driver.create({
+      data: {
+        ...data,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    });
+    return driver;
+  }
+
+  @Put('drivers/:id')
+  async updateDriver(@Param('id') id: string, @Body() data: Partial<Driver>) {
+    const driver = await this.prisma.driver.update({
+      where: { id },
+      data: {
+        ...data,
+        updatedAt: new Date()
+      }
+    });
+    return driver;
+  }
+
+  @Delete('drivers/:id')
+  async deleteDriver(@Param('id') id: string) {
+    await this.prisma.driver.update({
+      where: { id },
+      data: { isActive: false, updatedAt: new Date() }
+    });
+    return { message: 'Водитель удален' };
   }
 }
