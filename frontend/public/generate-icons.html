@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Генератор PWA иконок</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        canvas { border: 1px solid #ccc; margin: 10px; }
+        button { padding: 10px 20px; margin: 10px; background: #1f2937; color: white; border: none; cursor: pointer; }
+        button:hover { background: #374151; }
+    </style>
+</head>
+<body>
+    <h1>Генератор PWA иконок для Бетонного завода</h1>
+    
+    <canvas id="canvas192" width="192" height="192"></canvas>
+    <canvas id="canvas512" width="512" height="512"></canvas>
+    
+    <br>
+    <button onclick="download192()">Скачать 192x192</button>
+    <button onclick="download512()">Скачать 512x512</button>
+    <button onclick="createIcons()">Создать иконки</button>
+    
+    <script>
+        function createIcon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            
+            // Очищаем canvas
+            ctx.clearRect(0, 0, size, size);
+            
+            // Фон - темно-серый (#1f2937)
+            ctx.fillStyle = '#1f2937';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Белый круг
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(size/2, size/2, size*0.35, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Серый круг внутри
+            ctx.fillStyle = '#6b7280';
+            ctx.beginPath();
+            ctx.arc(size/2, size/2, size*0.25, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Текст "Б"
+            ctx.fillStyle = '#1f2937';
+            ctx.font = `bold ${size*0.4}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('Б', size/2, size/2);
+        }
+        
+        function downloadCanvas(canvas, filename) {
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+        
+        function createIcons() {
+            createIcon(document.getElementById('canvas192'), 192);
+            createIcon(document.getElementById('canvas512'), 512);
+            alert('Иконки созданы! Нажмите кнопки скачивания.');
+        }
+        
+        function download192() {
+            downloadCanvas(document.getElementById('canvas192'), 'pwa-192x192.png');
+        }
+        
+        function download512() {
+            downloadCanvas(document.getElementById('canvas512'), 'pwa-512x512.png');
+        }
+        
+        // Автоматически создаем иконки при загрузке
+        window.onload = createIcons;
+    </script>
+</body>
+</html>

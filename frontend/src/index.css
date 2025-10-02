@@ -1,0 +1,346 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@layer base {
+  * {
+    @apply border-neutral-200;
+  }
+  
+  html {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+  
+  body {
+    @apply bg-white text-black antialiased;
+    background: #ffffff;
+    min-height: 100vh;
+  }
+  
+  /* Улучшенная прокрутка */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-neutral-100;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-300 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-400;
+  }
+}
+
+@layer components {
+  /* Черно-белая система кнопок */
+  .btn {
+    @apply inline-flex items-center justify-center font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-primary {
+    @apply btn bg-black hover:bg-mono-800 text-white border-2 border-black hover:border-mono-800 focus:ring-mono-500;
+  }
+  
+  .btn-secondary {
+    @apply btn bg-white hover:bg-mono-100 text-black border-2 border-black hover:border-mono-800 focus:ring-mono-500;
+  }
+  
+  .btn-ghost {
+    @apply btn text-mono-700 hover:text-black hover:bg-mono-100 focus:ring-mono-500;
+  }
+  
+  .btn-success {
+    @apply btn bg-mono-800 hover:bg-black text-white border-2 border-mono-800 hover:border-black focus:ring-mono-500;
+  }
+  
+  .btn-warning {
+    @apply btn bg-mono-600 hover:bg-mono-700 text-white border-2 border-mono-600 hover:border-mono-700 focus:ring-mono-500;
+  }
+  
+  .btn-danger {
+    @apply btn bg-mono-900 hover:bg-black text-white border-2 border-mono-900 hover:border-black focus:ring-mono-500;
+  }
+  
+  /* Размеры кнопок */
+  .btn-xs {
+    @apply px-2 py-1 text-xs rounded-md;
+  }
+  
+  .btn-sm {
+    @apply px-3 py-1.5 text-sm rounded-md;
+  }
+  
+  .btn-md {
+    @apply px-4 py-2 text-sm rounded-lg;
+  }
+  
+  .btn-lg {
+    @apply px-6 py-3 text-base rounded-lg;
+  }
+  
+  .btn-xl {
+    @apply px-8 py-4 text-lg rounded-xl;
+  }
+  
+  /* Черно-белые поля ввода */
+  .input-field {
+    @apply w-full px-4 py-3 bg-white border-2 border-mono-300 rounded-lg text-black placeholder-mono-500 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-mono-500 focus:border-black;
+  }
+  
+  .input-field:hover {
+    @apply border-mono-400;
+  }
+  
+  .input-field:focus {
+    @apply border-black;
+  }
+  
+  /* Черно-белые карточки */
+  .card {
+    @apply bg-white rounded-lg border-2 border-mono-200 p-6 transition-all duration-300;
+  }
+  
+  .card:hover {
+    @apply border-mono-300;
+  }
+  
+  .card-compact {
+    @apply bg-white rounded-lg border-2 border-mono-200 p-4 transition-all duration-300;
+  }
+  
+  .card-compact:hover {
+    @apply border-mono-300;
+  }
+  
+  .card-interactive {
+    @apply card cursor-pointer hover:border-mono-400 active:border-mono-500;
+  }
+  
+  .card-primary {
+    @apply card bg-mono-50 border-mono-300;
+  }
+  
+  .card-primary:hover {
+    @apply border-mono-400;
+  }
+  
+  .card-dark {
+    @apply bg-black text-white border-2 border-mono-800 p-6 transition-all duration-300;
+  }
+  
+  .card-dark:hover {
+    @apply border-mono-700;
+  }
+  
+  /* Черно-белые бейджи */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold transition-all duration-300;
+  }
+  
+  .badge-primary {
+    @apply badge bg-black text-white hover:bg-mono-800;
+  }
+  
+  .badge-secondary {
+    @apply badge bg-white text-black border-2 border-black hover:bg-mono-100;
+  }
+  
+  .badge-success {
+    @apply badge bg-mono-800 text-white hover:bg-black;
+  }
+  
+  .badge-warning {
+    @apply badge bg-mono-600 text-white hover:bg-mono-700;
+  }
+  
+  .badge-danger {
+    @apply badge bg-mono-900 text-white hover:bg-black;
+  }
+  
+  .badge-neutral {
+    @apply badge bg-mono-200 text-black hover:bg-mono-300;
+  }
+  
+  /* Мобильная адаптация */
+  .mobile-touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+  
+  .mobile-input {
+    @apply text-base py-3 px-4;
+  }
+  
+  /* Анимации */
+  .animate-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+  
+  .scale-in {
+    animation: scaleIn 0.2s ease-out;
+  }
+  
+  /* Черно-белые градиенты */
+  .gradient-primary {
+    background: linear-gradient(135deg, #000000 0%, #404040 100%);
+  }
+  
+  .gradient-secondary {
+    background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+  }
+  
+  .gradient-surface {
+    background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+  }
+  
+  .gradient-background {
+    background: #ffffff;
+  }
+  
+  .gradient-dark {
+    background: linear-gradient(135deg, #262626 0%, #000000 100%);
+  }
+  
+  /* Стеклянный эффект */
+  .glass {
+    @apply bg-white/80 backdrop-blur-sm border border-white/20;
+  }
+  
+  .glass-dark {
+    @apply bg-neutral-900/80 backdrop-blur-sm border border-white/10;
+  }
+  
+  /* Черно-белые утилиты */
+  .text-primary {
+    @apply text-black;
+  }
+  
+  .text-secondary {
+    @apply text-mono-600;
+  }
+  
+  .bg-primary {
+    @apply bg-black;
+  }
+  
+  .bg-secondary {
+    @apply bg-white;
+  }
+  
+  .border-primary {
+    @apply border-black;
+  }
+  
+  .border-secondary {
+    @apply border-mono-300;
+  }
+  
+  .shadow-mono {
+    box-shadow: 0 4px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+  
+  .hover-lift {
+    @apply transition-all duration-300;
+  }
+  
+  .focus-mono {
+    @apply focus:ring-2 focus:ring-mono-500 focus:ring-offset-2;
+  }
+  
+  @media (max-width: 768px) {
+    .btn-md {
+      @apply btn-lg mobile-touch-target;
+    }
+    
+    .input-field {
+      @apply mobile-input;
+    }
+    
+    .card {
+      @apply rounded-xl p-4;
+    }
+    
+    .card-primary {
+      @apply p-4;
+    }
+  }
+}
+  /* Универсальные черно-белые карточки для всех страниц */
+  .dashboard-card {
+    @apply p-4 bg-white hover:bg-mono-50 border-2 border-mono-200 hover:border-mono-300 rounded-lg cursor-pointer transition-all duration-300;
+  }
+  
+  .dashboard-card-icon {
+    @apply h-5 w-5 text-black transition-colors duration-300;
+  }
+  
+  .dashboard-card:hover .dashboard-card-icon {
+    @apply text-mono-800;
+  }
+  
+  .dashboard-card-title {
+    @apply font-medium text-black transition-colors duration-300;
+  }
+  
+  .dashboard-card:hover .dashboard-card-title {
+    @apply text-mono-800;
+  }
+  
+  .dashboard-card-badge {
+    @apply text-xs text-mono-600 bg-mono-100 px-2 py-1 rounded transition-colors duration-300;
+  }
+  
+  .dashboard-card:hover .dashboard-card-badge {
+    @apply bg-mono-200;
+  }
+  
+  .developer-card {
+    @apply p-3 bg-mono-50 border-2 border-mono-200 rounded-lg;
+  }
+  
+  .developer-text {
+    @apply text-sm text-mono-700;
+  }
+  
+  .developer-button {
+    @apply w-full px-3 py-2 bg-black text-white rounded-lg hover:bg-mono-800 transition-colors duration-300 text-sm font-medium;
+  }
+  
+  .developer-button-secondary {
+    @apply w-full px-3 py-2 bg-white text-black border-2 border-black rounded-lg hover:bg-mono-100 transition-colors duration-300 text-sm font-medium;
+  }
+  
+  /* Универсальные стили для всех страниц */
+  .page-header {
+    @apply bg-white border-b-2 border-black;
+  }
+  
+  .page-title {
+    @apply text-xl font-bold text-black;
+  }
+  
+  .page-subtitle {
+    @apply text-mono-600;
+  }
+  
+  .stats-card {
+    @apply bg-white border-2 border-mono-200 rounded-lg p-4 hover:border-mono-300 transition-colors duration-300;
+  }
+  
+  .stats-number {
+    @apply text-2xl font-bold text-black;
+  }
+  
+  .stats-label {
+    @apply text-sm text-mono-600 font-medium;
+  }

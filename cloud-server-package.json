@@ -1,0 +1,33 @@
+{
+  "name": "scales-cloud-server",
+  "version": "1.0.0",
+  "description": "Облачный сервер для удаленного доступа к весам через мобильный интернет",
+  "main": "scales-cloud-server.js",
+  "scripts": {
+    "start": "node scales-cloud-server.js",
+    "dev": "nodemon scales-cloud-server.js",
+    "pm2": "pm2 start scales-cloud-server.js --name scales-cloud"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "ws": "^8.14.2",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "pm2": "^5.3.0"
+  },
+  "keywords": [
+    "scales",
+    "cloud",
+    "mobile-internet",
+    "websocket",
+    "remote-access"
+  ],
+  "author": "GARANT BETON",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

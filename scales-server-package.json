@@ -1,0 +1,28 @@
+{
+  "name": "scales-server",
+  "version": "1.0.0",
+  "description": "HTTP сервер для удаленного доступа к весам через COM-порт",
+  "main": "scales-http-server.js",
+  "scripts": {
+    "start": "node scales-http-server.js",
+    "dev": "nodemon scales-http-server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "serialport": "^12.0.0",
+    "@serialport/parser-readline": "^12.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "scales",
+    "serial",
+    "com-port",
+    "http-api",
+    "remote-access"
+  ],
+  "author": "GARANT BETON",
+  "license": "MIT"
+}
