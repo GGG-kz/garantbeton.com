@@ -72,3 +72,69 @@ model ConcreteOrder {
 
   @@map("concrete_orders")
 }
+
+model Counterparty {
+  id           String   @id @default(cuid())
+  name         String   @unique
+  fullName     String
+  type         String   // 'client' | 'supplier'
+  contactPerson String?
+  phone        String?
+  email        String?
+  address      String?
+  inn          String?
+  kpp          String?
+  bankAccount  String?
+  notes        String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("counterparties")
+}
+
+model ConcreteGrade {
+  id              String   @id @default(cuid())
+  name            String   @unique
+  description     String
+  strength        String
+  mobility        String
+  frostResistance String
+  waterResistance String
+  price           Float
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("concrete_grades")
+}
+
+model Warehouse {
+  id           String   @id @default(cuid())
+  name         String   @unique
+  address      String
+  capacity     Float
+  currentStock Float
+  manager      String
+  phone        String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("warehouses")
+}
+
+model Material {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  type        String   // 'cement' | 'sand' | 'gravel' | 'water' | 'additive' | 'other'
+  unit        String   // 'kg' | 'ton' | 'm3' | 'liter' | 'piece'
+  price       Float
+  supplier    String?
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("materials")
+}
