@@ -16,13 +16,13 @@ export default function CounterpartyModal({ isOpen, onClose, onSave, counterpart
     name: '',
     fullName: '',
     type: 'client' as 'client' | 'supplier',
+    organizationType: 'legal' as 'legal' | 'individual',
     contactPerson: '',
     phone: '',
     email: '',
     address: '',
-    inn: '',
-    kpp: '',
-    bankAccount: '',
+    iin: '',
+    bin: '',
     notes: '',
   })
 
