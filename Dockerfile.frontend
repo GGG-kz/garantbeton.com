@@ -28,6 +28,11 @@ COPY nginx.conf /etc/nginx/nginx.conf
 # Copy built application
 COPY --from=builder /app/dist /usr/share/nginx/html
 
+# Copy all public assets including PWA icons
+COPY --from=builder /app/public/*.png /usr/share/nginx/html/
+COPY --from=builder /app/public/*.ico /usr/share/nginx/html/
+COPY --from=builder /app/public/*.svg /usr/share/nginx/html/
+
 # Change ownership
 RUN chown -R nginx:nginx /usr/share/nginx/html
 RUN chown -R nginx:nginx /var/cache/nginx
