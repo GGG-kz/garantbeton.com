@@ -25,8 +25,9 @@
     "prisma:seed": "ts-node prisma/seed.ts",
     "prisma:seed:prod": "ts-node scripts/seed-production.ts",
     "db:clear": "ts-node scripts/clear-database.ts",
-    "db:setup:prod": "prisma generate && prisma migrate deploy && npm run prisma:seed:prod",
     "db:verify": "ts-node scripts/verify-database.ts",
+    "db:check:prod": "ts-node scripts/check-production-db.ts",
+    "db:setup:prod": "ts-node scripts/setup-production.ts",
     "db:backup": "pg_dump $DATABASE_URL > backup_$(date +%Y%m%d_%H%M%S).sql",
     "db:restore": "psql $DATABASE_URL < backup.sql"
   },
