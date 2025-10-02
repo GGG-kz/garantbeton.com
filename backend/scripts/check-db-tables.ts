@@ -47,7 +47,8 @@ async function checkTables() {
         data: {
           login: 'test_user',
           password_hash: 'test_password',
-          role: 'USER'
+          role: 'USER',
+          updatedAt: new Date()
         }
       });
       console.log('✅ Пользователь создан успешно:', testUser.id);

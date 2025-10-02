@@ -33,7 +33,7 @@ async function clearDatabase() {
       data: {
         id: developer.id,
         login: developer.login,
-        password: developer.password,
+        password_hash: developer.password,
         role: developer.role,
       },
     });
