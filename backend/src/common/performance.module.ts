@@ -1,7 +1,7 @@
 import { Module, Global, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { CacheService } from './cache.service';
 import { DatabaseService } from './database.service';
-import { CompressionMiddleware, PerformanceMiddleware } from './compression.middleware';
+import { PerformanceMiddleware } from './compression.middleware';
 
 @Global()
 @Module({

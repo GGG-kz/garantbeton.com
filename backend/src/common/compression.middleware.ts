@@ -1,17 +1,5 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import * as compression from 'compression';
 import type { Request, Response, NextFunction } from 'express';
-
-@Injectable()
-export class CompressionMiddleware implements NestMiddleware {
-  private readonly handler = compression({
-    threshold: 1024,
-  });
-
-  use(req: Request, res: Response, next: NextFunction): void {
-    this.handler(req, res, next);
-  }
-}
 
 @Injectable()
 export class PerformanceMiddleware implements NestMiddleware {

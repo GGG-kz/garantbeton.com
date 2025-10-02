@@ -12,7 +12,7 @@ export class RegisterDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(6)
-  password: string;
+  password: string; // DTO остается с password, но в сервисе преобразуется в password_hash
 
   @ApiProperty({ 
     example: UserRole.MANAGER, 
