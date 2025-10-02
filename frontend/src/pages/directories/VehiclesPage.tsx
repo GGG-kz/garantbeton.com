@@ -137,10 +137,7 @@ export default function VehiclesPage() {
           item.id === editingVehicle.id ? updatedVehicle : item
         ))
       } else {
-        const newVehicle = await vehiclesApi.create({
-          ...data,
-          isActive: true
-        })
+        const newVehicle = await vehiclesApi.create(data)
         setVehicles(prev => [...prev, newVehicle])
       }
       handleSearch(searchTerm)

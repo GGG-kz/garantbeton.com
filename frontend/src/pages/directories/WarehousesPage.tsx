@@ -79,10 +79,7 @@ export default function WarehousesPage() {
         ))
       } else {
         // Добавление нового
-        const newWarehouse = await warehousesApi.create({
-          ...data,
-          isActive: true
-        })
+        const newWarehouse = await warehousesApi.create(data)
         setWarehouses(prev => [...prev, newWarehouse])
       }
       setIsModalOpen(false)

@@ -107,10 +107,7 @@ export default function CounterpartiesPage() {
 
   const handleCreate = async (data: CreateCounterpartyRequest) => {
     try {
-      const newCounterparty = await counterpartiesApi.create({
-        ...data,
-        isActive: true
-      })
+      const newCounterparty = await counterpartiesApi.create(data)
       setCounterparties(prev => [...prev, newCounterparty])
       handleSearch(searchTerm)
       setIsModalOpen(false)

@@ -81,7 +81,7 @@ export default function ConcreteGradesPage() {
         ))
       } else {
         // Создание новой марки бетона
-        const newGrade = await concreteGradesApi.create({...data, isActive: true})
+        const newGrade = await concreteGradesApi.create(data)
         setConcreteGrades(prev => [...prev, newGrade])
       }
       setIsModalOpen(false)

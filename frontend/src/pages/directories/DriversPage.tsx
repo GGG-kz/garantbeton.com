@@ -115,10 +115,7 @@ export default function DriversPage() {
           item.id === editingDriver.id ? updatedDriver : item
         ))
       } else {
-        const newDriver = await driversApi.create({
-          ...data,
-          isActive: true
-        })
+        const newDriver = await driversApi.create(data)
         setDrivers(prev => [...prev, newDriver])
       }
       handleSearch(searchTerm)

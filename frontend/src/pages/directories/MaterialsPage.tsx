@@ -112,10 +112,7 @@ export default function MaterialsPage() {
           item.id === editingMaterial.id ? updatedMaterial : item
         ))
       } else {
-        const newMaterial = await materialsApi.create({
-          ...data,
-          isActive: true
-        })
+        const newMaterial = await materialsApi.create(data)
         setMaterials(prev => [...prev, newMaterial])
       }
       handleSearch(searchTerm)
