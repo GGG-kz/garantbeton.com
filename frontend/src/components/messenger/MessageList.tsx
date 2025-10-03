@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Message, Chat } from '../../types/messenger'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { useAuthStore } from '../../stores/authStore'
-import { Send, Paperclip, MoreVertical, Reply, Edit, Trash2, MessageCircle, Users, Link, Copy } from 'lucide-react'
+import { Send, Paperclip, MoreVertical, Reply, Edit, Trash2, MessageCircle, Users, Link, Copy, X } from 'lucide-react'
 
 interface MessageListProps {
   chat: Chat | null
@@ -18,6 +18,8 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
   const [newMessage, setNewMessage] = useState('')
   const [replyingTo, setReplyingTo] = useState<Message | null>(null)
   const [isTyping, setIsTyping] = useState(false)
+  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null)
+  const [showMessageMenu, setShowMessageMenu] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   // Фильтруем сообщения для текущего чата и сортируем по времени (старые сверху)
@@ -89,6 +91,41 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
       console.error('Ошибка при копировании ссылки:', err)
     })
   }
+
+  // Функции удаления сообщений
+  const deleteMessageForAll = (messageId: string) => {
+    // Здесь должна быть логика удаления сообщения для всех участников
+    console.log('Удалить сообщение для всех:', messageId)
+    setShowMessageMenu(false)
+    setSelectedMessage(null)
+  }
+
+  const deleteMessageForMe = (messageId: string) => {
+    // Здесь должна быть логика удаления сообщения только для текущего пользователя
+    console.log('Удалить сообщение для меня:', messageId)
+    setShowMessageMenu(false)
+    setSelectedMessage(null)
+  }
+
+  const handleMessageClick = (message: Message) => {
+    if (message.senderId === user?.id) {
+      setSelectedMessage(message)
+      setShowMessageMenu(true)
+    }
+  }
+
+  // Закрытие меню при клике вне его
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showMessageMenu && !(event.target as Element).closest('.message-menu')) {
+        setShowMessageMenu(false)
+        setSelectedMessage(null)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [showMessageMenu])
 
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp)
@@ -284,7 +321,8 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
                             : isMobile
                               ? 'bg-white text-black shadow-sm'
                               : 'bg-white border-2 border-mono-200 text-black hover:border-mono-300'
-                        }`}
+                        } ${isOwnMessage ? 'cursor-pointer hover:opacity-90' : ''}`}
+                        onClick={() => handleMessageClick(message)}
                       >
                         <p className={`${isMobile ? 'text-sm' : 'text-sm'} leading-relaxed`}>
                           {message.content}
@@ -411,6 +449,60 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
           </button>
         </form>
       </div>
+
+      {/* Message Delete Menu */}
+      {showMessageMenu && selectedMessage && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="message-menu bg-white rounded-lg p-6 max-w-sm w-full mx-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-black">Удалить сообщение</h3>
+              <button
+                onClick={() => setShowMessageMenu(false)}
+                className="p-2 hover:bg-mono-100 rounded-full transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <p className="text-mono-600 mb-6">
+              Выберите, как удалить сообщение:
+            </p>
+            
+            <div className="space-y-3">
+              <button
+                onClick={() => deleteMessageForAll(selectedMessage.id)}
+                className="w-full p-3 text-left bg-red-50 hover:bg-red-100 text-red-700 rounded-lg transition-colors flex items-center space-x-3"
+              >
+                <Trash2 className="h-5 w-5" />
+                <div>
+                  <div className="font-medium">Удалить у всех</div>
+                  <div className="text-sm opacity-75">Сообщение будет удалено для всех участников</div>
+                </div>
+              </button>
+              
+              <button
+                onClick={() => deleteMessageForMe(selectedMessage.id)}
+                className="w-full p-3 text-left bg-mono-50 hover:bg-mono-100 text-mono-700 rounded-lg transition-colors flex items-center space-x-3"
+              >
+                <X className="h-5 w-5" />
+                <div>
+                  <div className="font-medium">Удалить у меня</div>
+                  <div className="text-sm opacity-75">Сообщение будет удалено только у вас</div>
+                </div>
+              </button>
+            </div>
+            
+            <div className="mt-6 flex space-x-3">
+              <button
+                onClick={() => setShowMessageMenu(false)}
+                className="flex-1 px-4 py-2 text-mono-600 hover:bg-mono-100 rounded-lg transition-colors"
+              >
+                Отмена
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
