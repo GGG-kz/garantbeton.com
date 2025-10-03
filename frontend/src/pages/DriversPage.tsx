@@ -9,6 +9,7 @@ interface Driver {
   id: string
   fullName: string
   login: string
+  password: string
   phone: string
   isActive: boolean
   createdAt: string
@@ -21,6 +22,7 @@ const mockDrivers: Driver[] = [
     id: '1',
     fullName: 'Петров Алексей Иванович',
     login: 'alexey.petrov',
+    password: 'TempPass123',
     phone: '+7 777 123 4567',
     isActive: true,
     createdAt: '2024-01-15T10:00:00Z'
@@ -29,6 +31,7 @@ const mockDrivers: Driver[] = [
     id: '2',
     fullName: 'Сидоров Михаил Петрович',
     login: 'mikhail.sidorov',
+    password: 'TempPass123',
     phone: '+7 777 234 5678',
     isActive: true,
     createdAt: '2024-01-20T14:30:00Z'
@@ -73,7 +76,7 @@ export default function DriversPage() {
       setFormData({
         fullName: driver.fullName,
         login: driver.login,
-        password: '',
+        password: driver.password || '',
         phone: driver.phone,
         isActive: driver.isActive
       })
@@ -102,23 +105,29 @@ export default function DriversPage() {
     })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (editingDriver) {
-      // Обновление существующего водителя
-      updateDriver(editingDriver.id, {
-        fullName: formData.fullName,
-        login: formData.login,
-        phone: formData.phone,
-        isActive: formData.isActive
-      })
-    } else {
-      // Создание нового водителя
-      addDriver(formData)
+    try {
+      if (editingDriver) {
+        // Обновление существующего водителя
+        updateDriver(editingDriver.id, {
+          fullName: formData.fullName,
+          login: formData.login,
+          password: formData.password,
+          phone: formData.phone,
+          isActive: formData.isActive
+        })
+      } else {
+        // Создание нового водителя
+        await addDriver(formData)
+      }
+      
+      handleCloseModal()
+    } catch (error) {
+      console.error('Ошибка при сохранении водителя:', error)
+      alert('Ошибка при сохранении водителя. Попробуйте еще раз.')
     }
-    
-    handleCloseModal()
   }
 
   const handleDelete = (driverId: string) => {

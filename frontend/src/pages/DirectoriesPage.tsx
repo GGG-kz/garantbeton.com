@@ -59,6 +59,7 @@ interface Driver {
   id: string
   fullName: string
   login: string
+  password: string
   phone: string
   isActive: boolean
   createdAt: string
@@ -138,87 +139,92 @@ export default function DirectoriesPage() {
     }
   }
 
-  const handleSave = (data: any) => {
-    if (activeTab === 'counterparties') {
-      if (editingCounterparty) {
-        setCounterparties(prev => prev.map(c => 
-          c.id === editingCounterparty.id 
-            ? { ...c, ...data, updatedAt: new Date().toISOString() }
-            : c
-        ))
-      } else {
-        const newCounterparty: Counterparty = {
-          ...data,
-          id: Date.now().toString(),
-          isActive: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+  const handleSave = async (data: any) => {
+    try {
+      if (activeTab === 'counterparties') {
+        if (editingCounterparty) {
+          setCounterparties(prev => prev.map(c => 
+            c.id === editingCounterparty.id 
+              ? { ...c, ...data, updatedAt: new Date().toISOString() }
+              : c
+          ))
+        } else {
+          const newCounterparty: Counterparty = {
+            ...data,
+            id: Date.now().toString(),
+            isActive: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          }
+          setCounterparties(prev => [...prev, newCounterparty])
         }
-        setCounterparties(prev => [...prev, newCounterparty])
-      }
-    } else if (activeTab === 'warehouses') {
-      if (editingWarehouse) {
-        setWarehouses(prev => prev.map(w => 
-          w.id === editingWarehouse.id 
-            ? { ...w, ...data, updatedAt: new Date().toISOString() }
-            : w
-        ))
-      } else {
-        const newWarehouse: Warehouse = {
-          ...data,
-          id: Date.now().toString(),
-          isActive: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+      } else if (activeTab === 'warehouses') {
+        if (editingWarehouse) {
+          setWarehouses(prev => prev.map(w => 
+            w.id === editingWarehouse.id 
+              ? { ...w, ...data, updatedAt: new Date().toISOString() }
+              : w
+          ))
+        } else {
+          const newWarehouse: Warehouse = {
+            ...data,
+            id: Date.now().toString(),
+            isActive: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          }
+          setWarehouses(prev => [...prev, newWarehouse])
         }
-        setWarehouses(prev => [...prev, newWarehouse])
-      }
-    } else if (activeTab === 'materials') {
-      if (editingMaterial) {
-        setMaterials(prev => prev.map(m => 
-          m.id === editingMaterial.id 
-            ? { ...m, ...data, updatedAt: new Date().toISOString() }
-            : m
-        ))
-      } else {
-        const newMaterial: Material = {
-          ...data,
-          id: Date.now().toString(),
-          isActive: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+      } else if (activeTab === 'materials') {
+        if (editingMaterial) {
+          setMaterials(prev => prev.map(m => 
+            m.id === editingMaterial.id 
+              ? { ...m, ...data, updatedAt: new Date().toISOString() }
+              : m
+          ))
+        } else {
+          const newMaterial: Material = {
+            ...data,
+            id: Date.now().toString(),
+            isActive: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          }
+          setMaterials(prev => [...prev, newMaterial])
         }
-        setMaterials(prev => [...prev, newMaterial])
-      }
-    } else if (activeTab === 'concrete-grades') {
-      if (editingConcreteGrade) {
-        setConcreteGrades(prev => prev.map(cg => 
-          cg.id === editingConcreteGrade.id 
-            ? { ...cg, ...data, updatedAt: new Date().toISOString() }
-            : cg
-        ))
-      } else {
-        const newConcreteGrade: ConcreteGrade = {
-          ...data,
-          id: Date.now().toString(),
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+      } else if (activeTab === 'concrete-grades') {
+        if (editingConcreteGrade) {
+          setConcreteGrades(prev => prev.map(cg => 
+            cg.id === editingConcreteGrade.id 
+              ? { ...cg, ...data, updatedAt: new Date().toISOString() }
+              : cg
+          ))
+        } else {
+          const newConcreteGrade: ConcreteGrade = {
+            ...data,
+            id: Date.now().toString(),
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          }
+          setConcreteGrades(prev => [...prev, newConcreteGrade])
         }
-        setConcreteGrades(prev => [...prev, newConcreteGrade])
+      } else if (activeTab === 'drivers') {
+        if (editingDriver) {
+          updateDriver(editingDriver.id, data)
+        } else {
+          await addDriver(data)
+        }
       }
-    } else if (activeTab === 'drivers') {
-      if (editingDriver) {
-        updateDriver(editingDriver.id, data)
-      } else {
-        addDriver(data)
-      }
+      setIsModalOpen(false)
+      setEditingCounterparty(null)
+      setEditingWarehouse(null)
+      setEditingMaterial(null)
+      setEditingConcreteGrade(null)
+      setEditingDriver(null)
+    } catch (error) {
+      console.error('Ошибка при сохранении:', error)
+      alert('Ошибка при сохранении данных. Попробуйте еще раз.')
     }
-    setIsModalOpen(false)
-    setEditingCounterparty(null)
-    setEditingWarehouse(null)
-    setEditingMaterial(null)
-    setEditingConcreteGrade(null)
-    setEditingDriver(null)
   }
 
   const handleDelete = (id: string) => {

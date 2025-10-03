@@ -6,6 +6,7 @@ interface Driver {
   id: string
   fullName: string
   login: string
+  password: string
   phone: string
   isActive: boolean
   createdAt: string
@@ -15,7 +16,7 @@ interface Driver {
 interface DriverModalProps {
   isOpen: boolean
   onClose: () => void
-  onSave: (driver: Omit<Driver, 'id' | 'createdAt'>) => void
+  onSave: (driver: Omit<Driver, 'id' | 'createdAt' | 'userId'>) => void
   driver?: Driver | null
 }
 
@@ -33,7 +34,7 @@ export default function DriverModal({ isOpen, onClose, onSave, driver }: DriverM
       setFormData({
         fullName: driver.fullName,
         login: driver.login,
-        password: '',
+        password: driver.password || '',
         phone: driver.phone,
         isActive: driver.isActive
       })

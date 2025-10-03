@@ -6,6 +6,7 @@ export interface Driver {
   id: string
   fullName: string
   login: string
+  password: string
   phone: string
   isActive: boolean
   createdAt: string
@@ -15,7 +16,7 @@ export interface Driver {
 
 interface DriversStore {
   drivers: Driver[]
-  addDriver: (driver: Omit<Driver, 'id' | 'createdAt' | 'userId'>) => void
+  addDriver: (driver: Omit<Driver, 'id' | 'createdAt' | 'userId'>) => Promise<void>
   updateDriver: (id: string, driver: Partial<Driver>) => void
   deleteDriver: (id: string) => void
   getDriver: (id: string) => Driver | undefined
@@ -27,37 +28,63 @@ export const useDriversStore = create<DriversStore>()(
     (set, get) => ({
       drivers: [],
       
-      addDriver: (driverData) => {
-        // Создаем пользователя автоматически
-        const userId = Date.now().toString()
-        
-        // Добавляем пользователя в localStorage (эмулируем создание пользователя)
-        const existingUsers = JSON.parse(localStorage.getItem('users-storage') || '{"state":{"users":[]}}')
-        const newUser = {
-          id: userId,
-          login: driverData.login,
-          role: UserRole.DRIVER,
-          fullName: driverData.fullName,
-          email: '',
-          isActive: driverData.isActive,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+      addDriver: async (driverData) => {
+        try {
+          // Регистрируем водителя в бэкенде
+          const driverRegistrationData = {
+            id: Date.now().toString(),
+            login: driverData.login,
+            tempPassword: driverData.password || 'TempPass123',
+            fullName: driverData.fullName,
+            status: driverData.isActive ? 'active' : 'inactive'
+          }
+
+          const response = await fetch('/api/auth/driver/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(driverRegistrationData)
+          })
+
+          if (!response.ok) {
+            throw new Error('Ошибка регистрации водителя')
+          }
+
+          // Создаем пользователя автоматически
+          const userId = Date.now().toString()
+          
+          // Добавляем пользователя в localStorage (эмулируем создание пользователя)
+          const existingUsers = JSON.parse(localStorage.getItem('users-storage') || '{"state":{"users":[]}}')
+          const newUser = {
+            id: userId,
+            login: driverData.login,
+            role: UserRole.DRIVER,
+            fullName: driverData.fullName,
+            email: '',
+            isActive: driverData.isActive,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          }
+          
+          existingUsers.state.users.push(newUser)
+          localStorage.setItem('users-storage', JSON.stringify(existingUsers))
+          
+          // Создаем водителя
+          const newDriver: Driver = {
+            ...driverData,
+            id: Date.now().toString(),
+            userId: userId,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          }
+          set((state) => ({
+            drivers: [...state.drivers, newDriver]
+          }))
+        } catch (error) {
+          console.error('Ошибка при создании водителя:', error)
+          throw error
         }
-        
-        existingUsers.state.users.push(newUser)
-        localStorage.setItem('users-storage', JSON.stringify(existingUsers))
-        
-        // Создаем водителя
-        const newDriver: Driver = {
-          ...driverData,
-          id: Date.now().toString(),
-          userId: userId,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        }
-        set((state) => ({
-          drivers: [...state.drivers, newDriver]
-        }))
       },
       
       updateDriver: (id, driverData) => {
