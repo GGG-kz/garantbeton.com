@@ -9,8 +9,163 @@ import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useMobile } from '../hooks/useMobile'
 import { MessageCircle } from 'lucide-react'
 
-const mockChats: Chat[] = []
-const mockMessages: Message[] = []
+const mockChats: Chat[] = [
+  {
+    id: 'chat-1',
+    name: 'Петя',
+    type: 'private',
+    participants: [
+      { id: 'user-1', name: 'Петя', role: 'manager' },
+      { id: 'user-2', name: 'Вы', role: 'developer' }
+    ],
+    lastMessage: {
+      id: 'msg-1',
+      senderId: 'user-1',
+      senderName: 'Петя',
+      senderRole: 'manager',
+      chatId: 'chat-1',
+      chatType: 'private',
+      content: 'Привет! Как дела с проектом?',
+      messageType: 'text',
+      timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 минут назад
+      isRead: false
+    },
+    lastMessageAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+    unreadCount: 2,
+    isActive: true,
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), // 1 день назад
+    updatedAt: new Date(Date.now() - 1000 * 60 * 30).toISOString()
+  },
+  {
+    id: 'chat-2',
+    name: 'Команда разработки',
+    type: 'group',
+    participants: [
+      { id: 'user-1', name: 'Петя', role: 'manager' },
+      { id: 'user-2', name: 'Вы', role: 'developer' },
+      { id: 'user-3', name: 'Анна', role: 'developer' },
+      { id: 'user-4', name: 'Михаил', role: 'designer' }
+    ],
+    lastMessage: {
+      id: 'msg-2',
+      senderId: 'user-3',
+      senderName: 'Анна',
+      senderRole: 'developer',
+      chatId: 'chat-2',
+      chatType: 'group',
+      content: 'Готово! Все тесты прошли успешно 🎉',
+      messageType: 'text',
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2 часа назад
+      isRead: true
+    },
+    lastMessageAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+    unreadCount: 0,
+    isActive: true,
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(), // 1 неделя назад
+    updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString()
+  },
+  {
+    id: 'chat-3',
+    name: 'Мария',
+    type: 'private',
+    participants: [
+      { id: 'user-5', name: 'Мария', role: 'accountant' },
+      { id: 'user-2', name: 'Вы', role: 'developer' }
+    ],
+    lastMessage: {
+      id: 'msg-3',
+      senderId: 'user-5',
+      senderName: 'Мария',
+      senderRole: 'accountant',
+      chatId: 'chat-3',
+      chatType: 'private',
+      content: 'Документы готовы, можете забрать',
+      messageType: 'text',
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), // 1 день назад
+      isRead: true
+    },
+    lastMessageAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+    unreadCount: 0,
+    isActive: true,
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(), // 3 дня назад
+    updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString()
+  }
+]
+
+const mockMessages: Message[] = [
+  {
+    id: 'msg-1',
+    senderId: 'user-1',
+    senderName: 'Петя',
+    senderRole: 'manager',
+    chatId: 'chat-1',
+    chatType: 'private',
+    content: 'Привет! Как дела с проектом?',
+    messageType: 'text',
+    timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+    isRead: false
+  },
+  {
+    id: 'msg-2',
+    senderId: 'user-2',
+    senderName: 'Вы',
+    senderRole: 'developer',
+    chatId: 'chat-1',
+    chatType: 'private',
+    content: 'Все отлично! Функции мессенджера работают',
+    messageType: 'text',
+    timestamp: new Date(Date.now() - 1000 * 60 * 25).toISOString(),
+    isRead: true
+  },
+  {
+    id: 'msg-3',
+    senderId: 'user-1',
+    senderName: 'Петя',
+    senderRole: 'manager',
+    chatId: 'chat-1',
+    chatType: 'private',
+    content: 'Отлично! Покажи мне как это работает 😊',
+    messageType: 'text',
+    timestamp: new Date(Date.now() - 1000 * 60 * 20).toISOString(),
+    isRead: false
+  },
+  {
+    id: 'msg-4',
+    senderId: 'user-3',
+    senderName: 'Анна',
+    senderRole: 'developer',
+    chatId: 'chat-2',
+    chatType: 'group',
+    content: 'Готово! Все тесты прошли успешно 🎉',
+    messageType: 'text',
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+    isRead: true
+  },
+  {
+    id: 'msg-5',
+    senderId: 'user-4',
+    senderName: 'Михаил',
+    senderRole: 'designer',
+    chatId: 'chat-2',
+    chatType: 'group',
+    content: 'Супер! Дизайн тоже готов 👍',
+    messageType: 'text',
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 1.5).toISOString(),
+    isRead: true
+  },
+  {
+    id: 'msg-6',
+    senderId: 'user-5',
+    senderName: 'Мария',
+    senderRole: 'accountant',
+    chatId: 'chat-3',
+    chatType: 'private',
+    content: 'Документы готовы, можете забрать',
+    messageType: 'text',
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+    isRead: true
+  }
+]
 
 export default function MessengerPage() {
   const { user } = useAuthStore()
