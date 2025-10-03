@@ -53,7 +53,7 @@ export default function ExpenseInvoiceModal({
   const [orders] = useLocalStorage<ConcreteOrder[]>('orders', [])
   
   // Определяем, может ли пользователь видеть цены
-  const canViewPrices = user?.role === 'accountant' || user?.role === 'director'
+  const canViewPrices = user?.role === 'accountant' || user?.role === 'director' || user?.role === 'developer'
   
   // Генерируем номер накладной
   const generateInvoiceNumber = () => {

@@ -54,7 +54,7 @@ export default function ExpenseInvoiceForm({
   console.log('Filtered orders:', orders.filter(order => order.status === 'confirmed' || order.status === 'in_production'))
   
   // Определяем, может ли пользователь видеть цены
-  const canViewPrices = user?.role === 'accountant' || user?.role === 'director'
+  const canViewPrices = user?.role === 'accountant' || user?.role === 'director' || user?.role === 'developer'
   
   // Генерируем номер накладной
   const generateInvoiceNumber = () => {
