@@ -11,13 +11,17 @@ import {
   Settings,
   Menu,
   X,
-  LogOut
+  LogOut,
+  Receipt,
+  Package
 } from 'lucide-react';
 
 const navigationItems = [
   { path: '/dashboard', icon: Home, label: 'Главная' },
   { path: '/orders', icon: FileText, label: 'Заказы' },
   { path: '/directories', icon: Users, label: 'Справочники' },
+  { path: '/expense-invoices', icon: Receipt, label: 'Расходные накладные' },
+  { path: '/receipt-invoices', icon: Package, label: 'Приходные накладные' },
   { path: '/weighing', icon: Scale, label: 'Взвешивание' },
   { path: '/messenger', icon: MessageCircle, label: 'Сообщения' },
   { path: '/profile', icon: Settings, label: 'Профиль' }
