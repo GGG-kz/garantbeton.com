@@ -388,8 +388,8 @@ export default function DashboardPage() {
                     </div>
                   )}
 
-                  {/* Карточка расходных накладных - доступна диспетчеру, менеджеру, директору, бухгалтеру, снабженцу, оператору и разработчику */}
-                  {(user.role === UserRole.DISPATCHER || user.role === UserRole.MANAGER || user.role === UserRole.DIRECTOR || user.role === UserRole.ACCOUNTANT || user.role === UserRole.SUPPLY || user.role === UserRole.OPERATOR || user.role === UserRole.DEVELOPER) && (
+                  {/* Карточка расходных накладных - доступна всем ролям */}
+                  {(
                     <div
                       onClick={() => navigate('/expense-invoices')}
                       className="dashboard-card"
@@ -406,8 +406,8 @@ export default function DashboardPage() {
                     </div>
                   )}
 
-                  {/* Карточка приходных накладных - доступна диспетчеру, менеджеру, директору, бухгалтеру, снабженцу, оператору и разработчику */}
-                  {(user.role === UserRole.DISPATCHER || user.role === UserRole.MANAGER || user.role === UserRole.DIRECTOR || user.role === UserRole.ACCOUNTANT || user.role === UserRole.SUPPLY || user.role === UserRole.OPERATOR || user.role === UserRole.DEVELOPER) && (
+                  {/* Карточка приходных накладных - доступна всем ролям */}
+                  {(
                     <div
                       onClick={() => navigate('/receipt-invoices')}
                       className="dashboard-card"
