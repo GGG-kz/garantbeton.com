@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PageLayout from '../components/PageLayout'
 import CounterpartyModal from '../components/directories/CounterpartyModal'
 import WarehouseModal from '../components/directories/WarehouseModal'
+import MaterialModal from '../components/directories/MaterialModal'
 import { Plus, Building2, Users, Package, Truck, User, Database, X, Edit, Trash2 } from 'lucide-react'
 
 interface Counterparty {
@@ -30,13 +31,25 @@ interface Warehouse {
   updatedAt: string
 }
 
+interface Material {
+  id: string
+  name: string
+  unit: 'kg' | 'm3' | 'ton' | 'liter'
+  additionalInfo?: string
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+}
+
 export default function DirectoriesPage() {
   const [activeTab, setActiveTab] = useState<'counterparties' | 'warehouses' | 'materials' | 'concrete-grades' | 'vehicles' | 'drivers'>('counterparties')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingCounterparty, setEditingCounterparty] = useState<Counterparty | null>(null)
   const [editingWarehouse, setEditingWarehouse] = useState<Warehouse | null>(null)
+  const [editingMaterial, setEditingMaterial] = useState<Material | null>(null)
   const [counterparties, setCounterparties] = useState<Counterparty[]>([])
   const [warehouses, setWarehouses] = useState<Warehouse[]>([])
+  const [materials, setMaterials] = useState<Material[]>([])
 
   const tabs = [
     { id: 'counterparties', label: 'Контрагенты', icon: Building2 },
@@ -54,15 +67,21 @@ export default function DirectoriesPage() {
     } else if (activeTab === 'warehouses') {
       setEditingWarehouse(null)
       setIsModalOpen(true)
+    } else if (activeTab === 'materials') {
+      setEditingMaterial(null)
+      setIsModalOpen(true)
     }
   }
 
-  const handleEdit = (item: Counterparty | Warehouse) => {
+  const handleEdit = (item: Counterparty | Warehouse | Material) => {
     if (activeTab === 'counterparties') {
       setEditingCounterparty(item as Counterparty)
       setIsModalOpen(true)
     } else if (activeTab === 'warehouses') {
       setEditingWarehouse(item as Warehouse)
+      setIsModalOpen(true)
+    } else if (activeTab === 'materials') {
+      setEditingMaterial(item as Material)
       setIsModalOpen(true)
     }
   }
@@ -104,19 +123,49 @@ export default function DirectoriesPage() {
         }
         setWarehouses(prev => [...prev, newWarehouse])
       }
+    } else if (activeTab === 'materials') {
+      if (editingMaterial) {
+        // Редактирование
+        setMaterials(prev => prev.map(m => 
+          m.id === editingMaterial.id 
+            ? { ...m, ...data, updatedAt: new Date().toISOString() }
+            : m
+        ))
+      } else {
+        // Создание
+        const newMaterial: Material = {
+          ...data,
+          id: Date.now().toString(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }
+        setMaterials(prev => [...prev, newMaterial])
+      }
     }
     setIsModalOpen(false)
     setEditingCounterparty(null)
     setEditingWarehouse(null)
+    setEditingMaterial(null)
   }
 
   const handleDelete = (id: string) => {
-    const itemType = activeTab === 'counterparties' ? 'контрагента' : 'склад'
+    const itemTypes: Record<string, string> = {
+      'counterparties': 'контрагента',
+      'warehouses': 'склад',
+      'materials': 'материал',
+      'concrete-grades': 'марку бетона',
+      'vehicles': 'транспорт',
+      'drivers': 'водителя'
+    }
+    const itemType = itemTypes[activeTab] || 'элемент'
+    
     if (window.confirm(`Вы уверены, что хотите удалить этот ${itemType}?`)) {
       if (activeTab === 'counterparties') {
         setCounterparties(prev => prev.filter(c => c.id !== id))
       } else if (activeTab === 'warehouses') {
         setWarehouses(prev => prev.filter(w => w.id !== id))
+      } else if (activeTab === 'materials') {
+        setMaterials(prev => prev.filter(m => m.id !== id))
       }
     }
   }
@@ -320,6 +369,99 @@ export default function DirectoriesPage() {
     </div>
   )
 
+  const renderMaterials = () => (
+    <div className="space-y-6">
+      {/* Заголовок с кнопкой добавления */}
+      <div className="flex justify-between items-center">
+        <div className="flex items-center space-x-4">
+          <Package className="h-8 w-8 text-mono-600" />
+          <div>
+            <h2 className="text-2xl font-bold text-mono-900">Материалы</h2>
+            <p className="text-mono-600">Всего: {materials.length}</p>
+          </div>
+        </div>
+        <button 
+          onClick={handleAdd}
+          className="flex items-center space-x-2 px-4 py-2 bg-mono-600 hover:bg-mono-700 text-white rounded-lg transition-colors duration-200"
+        >
+          <Plus className="h-4 w-4" />
+          <span>Добавить материал</span>
+        </button>
+      </div>
+
+      {/* Список материалов */}
+      {materials.length === 0 ? (
+        <div className="text-center py-12">
+          <Package className="h-12 w-12 text-mono-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-mono-900 mb-2">Материалы не найдены</h3>
+          <p className="text-mono-500">Создайте первый материал для начала работы</p>
+        </div>
+      ) : (
+        <div className="bg-white rounded-lg border border-mono-200 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-mono-200">
+              <thead className="bg-mono-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
+                    Наименование
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
+                    Единица измерения
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
+                    Дополнительная информация
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-mono-500 uppercase tracking-wider">
+                    Действия
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-mono-200">
+                {materials.map((material) => (
+                  <tr key={material.id} className="hover:bg-mono-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-mono-900">{material.name}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-mono-100 text-mono-800">
+                        {material.unit === 'kg' ? 'кг' : 
+                         material.unit === 'm3' ? 'м³' : 
+                         material.unit === 'ton' ? 'т' : 'л'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm text-mono-900 max-w-xs truncate" title={material.additionalInfo}>
+                        {material.additionalInfo || '—'}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="flex justify-end space-x-2">
+                        <button 
+                          onClick={() => handleEdit(material)}
+                          className="text-mono-600 hover:text-black"
+                          title="Редактировать"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </button>
+                        <button 
+                          onClick={() => handleDelete(material.id)}
+                          className="text-mono-600 hover:text-black"
+                          title="Удалить"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+
   const renderPlaceholder = (title: string, description: string) => (
     <div className="text-center py-12">
       <div className="text-6xl mb-4">🚧</div>
@@ -361,7 +503,7 @@ export default function DirectoriesPage() {
         <div className="min-h-[400px]">
           {activeTab === 'counterparties' && renderCounterparties()}
           {activeTab === 'warehouses' && renderWarehouses()}
-          {activeTab === 'materials' && renderPlaceholder('Материалы', 'Раздел в разработке')}
+          {activeTab === 'materials' && renderMaterials()}
           {activeTab === 'concrete-grades' && renderPlaceholder('Марки бетона', 'Раздел в разработке')}
           {activeTab === 'vehicles' && renderPlaceholder('Транспорт', 'Раздел в разработке')}
           {activeTab === 'drivers' && renderPlaceholder('Водители', 'Раздел в разработке')}
@@ -386,6 +528,16 @@ export default function DirectoriesPage() {
           }}
           onSave={handleSave}
           warehouse={editingWarehouse}
+        />
+        
+        <MaterialModal
+          isOpen={isModalOpen && activeTab === 'materials'}
+          onClose={() => {
+            setIsModalOpen(false)
+            setEditingMaterial(null)
+          }}
+          onSave={handleSave}
+          material={editingMaterial}
         />
       </div>
     </PageLayout>
