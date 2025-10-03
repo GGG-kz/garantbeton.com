@@ -349,8 +349,8 @@ export default function DashboardPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div
-                    onClick={() => navigate('/directories')}
-                    className="dashboard-card"
+                    onClick={() => alert('Справочники временно недоступны. Будет добавлено завтра.')}
+                    className="dashboard-card opacity-50 cursor-not-allowed"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-2">
@@ -358,8 +358,7 @@ export default function DashboardPage() {
                         <h4 className="dashboard-card-title">Справочники</h4>
                       </div>
                       <div className="dashboard-card-badge">
-                        {stats.counterparties.total + stats.concreteGrades.total + stats.warehouses.total + 
-                         stats.materials.total + stats.drivers.total + stats.vehicles.total} записей
+                        Временно недоступно
                       </div>
                     </div>
                     <p className="text-sm text-mono-700">
