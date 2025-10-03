@@ -4,6 +4,7 @@ import CounterpartyModal from '../components/directories/CounterpartyModal'
 import WarehouseModal from '../components/directories/WarehouseModal'
 import MaterialModal from '../components/directories/MaterialModal'
 import ConcreteGradeModal from '../components/directories/ConcreteGradeModal'
+import MobileCard from '../components/directories/MobileCard'
 import { Plus, Building2, Users, Package, Truck, User, Database, X, Edit, Trash2 } from 'lucide-react'
 
 interface Counterparty {
@@ -62,7 +63,7 @@ interface ConcreteGrade {
   updatedAt: string
 }
 
-export default function DirectoriesPage() {
+export default function DirectoriesPageMobile() {
   const [activeTab, setActiveTab] = useState<'counterparties' | 'warehouses' | 'materials' | 'concrete-grades' | 'vehicles' | 'drivers'>('counterparties')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingCounterparty, setEditingCounterparty] = useState<Counterparty | null>(null)
@@ -118,17 +119,16 @@ export default function DirectoriesPage() {
   const handleSave = (data: any) => {
     if (activeTab === 'counterparties') {
       if (editingCounterparty) {
-        // Редактирование
         setCounterparties(prev => prev.map(c => 
           c.id === editingCounterparty.id 
             ? { ...c, ...data, updatedAt: new Date().toISOString() }
             : c
         ))
       } else {
-        // Создание
         const newCounterparty: Counterparty = {
           ...data,
           id: Date.now().toString(),
+          isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         }
@@ -136,17 +136,16 @@ export default function DirectoriesPage() {
       }
     } else if (activeTab === 'warehouses') {
       if (editingWarehouse) {
-        // Редактирование
         setWarehouses(prev => prev.map(w => 
           w.id === editingWarehouse.id 
             ? { ...w, ...data, updatedAt: new Date().toISOString() }
             : w
         ))
       } else {
-        // Создание
         const newWarehouse: Warehouse = {
           ...data,
           id: Date.now().toString(),
+          isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         }
@@ -154,17 +153,16 @@ export default function DirectoriesPage() {
       }
     } else if (activeTab === 'materials') {
       if (editingMaterial) {
-        // Редактирование
         setMaterials(prev => prev.map(m => 
           m.id === editingMaterial.id 
             ? { ...m, ...data, updatedAt: new Date().toISOString() }
             : m
         ))
       } else {
-        // Создание
         const newMaterial: Material = {
           ...data,
           id: Date.now().toString(),
+          isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         }
@@ -172,14 +170,12 @@ export default function DirectoriesPage() {
       }
     } else if (activeTab === 'concrete-grades') {
       if (editingConcreteGrade) {
-        // Редактирование
         setConcreteGrades(prev => prev.map(cg => 
           cg.id === editingConcreteGrade.id 
             ? { ...cg, ...data, updatedAt: new Date().toISOString() }
             : cg
         ))
       } else {
-        // Создание
         const newConcreteGrade: ConcreteGrade = {
           ...data,
           id: Date.now().toString(),
@@ -220,205 +216,6 @@ export default function DirectoriesPage() {
     }
   }
 
-  const renderCounterparties = () => (
-    <div className="space-y-6">
-      {/* Заголовок с кнопкой добавления */}
-      <div className="flex justify-between items-center">
-        <div className="flex items-center space-x-4">
-          <Building2 className="h-8 w-8 text-mono-600" />
-          <div>
-            <h2 className="text-2xl font-bold text-mono-900">Контрагенты</h2>
-            <p className="text-mono-600">Всего: {counterparties.length}</p>
-          </div>
-        </div>
-        <button 
-          onClick={handleAdd}
-          className="flex items-center space-x-2 px-4 py-2 bg-mono-600 hover:bg-mono-700 text-white rounded-lg transition-colors duration-200"
-        >
-          <Plus className="h-4 w-4" />
-          <span>Добавить контрагента</span>
-        </button>
-      </div>
-
-      {/* Список контрагентов */}
-      {counterparties.length === 0 ? (
-        <div className="text-center py-12">
-          <Building2 className="h-12 w-12 text-mono-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-mono-900 mb-2">Контрагенты не найдены</h3>
-          <p className="text-mono-500">Создайте первого контрагента для начала работы</p>
-        </div>
-      ) : (
-        <div className="bg-white rounded-lg border border-mono-200 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-mono-200">
-              <thead className="bg-mono-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Наименование
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Тип
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Организация
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Контактное лицо
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Телефон
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Действия
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-mono-200">
-                {counterparties.map((counterparty) => (
-                  <tr key={counterparty.id} className="hover:bg-mono-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-mono-900">{counterparty.name}</div>
-                      <div className="text-sm text-mono-500">
-                        {counterparty.organizationType === 'legal' ? `БИН: ${counterparty.bin}` : `ИИН: ${counterparty.iin}`}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                        counterparty.type === 'client' 
-                          ? 'bg-mono-100 text-mono-800' 
-                          : 'bg-mono-100 text-mono-800'
-                      }`}>
-                        {counterparty.type === 'client' ? 'Клиент' : 'Поставщик'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-mono-900">
-                      {counterparty.organizationType === 'legal' ? 'Юридическое лицо' : 'Физическое лицо'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-mono-900">
-                      {counterparty.contactPerson}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-mono-900">
-                      {counterparty.phone || '—'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex justify-end space-x-2">
-                        <button 
-                          onClick={() => handleEdit(counterparty)}
-                          className="text-mono-600 hover:text-black"
-                          title="Редактировать"
-                        >
-                          <Edit className="h-4 w-4" />
-                        </button>
-                        <button 
-                          onClick={() => handleDelete(counterparty.id)}
-                          className="text-mono-600 hover:text-black"
-                          title="Удалить"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-    </div>
-  )
-
-  const renderWarehouses = () => (
-    <div className="space-y-6">
-      {/* Заголовок с кнопкой добавления */}
-      <div className="flex justify-between items-center">
-        <div className="flex items-center space-x-4">
-          <Database className="h-8 w-8 text-mono-600" />
-          <div>
-            <h2 className="text-2xl font-bold text-mono-900">Склады</h2>
-            <p className="text-mono-600">Всего: {warehouses.length}</p>
-          </div>
-        </div>
-        <button 
-          onClick={handleAdd}
-          className="flex items-center space-x-2 px-4 py-2 bg-mono-600 hover:bg-mono-700 text-white rounded-lg transition-colors duration-200"
-        >
-          <Plus className="h-4 w-4" />
-          <span>Добавить склад</span>
-        </button>
-      </div>
-
-      {/* Список складов */}
-      {warehouses.length === 0 ? (
-        <div className="text-center py-12">
-          <Database className="h-12 w-12 text-mono-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-mono-900 mb-2">Склады не найдены</h3>
-          <p className="text-mono-500">Создайте первый склад для начала работы</p>
-        </div>
-      ) : (
-        <div className="bg-white rounded-lg border border-mono-200 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-mono-200">
-              <thead className="bg-mono-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Наименование
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Адрес
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Координаты
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Действия
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-mono-200">
-                {warehouses.map((warehouse) => (
-                  <tr key={warehouse.id} className="hover:bg-mono-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-mono-900">{warehouse.name}</div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm text-mono-900 max-w-xs truncate" title={warehouse.address}>
-                        {warehouse.address}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-mono-900">
-                        {warehouse.coordinates || '—'}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex justify-end space-x-2">
-                        <button 
-                          onClick={() => handleEdit(warehouse)}
-                          className="text-mono-600 hover:text-black"
-                          title="Редактировать"
-                        >
-                          <Edit className="h-4 w-4" />
-                        </button>
-                        <button 
-                          onClick={() => handleDelete(warehouse.id)}
-                          className="text-mono-600 hover:text-black"
-                          title="Удалить"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-    </div>
-  )
-
   const getTypeLabel = (type: string) => {
     const typeLabels: Record<string, string> = {
       'cement': 'Цемент',
@@ -443,23 +240,118 @@ export default function DirectoriesPage() {
     return typeColors[type] || 'bg-mono-100 text-mono-800'
   }
 
-  const renderMaterials = () => (
+  const renderCounterparties = () => (
     <div className="space-y-6">
       {/* Заголовок с кнопкой добавления */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
         <div className="flex items-center space-x-4">
-          <Package className="h-8 w-8 text-mono-600" />
+          <Building2 className="h-6 w-6 sm:h-8 sm:w-8 text-mono-600" />
           <div>
-            <h2 className="text-2xl font-bold text-mono-900">Материалы</h2>
-            <p className="text-mono-600">Всего: {materials.length}</p>
+            <h2 className="text-xl sm:text-2xl font-bold text-mono-900">Контрагенты</h2>
+            <p className="text-sm sm:text-base text-mono-600">Всего: {counterparties.length}</p>
           </div>
         </div>
         <button 
           onClick={handleAdd}
-          className="flex items-center space-x-2 px-4 py-2 bg-mono-600 hover:bg-mono-700 text-white rounded-lg transition-colors duration-200"
+          className="flex items-center justify-center space-x-2 px-4 py-2 bg-mono-600 hover:bg-mono-700 text-white rounded-lg transition-colors duration-200 w-full sm:w-auto"
         >
           <Plus className="h-4 w-4" />
-          <span>Добавить материал</span>
+          <span className="text-sm sm:text-base">Добавить контрагента</span>
+        </button>
+      </div>
+
+      {/* Список контрагентов */}
+      {counterparties.length === 0 ? (
+        <div className="text-center py-12">
+          <Building2 className="h-12 w-12 text-mono-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-mono-900 mb-2">Контрагенты не найдены</h3>
+          <p className="text-mono-500">Создайте первого контрагента для начала работы</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {counterparties.map((counterparty) => (
+            <MobileCard
+              key={counterparty.id}
+              title={counterparty.name}
+              fields={[
+                { label: 'Тип', value: counterparty.type === 'client' ? 'Клиент' : 'Поставщик' },
+                { label: 'Организация', value: counterparty.organizationType === 'legal' ? 'Юридическое лицо' : 'Физическое лицо' },
+                { label: 'ИИН/БИН', value: counterparty.organizationType === 'legal' ? `БИН: ${counterparty.bin}` : `ИИН: ${counterparty.iin}` },
+                { label: 'Контактное лицо', value: counterparty.contactPerson || '—' },
+                { label: 'Телефон', value: counterparty.phone || '—' }
+              ]}
+              onEdit={() => handleEdit(counterparty)}
+              onDelete={() => handleDelete(counterparty.id)}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+
+  const renderWarehouses = () => (
+    <div className="space-y-6">
+      {/* Заголовок с кнопкой добавления */}
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
+        <div className="flex items-center space-x-4">
+          <Database className="h-6 w-6 sm:h-8 sm:w-8 text-mono-600" />
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-mono-900">Склады</h2>
+            <p className="text-sm sm:text-base text-mono-600">Всего: {warehouses.length}</p>
+          </div>
+        </div>
+        <button 
+          onClick={handleAdd}
+          className="flex items-center justify-center space-x-2 px-4 py-2 bg-mono-600 hover:bg-mono-700 text-white rounded-lg transition-colors duration-200 w-full sm:w-auto"
+        >
+          <Plus className="h-4 w-4" />
+          <span className="text-sm sm:text-base">Добавить склад</span>
+        </button>
+      </div>
+
+      {/* Список складов */}
+      {warehouses.length === 0 ? (
+        <div className="text-center py-12">
+          <Database className="h-12 w-12 text-mono-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-mono-900 mb-2">Склады не найдены</h3>
+          <p className="text-mono-500">Создайте первый склад для начала работы</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {warehouses.map((warehouse) => (
+            <MobileCard
+              key={warehouse.id}
+              title={warehouse.name}
+              fields={[
+                { label: 'Адрес', value: warehouse.address },
+                { label: 'Координаты', value: warehouse.coordinates || '—' }
+              ]}
+              onEdit={() => handleEdit(warehouse)}
+              onDelete={() => handleDelete(warehouse.id)}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+
+  const renderMaterials = () => (
+    <div className="space-y-6">
+      {/* Заголовок с кнопкой добавления */}
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
+        <div className="flex items-center space-x-4">
+          <Package className="h-6 w-6 sm:h-8 sm:w-8 text-mono-600" />
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-mono-900">Материалы</h2>
+            <p className="text-sm sm:text-base text-mono-600">Всего: {materials.length}</p>
+          </div>
+        </div>
+        <button 
+          onClick={handleAdd}
+          className="flex items-center justify-center space-x-2 px-4 py-2 bg-mono-600 hover:bg-mono-700 text-white rounded-lg transition-colors duration-200 w-full sm:w-auto"
+        >
+          <Plus className="h-4 w-4" />
+          <span className="text-sm sm:text-base">Добавить материал</span>
         </button>
       </div>
 
@@ -471,74 +363,22 @@ export default function DirectoriesPage() {
           <p className="text-mono-500">Создайте первый материал для начала работы</p>
         </div>
       ) : (
-        <div className="bg-white rounded-lg border border-mono-200 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-mono-200">
-              <thead className="bg-mono-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Наименование
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Тип
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Единица измерения
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Дополнительная информация
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Действия
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-mono-200">
-                {materials.map((material) => (
-                  <tr key={material.id} className="hover:bg-mono-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-mono-900">{material.name}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getTypeColor(material.type)}`}>
-                        {getTypeLabel(material.type)}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-mono-100 text-mono-800">
-                        {material.unit === 'kg' ? 'кг' : 
-                         material.unit === 'm3' ? 'м³' : 
-                         material.unit === 'ton' ? 'т' : 'л'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm text-mono-900 max-w-xs truncate" title={material.additionalInfo}>
-                        {material.additionalInfo || '—'}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex justify-end space-x-2">
-                        <button 
-                          onClick={() => handleEdit(material)}
-                          className="text-mono-600 hover:text-black"
-                          title="Редактировать"
-                        >
-                          <Edit className="h-4 w-4" />
-                        </button>
-                        <button 
-                          onClick={() => handleDelete(material.id)}
-                          className="text-mono-600 hover:text-black"
-                          title="Удалить"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        <div className="space-y-3">
+          {materials.map((material) => (
+            <MobileCard
+              key={material.id}
+              title={material.name}
+              fields={[
+                { label: 'Тип', value: getTypeLabel(material.type) },
+                { label: 'Единица измерения', value: material.unit === 'kg' ? 'кг' : 
+                                                      material.unit === 'm3' ? 'м³' : 
+                                                      material.unit === 'ton' ? 'т' : 'л' },
+                { label: 'Дополнительная информация', value: material.additionalInfo || '—' }
+              ]}
+              onEdit={() => handleEdit(material)}
+              onDelete={() => handleDelete(material.id)}
+            />
+          ))}
         </div>
       )}
     </div>
@@ -547,20 +387,20 @@ export default function DirectoriesPage() {
   const renderConcreteGrades = () => (
     <div className="space-y-6">
       {/* Заголовок с кнопкой добавления */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
         <div className="flex items-center space-x-4">
-          <Package className="h-8 w-8 text-mono-600" />
+          <Package className="h-6 w-6 sm:h-8 sm:w-8 text-mono-600" />
           <div>
-            <h2 className="text-2xl font-bold text-mono-900">Марки бетона</h2>
-            <p className="text-mono-600">Всего: {concreteGrades.length}</p>
+            <h2 className="text-xl sm:text-2xl font-bold text-mono-900">Марки бетона</h2>
+            <p className="text-sm sm:text-base text-mono-600">Всего: {concreteGrades.length}</p>
           </div>
         </div>
         <button 
           onClick={handleAdd}
-          className="flex items-center space-x-2 px-4 py-2 bg-mono-600 hover:bg-mono-700 text-white rounded-lg transition-colors duration-200"
+          className="flex items-center justify-center space-x-2 px-4 py-2 bg-mono-600 hover:bg-mono-700 text-white rounded-lg transition-colors duration-200 w-full sm:w-auto"
         >
           <Plus className="h-4 w-4" />
-          <span>Добавить марку бетона</span>
+          <span className="text-sm sm:text-base">Добавить марку бетона</span>
         </button>
       </div>
 
@@ -572,79 +412,21 @@ export default function DirectoriesPage() {
           <p className="text-mono-500">Создайте первую марку бетона для начала работы</p>
         </div>
       ) : (
-        <div className="bg-white rounded-lg border border-mono-200 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-mono-200">
-              <thead className="bg-mono-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Наименование
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Описание
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Материалы
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-mono-500 uppercase tracking-wider">
-                    Действия
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-mono-200">
-                {concreteGrades.map((concreteGrade) => (
-                  <tr key={concreteGrade.id} className="hover:bg-mono-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-mono-900">{concreteGrade.name}</div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm text-mono-900 max-w-xs truncate" title={concreteGrade.description}>
-                        {concreteGrade.description || '—'}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm text-mono-900">
-                        {concreteGrade.materialConsumptions.length > 0 ? (
-                          <div className="space-y-1">
-                            {concreteGrade.materialConsumptions.slice(0, 2).map((consumption) => (
-                              <div key={consumption.id} className="text-xs">
-                                {consumption.materialName}: {consumption.consumption} {consumption.unit}
-                              </div>
-                            ))}
-                            {concreteGrade.materialConsumptions.length > 2 && (
-                              <div className="text-xs text-mono-500">
-                                +{concreteGrade.materialConsumptions.length - 2} еще
-                              </div>
-                            )}
-                          </div>
-                        ) : (
-                          <span className="text-mono-400">Нет материалов</span>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex justify-end space-x-2">
-                        <button 
-                          onClick={() => handleEdit(concreteGrade)}
-                          className="text-mono-600 hover:text-black"
-                          title="Редактировать"
-                        >
-                          <Edit className="h-4 w-4" />
-                        </button>
-                        <button 
-                          onClick={() => handleDelete(concreteGrade.id)}
-                          className="text-mono-600 hover:text-black"
-                          title="Удалить"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        <div className="space-y-3">
+          {concreteGrades.map((concreteGrade) => (
+            <MobileCard
+              key={concreteGrade.id}
+              title={concreteGrade.name}
+              fields={[
+                { label: 'Описание', value: concreteGrade.description || '—' },
+                { label: 'Материалы', value: concreteGrade.materialConsumptions.length > 0 
+                  ? `${concreteGrade.materialConsumptions.length} материалов`
+                  : 'Нет материалов' }
+              ]}
+              onEdit={() => handleEdit(concreteGrade)}
+              onDelete={() => handleDelete(concreteGrade.id)}
+            />
+          ))}
         </div>
       )}
     </div>
@@ -666,21 +448,22 @@ export default function DirectoriesPage() {
       <div className="space-y-6">
         {/* Вкладки */}
         <div className="border-b border-mono-200">
-          <nav className="-mb-px flex space-x-8">
+          <nav className="-mb-px flex space-x-2 sm:space-x-4 lg:space-x-8 overflow-x-auto">
             {tabs.map((tab) => {
               const Icon = tab.icon
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm ${
+                  className={`flex items-center space-x-1 sm:space-x-2 py-2 px-2 sm:px-4 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap ${
                     activeTab === tab.id
                       ? 'border-mono-500 text-mono-600'
                       : 'border-transparent text-mono-500 hover:text-mono-700 hover:border-mono-300'
                   }`}
                 >
-                  <Icon className="h-4 w-4" />
-                  <span>{tab.label}</span>
+                  <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline">{tab.label}</span>
+                  <span className="sm:hidden">{tab.label.split(' ')[0]}</span>
                 </button>
               )
             })}
