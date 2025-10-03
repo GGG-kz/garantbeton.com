@@ -54,13 +54,20 @@ export default function RoleSwitcher() {
     shouldShow: user && user.role === UserRole.DEVELOPER
   })
 
-  // Временно показываем для всех пользователей для отладки
+  // Проверяем, является ли пользователь разработчиком
+  const isDeveloper = user?.role === UserRole.DEVELOPER || user?.role === 'developer' as UserRole
+  
   if (!user) {
     console.log('RoleSwitcher: Not showing - no user')
     return null
   }
   
-  console.log('RoleSwitcher: Showing for user:', user.login, 'role:', user.role)
+  if (!isDeveloper) {
+    console.log('RoleSwitcher: Not showing - not a developer. User role:', user.role, 'Expected:', UserRole.DEVELOPER)
+    return null
+  }
+  
+  console.log('RoleSwitcher: Showing for user:', user.login, 'role:', user.role, 'isDeveloper:', isDeveloper)
 
   return (
     <div className="relative" ref={dropdownRef}>
