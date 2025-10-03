@@ -60,8 +60,8 @@ export default function RoleSwitcher() {
     shouldShow: user && user.role === UserRole.DEVELOPER
   })
 
-  // Проверяем, является ли пользователь разработчиком по исходной роли
-  const isDeveloper = user?.originalRole === UserRole.DEVELOPER || user?.role === UserRole.DEVELOPER
+  // Проверяем, является ли пользователь разработчиком ТОЛЬКО по исходной роли
+  const isDeveloper = user?.originalRole === UserRole.DEVELOPER
   
   console.log('RoleSwitcher debug:', {
     user: user?.login,

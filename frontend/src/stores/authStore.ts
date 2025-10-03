@@ -70,10 +70,19 @@ export const useAuthStore = create<AuthState>()(
       initializeAuth: () => {
         const state = get()
         if (state.accessToken && state.user) {
+          // Если originalRole не установлен, устанавливаем его на основе текущей роли
+          const originalRole = state.originalRole || state.user.role
+          
           set({ 
             isAuthenticated: true,
-            // Восстанавливаем originalRole если пользователь разработчик
-            originalRole: state.user.role === UserRole.DEVELOPER ? UserRole.DEVELOPER : (state.originalRole || null)
+            originalRole: originalRole
+          })
+          
+          console.log('initializeAuth debug:', {
+            user: state.user.login,
+            currentRole: state.user.role,
+            originalRole: originalRole,
+            isDeveloper: originalRole === UserRole.DEVELOPER
           })
         }
       },
@@ -81,7 +90,7 @@ export const useAuthStore = create<AuthState>()(
       switchRole: (role: UserRole) => {
         const state = get()
         // Разрешаем переключение ролей только если пользователь разработчик (по исходной роли)
-        const isDeveloper = state.user?.originalRole === UserRole.DEVELOPER || state.user?.role === UserRole.DEVELOPER
+        const isDeveloper = state.user?.originalRole === UserRole.DEVELOPER
         
         console.log('switchRole debug:', {
           currentRole: state.user?.role,
