@@ -34,6 +34,7 @@ interface Warehouse {
 interface Material {
   id: string
   name: string
+  type: 'cement' | 'sand' | 'gravel' | 'water' | 'additive' | 'other'
   unit: 'kg' | 'm3' | 'ton' | 'liter'
   additionalInfo?: string
   isActive: boolean
@@ -369,6 +370,30 @@ export default function DirectoriesPage() {
     </div>
   )
 
+  const getTypeLabel = (type: string) => {
+    const typeLabels: Record<string, string> = {
+      'cement': 'Цемент',
+      'sand': 'Песок',
+      'gravel': 'Щебень',
+      'water': 'Вода',
+      'additive': 'Химии/Добавки',
+      'other': 'Другое'
+    }
+    return typeLabels[type] || 'Неизвестно'
+  }
+
+  const getTypeColor = (type: string) => {
+    const typeColors: Record<string, string> = {
+      'cement': 'bg-mono-100 text-mono-800',
+      'sand': 'bg-mono-100 text-mono-800',
+      'gravel': 'bg-mono-100 text-mono-800',
+      'water': 'bg-mono-100 text-mono-800',
+      'additive': 'bg-mono-100 text-mono-800',
+      'other': 'bg-mono-100 text-mono-800'
+    }
+    return typeColors[type] || 'bg-mono-100 text-mono-800'
+  }
+
   const renderMaterials = () => (
     <div className="space-y-6">
       {/* Заголовок с кнопкой добавления */}
@@ -406,6 +431,9 @@ export default function DirectoriesPage() {
                     Наименование
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
+                    Тип
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
                     Единица измерения
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
@@ -421,6 +449,11 @@ export default function DirectoriesPage() {
                   <tr key={material.id} className="hover:bg-mono-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-mono-900">{material.name}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getTypeColor(material.type)}`}>
+                        {getTypeLabel(material.type)}
+                      </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-mono-100 text-mono-800">
