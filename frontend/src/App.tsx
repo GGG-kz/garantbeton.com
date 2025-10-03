@@ -9,6 +9,7 @@ import { useMobile } from './hooks/useMobile'
 // Критически важные страницы загружаем сразу
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
+import DirectoriesPage from './pages/DirectoriesPage'
 
 // Остальные страницы загружаем лениво
 const ProfilePage = lazy(() => import('./pages/ProfilePage'))
@@ -74,19 +75,7 @@ function App() {
             path="/directories" 
             element={
               <ProtectedRoute>
-                <div className="min-h-screen bg-white flex items-center justify-center">
-                  <div className="text-center p-8">
-                    <div className="text-6xl mb-4">📋</div>
-                    <h1 className="text-2xl font-bold text-mono-900 mb-4">Справочники</h1>
-                    <p className="text-mono-600 mb-6">Временно недоступны. Будет добавлено завтра.</p>
-                    <button 
-                      onClick={() => window.history.back()}
-                      className="px-4 py-2 bg-mono-600 text-white rounded-lg hover:bg-mono-700 transition-colors"
-                    >
-                      Назад
-                    </button>
-                  </div>
-                </div>
+                <DirectoriesPage />
               </ProtectedRoute>
             } 
           />
