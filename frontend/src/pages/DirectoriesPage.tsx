@@ -4,6 +4,7 @@ import CounterpartyModal from '../components/directories/CounterpartyModal'
 import WarehouseModal from '../components/directories/WarehouseModal'
 import MaterialModal from '../components/directories/MaterialModal'
 import ConcreteGradeModal from '../components/directories/ConcreteGradeModal'
+import DriverModal from '../components/directories/DriverModal'
 import MobileCard from '../components/directories/MobileCard'
 import { Plus, Building2, Users, Package, Truck, User, Database, X, Edit, Trash2 } from 'lucide-react'
 
@@ -80,6 +81,7 @@ export default function DirectoriesPage() {
   const [editingWarehouse, setEditingWarehouse] = useState<Warehouse | null>(null)
   const [editingMaterial, setEditingMaterial] = useState<Material | null>(null)
   const [editingConcreteGrade, setEditingConcreteGrade] = useState<ConcreteGrade | null>(null)
+  const [editingDriver, setEditingDriver] = useState<Driver | null>(null)
   const [counterparties, setCounterparties] = useState<Counterparty[]>([])
   const [warehouses, setWarehouses] = useState<Warehouse[]>([])
   const [materials, setMaterials] = useState<Material[]>([])
@@ -109,12 +111,12 @@ export default function DirectoriesPage() {
       setEditingConcreteGrade(null)
       setIsModalOpen(true)
     } else if (activeTab === 'drivers') {
-      // Для водителей используем отдельную страницу
-      window.location.href = '/admin/drivers'
+      setEditingDriver(null)
+      setIsModalOpen(true)
     }
   }
 
-  const handleEdit = (item: Counterparty | Warehouse | Material | ConcreteGrade) => {
+  const handleEdit = (item: Counterparty | Warehouse | Material | ConcreteGrade | Driver) => {
     if (activeTab === 'counterparties') {
       setEditingCounterparty(item as Counterparty)
       setIsModalOpen(true)
@@ -126,6 +128,9 @@ export default function DirectoriesPage() {
       setIsModalOpen(true)
     } else if (activeTab === 'concrete-grades') {
       setEditingConcreteGrade(item as ConcreteGrade)
+      setIsModalOpen(true)
+    } else if (activeTab === 'drivers') {
+      setEditingDriver(item as Driver)
       setIsModalOpen(true)
     }
   }
@@ -198,12 +203,28 @@ export default function DirectoriesPage() {
         }
         setConcreteGrades(prev => [...prev, newConcreteGrade])
       }
+    } else if (activeTab === 'drivers') {
+      if (editingDriver) {
+        setDrivers(prev => prev.map(d => 
+          d.id === editingDriver.id 
+            ? { ...d, ...data, updatedAt: new Date().toISOString() }
+            : d
+        ))
+      } else {
+        const newDriver: Driver = {
+          ...data,
+          id: Date.now().toString(),
+          createdAt: new Date().toISOString()
+        }
+        setDrivers(prev => [...prev, newDriver])
+      }
     }
     setIsModalOpen(false)
     setEditingCounterparty(null)
     setEditingWarehouse(null)
     setEditingMaterial(null)
     setEditingConcreteGrade(null)
+    setEditingDriver(null)
   }
 
   const handleDelete = (id: string) => {
@@ -226,6 +247,8 @@ export default function DirectoriesPage() {
         setMaterials(prev => prev.filter(m => m.id !== id))
       } else if (activeTab === 'concrete-grades') {
         setConcreteGrades(prev => prev.filter(cg => cg.id !== id))
+      } else if (activeTab === 'drivers') {
+        setDrivers(prev => prev.filter(d => d.id !== id))
       }
     }
   }
@@ -484,8 +507,8 @@ export default function DirectoriesPage() {
                 { label: 'Телефон', value: driver.phone },
                 { label: 'Статус', value: driver.isActive ? 'Активен' : 'Неактивен' }
               ]}
-              onEdit={() => window.location.href = '/admin/drivers'}
-              onDelete={() => window.location.href = '/admin/drivers'}
+              onEdit={() => handleEdit(driver)}
+              onDelete={() => handleDelete(driver.id)}
             />
           ))}
         </div>
@@ -581,6 +604,16 @@ export default function DirectoriesPage() {
           onSave={handleSave}
           concreteGrade={editingConcreteGrade}
           materials={materials}
+        />
+        
+        <DriverModal
+          isOpen={isModalOpen && activeTab === 'drivers'}
+          onClose={() => {
+            setIsModalOpen(false)
+            setEditingDriver(null)
+          }}
+          onSave={handleSave}
+          driver={editingDriver}
         />
       </div>
     </PageLayout>

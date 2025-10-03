@@ -402,23 +402,6 @@ export default function DashboardPage() {
                     </div>
                   )}
 
-                  {/* Карточка водителей - для администратора и диспетчера */}
-                  {(user.role === UserRole.ADMIN || user.role === UserRole.DISPATCHER) && (
-                    <div
-                      onClick={() => navigate('/admin/drivers')}
-                      className="dashboard-card"
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center space-x-2">
-                          <Truck className="dashboard-card-icon" />
-                          <h4 className="dashboard-card-title">Водители</h4>
-                        </div>
-                      </div>
-                      <p className="text-sm text-mono-700">
-                        Управление водителями: создание, редактирование, активация/деактивация
-                      </p>
-                    </div>
-                  )}
 
                   {/* Карточка отчётов - для администратора и разработчика */}
                   {(user.role === UserRole.ADMIN || user.role === UserRole.DEVELOPER) && (
