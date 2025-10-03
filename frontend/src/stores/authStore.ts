@@ -82,6 +82,15 @@ export const useAuthStore = create<AuthState>()(
         const state = get()
         // Разрешаем переключение ролей только если пользователь разработчик (по исходной роли)
         const isDeveloper = state.user?.originalRole === UserRole.DEVELOPER || state.user?.role === UserRole.DEVELOPER
+        
+        console.log('switchRole debug:', {
+          currentRole: state.user?.role,
+          originalRole: state.user?.originalRole,
+          newRole: role,
+          isDeveloper,
+          user: state.user?.login
+        })
+        
         if (state.user && isDeveloper) {
           set({
             user: {
@@ -89,6 +98,9 @@ export const useAuthStore = create<AuthState>()(
               role,
             },
           })
+          console.log('Role switched successfully to:', role)
+        } else {
+          console.log('Role switch denied - not a developer')
         }
       },
 

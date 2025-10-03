@@ -39,6 +39,12 @@ export default function RoleSwitcher() {
 
   const handleRoleChange = (roleId: string) => {
     if (user) {
+      console.log('RoleSwitcher: Attempting to switch to role:', roleId)
+      console.log('RoleSwitcher: Current user state before switch:', {
+        user: user?.login,
+        currentRole: user?.role,
+        originalRole: user?.originalRole
+      })
       const { switchRole } = useAuthStore.getState()
       switchRole(roleId as UserRole)
       setIsOpen(false)
