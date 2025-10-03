@@ -242,7 +242,7 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
   }
 
   return (
-    <div className={`flex-1 flex flex-col ${isMobile ? 'bg-mono-50' : 'bg-white'}`}>
+    <div className={`flex-1 flex flex-col ${isMobile ? 'bg-mono-50' : 'bg-white'} ${isMobile ? 'h-screen' : ''}`}>
       {/* Chat Header - скрыт на мобильной версии, так как есть в MobileMessengerLayout */}
       {!isMobile && (
         <div className="p-6 border-b border-mono-200 bg-mono-50">
@@ -302,7 +302,7 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
       )}
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className={`flex-1 overflow-y-auto p-4 space-y-4 ${isMobile ? 'pb-24' : ''}`}>
         {filteredMessages.length === 0 ? (
           <div className="text-center text-mono-500 mt-16 p-8 animate-fade-in">
             <div className="w-20 h-20 mx-auto mb-4 bg-mono-100 rounded-3xl flex items-center justify-center">
@@ -501,8 +501,8 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
         </div>
       )}
 
-      {/* Message input */}
-      <div className={`${isMobile ? 'p-4' : 'p-6'} border-t border-mono-200 ${isMobile ? 'bg-white' : 'bg-mono-50'}`}>
+      {/* Message input - fixed at bottom */}
+      <div className={`${isMobile ? 'p-4' : 'p-6'} border-t border-mono-200 ${isMobile ? 'bg-white' : 'bg-mono-50'} ${isMobile ? 'fixed bottom-0 left-0 right-0 z-10' : ''}`}>
         <form onSubmit={handleSendMessage} className={`flex items-end ${isMobile ? 'space-x-2' : 'space-x-3'}`}>
           <button
             type="button"
