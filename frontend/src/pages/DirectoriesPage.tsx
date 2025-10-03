@@ -53,6 +53,16 @@ interface MaterialConsumption {
   unit: string
 }
 
+interface Driver {
+  id: string
+  firstName: string
+  lastName: string
+  login: string
+  phone: string
+  isActive: boolean
+  createdAt: string
+}
+
 interface ConcreteGrade {
   id: string
   name: string
@@ -74,6 +84,7 @@ export default function DirectoriesPage() {
   const [warehouses, setWarehouses] = useState<Warehouse[]>([])
   const [materials, setMaterials] = useState<Material[]>([])
   const [concreteGrades, setConcreteGrades] = useState<ConcreteGrade[]>([])
+  const [drivers, setDrivers] = useState<Driver[]>([])
 
   const tabs = [
     { id: 'counterparties', label: 'Контрагенты', icon: Building2 },
@@ -97,6 +108,9 @@ export default function DirectoriesPage() {
     } else if (activeTab === 'concrete-grades') {
       setEditingConcreteGrade(null)
       setIsModalOpen(true)
+    } else if (activeTab === 'drivers') {
+      // Для водителей используем отдельную страницу
+      window.location.href = '/admin/drivers'
     }
   }
 
@@ -432,6 +446,53 @@ export default function DirectoriesPage() {
     </div>
   )
 
+  const renderDrivers = () => (
+    <div className="space-y-6">
+      {/* Заголовок с кнопкой добавления */}
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
+        <div className="flex items-center space-x-4">
+          <User className="h-6 w-6 sm:h-8 sm:w-8 text-mono-600" />
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-mono-900">Водители</h2>
+            <p className="text-sm sm:text-base text-mono-600">Всего: {drivers.length}</p>
+          </div>
+        </div>
+        <button 
+          onClick={handleAdd}
+          className="flex items-center justify-center space-x-2 px-4 py-2 bg-mono-600 hover:bg-mono-700 text-white rounded-lg transition-colors duration-200 w-full sm:w-auto"
+        >
+          <Plus className="h-4 w-4" />
+          <span className="text-sm sm:text-base">Добавить водителя</span>
+        </button>
+      </div>
+
+      {/* Список водителей */}
+      {drivers.length === 0 ? (
+        <div className="text-center py-12">
+          <User className="h-12 w-12 text-mono-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-mono-900 mb-2">Водители не найдены</h3>
+          <p className="text-mono-500">Создайте первого водителя для начала работы</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {drivers.map((driver) => (
+            <MobileCard
+              key={driver.id}
+              title={`${driver.firstName} ${driver.lastName}`}
+              fields={[
+                { label: 'Логин', value: driver.login },
+                { label: 'Телефон', value: driver.phone },
+                { label: 'Статус', value: driver.isActive ? 'Активен' : 'Неактивен' }
+              ]}
+              onEdit={() => window.location.href = '/admin/drivers'}
+              onDelete={() => window.location.href = '/admin/drivers'}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+
   const renderPlaceholder = (title: string, description: string) => (
     <div className="text-center py-12">
       <div className="text-6xl mb-4">🚧</div>
@@ -477,7 +538,7 @@ export default function DirectoriesPage() {
           {activeTab === 'materials' && renderMaterials()}
           {activeTab === 'concrete-grades' && renderConcreteGrades()}
           {activeTab === 'vehicles' && renderPlaceholder('Транспорт', 'Раздел в разработке')}
-          {activeTab === 'drivers' && renderPlaceholder('Водители', 'Раздел в разработке')}
+          {activeTab === 'drivers' && renderDrivers()}
         </div>
 
         {/* Модальные окна */}
