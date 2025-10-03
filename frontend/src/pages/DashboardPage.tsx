@@ -152,6 +152,14 @@ export default function DashboardPage() {
   const roleInfo = getRoleInfo(user.role)
   const IconComponent = roleInfo.icon
 
+  // Отладочная информация для переключателя ролей
+  console.log('DashboardPage debug:', {
+    user: user?.login,
+    role: user?.role,
+    originalRole: user?.originalRole,
+    isAuthenticated: !!user
+  })
+
   return (
     <ResponsiveLayout>
       {/* Desktop Header - скрыт на мобильных */}
@@ -180,7 +188,10 @@ export default function DashboardPage() {
                   )}
                 </button>
                 
-                <RoleSwitcher />
+                {/* ВРЕМЕННО: принудительно показываем переключатель ролей */}
+                <div className="bg-red-500 text-white px-3 py-2 rounded-lg">
+                  <RoleSwitcher />
+                </div>
                 <UserMenu />
               </div>
             </div>
