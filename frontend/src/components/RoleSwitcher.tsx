@@ -45,6 +45,14 @@ export default function RoleSwitcher() {
     }
   }
 
+  // Отладочная информация
+  console.log('RoleSwitcher debug:', {
+    user: user?.login,
+    userRole: user?.role,
+    originalRole: user?.originalRole,
+    shouldShow: user && user.originalRole && user.originalRole === UserRole.DEVELOPER
+  })
+
   if (!user || !user.originalRole || user.originalRole !== UserRole.DEVELOPER) return null
 
   return (

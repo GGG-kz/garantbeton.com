@@ -17,6 +17,13 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true })
         try {
           const response = await authApi.login(credentials)
+          const originalRole = response.user.role === UserRole.DEVELOPER ? UserRole.DEVELOPER : null
+          console.log('Login debug:', {
+            userRole: response.user.role,
+            isDeveloper: response.user.role === UserRole.DEVELOPER,
+            originalRole
+          })
+          
           set({
             user: response.user,
             accessToken: response.accessToken,
@@ -24,7 +31,7 @@ export const useAuthStore = create<AuthState>()(
             isAuthenticated: true,
             isLoading: false,
             // Сохраняем исходную роль разработчика для возможности переключения
-            originalRole: response.user.role === UserRole.DEVELOPER ? UserRole.DEVELOPER : null,
+            originalRole,
           })
         } catch (error) {
           set({ isLoading: false })
@@ -66,7 +73,7 @@ export const useAuthStore = create<AuthState>()(
           set({ 
             isAuthenticated: true,
             // Восстанавливаем originalRole если пользователь разработчик
-            originalRole: state.user.role === UserRole.DEVELOPER ? UserRole.DEVELOPER : state.originalRole
+            originalRole: state.user.role === UserRole.DEVELOPER ? UserRole.DEVELOPER : (state.originalRole || null)
           })
         }
       },
