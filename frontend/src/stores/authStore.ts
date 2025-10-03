@@ -20,8 +20,10 @@ export const useAuthStore = create<AuthState>()(
           const originalRole = response.user.role === UserRole.DEVELOPER ? UserRole.DEVELOPER : null
           console.log('Login debug:', {
             userRole: response.user.role,
+            userRoleEnum: UserRole.DEVELOPER,
             isDeveloper: response.user.role === UserRole.DEVELOPER,
-            originalRole
+            originalRole,
+            comparison: response.user.role === UserRole.DEVELOPER
           })
           
           set({
@@ -108,8 +110,10 @@ export const useAuthStore = create<AuthState>()(
               ...state.user,
               role,
             },
+            // Сохраняем originalRole при переключении
+            originalRole: state.originalRole
           })
-          console.log('Role switched successfully to:', role)
+          console.log('Role switched successfully to:', role, 'originalRole preserved:', state.originalRole)
         } else {
           console.log('Role switch denied - not a developer')
         }
