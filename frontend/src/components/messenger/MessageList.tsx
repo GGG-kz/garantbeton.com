@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Message, Chat } from '../../types/messenger'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { useAuthStore } from '../../stores/authStore'
-import { Send, Paperclip, MoreVertical, Reply, Edit, Trash2, MessageCircle, Users } from 'lucide-react'
+import { Send, Paperclip, MoreVertical, Reply, Edit, Trash2, MessageCircle, Users, Link, Copy } from 'lucide-react'
 
 interface MessageListProps {
   chat: Chat | null
@@ -29,6 +29,32 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
     scrollToBottom()
   }, [chatMessages])
 
+  // Обработка якорных ссылок на сообщения
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash
+      if (hash.startsWith('#message-')) {
+        const messageId = hash.replace('#message-', '')
+        const messageElement = document.getElementById(`message-${messageId}`)
+        if (messageElement) {
+          messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          // Подсветка сообщения
+          messageElement.style.backgroundColor = 'rgba(59, 130, 246, 0.1)'
+          setTimeout(() => {
+            messageElement.style.backgroundColor = ''
+          }, 3000)
+        }
+      }
+    }
+
+    // Проверяем хеш при загрузке
+    handleHashChange()
+
+    // Слушаем изменения хеша
+    window.addEventListener('hashchange', handleHashChange)
+    return () => window.removeEventListener('hashchange', handleHashChange)
+  }, [])
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
@@ -52,6 +78,17 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
       setIsTyping(false)
     }
   }, [newMessage])
+
+  // Функция для копирования ссылки на сообщение
+  const copyMessageLink = (messageId: string) => {
+    const messageLink = `${window.location.origin}${window.location.pathname}#message-${messageId}`
+    navigator.clipboard.writeText(messageLink).then(() => {
+      // Можно добавить уведомление об успешном копировании
+      console.log('Ссылка на сообщение скопирована:', messageLink)
+    }).catch(err => {
+      console.error('Ошибка при копировании ссылки:', err)
+    })
+  }
 
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp)
@@ -135,11 +172,12 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
         <div className="p-6 border-b border-mono-200 bg-mono-50">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            {/* Mobile back button */}
+            {/* Back button for desktop */}
             {onBackToChats && (
               <button
                 onClick={onBackToChats}
-                className="md:hidden p-2.5 text-mono-500 hover:text-mono-700 hover:bg-mono-100 rounded-xl mobile-touch-target transition-all duration-200 hover:scale-105 active:scale-95"
+                className="p-2.5 text-mono-500 hover:text-mono-700 hover:bg-mono-100 rounded-xl mobile-touch-target transition-all duration-200 hover:scale-105 active:scale-95"
+                title="Назад к списку чатов"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -191,7 +229,7 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
             const showAvatar = shouldShowAvatar(message, prevMessage)
 
             return (
-              <div key={message.id}>
+              <div key={message.id} id={`message-${message.id}`}>
                 {/* Date separator */}
                 {showDate && (
                   <div className="flex justify-center my-6">
@@ -248,7 +286,23 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
                               : 'bg-white border-2 border-mono-200 text-black hover:border-mono-300'
                         }`}
                       >
-                        <p className={`${isMobile ? 'text-sm' : 'text-sm'} leading-relaxed`}>{message.content}</p>
+                        <p className={`${isMobile ? 'text-sm' : 'text-sm'} leading-relaxed`}>
+                          {message.content}
+                        </p>
+                        
+                        {/* Message ID and copy link button */}
+                        <div className="mt-1 flex items-center justify-between">
+                          <div className="text-xs opacity-50">
+                            ID: {message.id}
+                          </div>
+                          <button
+                            onClick={() => copyMessageLink(message.id)}
+                            className="p-1 hover:bg-black hover:bg-opacity-10 rounded transition-colors"
+                            title="Скопировать ссылку на сообщение"
+                          >
+                            <Link className="h-3 w-3" />
+                          </button>
+                        </div>
                       </div>
 
                       {/* Timestamp and read status */}

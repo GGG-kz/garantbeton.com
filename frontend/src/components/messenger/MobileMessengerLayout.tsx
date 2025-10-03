@@ -41,6 +41,7 @@ export default function MobileMessengerLayout({
             <button
               onClick={handleBackToChats}
               className="p-2 hover:bg-mono-700 rounded-full transition-colors"
+              title="Назад к списку чатов"
             >
               <ArrowLeft className="h-5 w-5" />
             </button>
