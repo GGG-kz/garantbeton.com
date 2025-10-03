@@ -418,7 +418,7 @@ export default function DashboardPage() {
                   )}
 
                   {/* Карточка цен - для бухгалтера, директора, снабженца и разработчика */}
-                  {(user.role === 'accountant' || user.role === 'director' || user.role === 'supply' || user.role === UserRole.DEVELOPER) && (
+                  {(user.role === UserRole.ACCOUNTANT || user.role === UserRole.DIRECTOR || user.role === UserRole.SUPPLY || user.role === UserRole.DEVELOPER) && (
                     <div
                       onClick={() => navigate('/prices')}
                       className="dashboard-card"
@@ -436,7 +436,7 @@ export default function DashboardPage() {
                   )}
 
                   {/* Карточка управления ценами услуг - доступна менеджеру, директору, бухгалтеру и разработчику */}
-                  {(user.role === 'manager' || user.role === 'director' || user.role === 'accountant' || user.role === UserRole.DEVELOPER) && (
+                  {(user.role === UserRole.MANAGER || user.role === UserRole.DIRECTOR || user.role === UserRole.ACCOUNTANT || user.role === UserRole.DEVELOPER) && (
                     <div
                       onClick={() => navigate('/service-prices')}
                       className="dashboard-card"

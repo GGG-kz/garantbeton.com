@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { ExpenseInvoice, CreateInvoiceRequest } from '../types/invoice'
 import { useAuthStore } from '../stores/authStore'
+import { UserRole } from '../types/auth'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import ViewToggle from '../components/ViewToggle'
 import ExpenseInvoiceModal from '../components/invoice/ExpenseInvoiceModal'
@@ -221,7 +222,7 @@ export default function ExpenseInvoicesPage() {
   }
 
   // Проверяем доступ диспетчера
-  if (user?.role !== 'dispatcher') {
+  if (user?.role !== UserRole.DISPATCHER) {
     return (
       <PageLayout title="Расходные накладные">
         <div className="flex items-center justify-center h-64">

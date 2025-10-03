@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../stores/authStore'
+import { UserRole } from '../types/auth'
 import { User, Settings, LogOut, ChevronDown } from 'lucide-react'
 
 export default function UserMenu() {
@@ -14,7 +15,7 @@ export default function UserMenu() {
 
   const handleProfile = () => {
     // Для водителей перенаправляем в личный кабинет водителя
-    if (user.role === 'driver') {
+    if (user.role === UserRole.DRIVER) {
       navigate('/driver-profile')
     } else {
       navigate('/profile')

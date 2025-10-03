@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useAuthStore } from '../stores/authStore'
+import { UserRole } from '../types/auth'
 import PageLayout from '../components/PageLayout'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import {
@@ -63,7 +64,7 @@ export default function AccountantReportsPage() {
     const [searchTerm, setSearchTerm] = useState('')
 
     // Проверяем права доступа - бухгалтер, директор и разработчик
-    const canAccessReports = user?.role === 'accountant' || user?.role === 'director' || user?.role === 'developer'
+    const canAccessReports = user?.role === UserRole.ACCOUNTANT || user?.role === UserRole.DIRECTOR || user?.role === UserRole.DEVELOPER
 
     if (!canAccessReports) {
         return (

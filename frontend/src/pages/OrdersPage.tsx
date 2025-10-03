@@ -5,6 +5,7 @@ import ViewToggle from '../components/ViewToggle'
 import { ConcreteOrder, CreateOrderRequest, UpdateOrderRequest, AdditionalService, ORDER_STATUSES, ORDER_PRIORITIES, ORDER_STATUS_COLORS, ORDER_PRIORITY_COLORS, EMPTY_ADDITIONAL_SERVICES } from '../types/orders'
 import { Counterparty, ConcreteGrade, Warehouse } from '../types/directories'
 import { useAuthStore } from '../stores/authStore'
+import { UserRole } from '../types/auth'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { 
   Plus, 
@@ -68,11 +69,11 @@ export default function OrdersPage() {
   const [viewingOrder, setViewingOrder] = useState<ConcreteOrder | null>(null)
 
   // Определяем, может ли пользователь видеть цены
-  const canViewPrice = user?.role === 'director' || user?.role === 'accountant' || user?.role === 'manager'
+  const canViewPrice = user?.role === UserRole.DIRECTOR || user?.role === UserRole.ACCOUNTANT || user?.role === UserRole.MANAGER
 
   const filteredOrders = orders.filter(order => {
     // Менеджеры видят только свои заявки, остальные роли видят все заявки
-    const isManagerRestricted = user?.role === 'manager' && order.createdBy !== user?.id
+    const isManagerRestricted = user?.role === UserRole.MANAGER && order.createdBy !== user?.id
     if (isManagerRestricted) return false
     
     const matchesSearch = order.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -112,7 +113,7 @@ export default function OrdersPage() {
 
   const handleEdit = (order: ConcreteOrder) => {
     // Проверяем права на редактирование - только директор и бухгалтер
-    const canEdit = user?.role === 'director' || user?.role === 'accountant'
+    const canEdit = user?.role === UserRole.DIRECTOR || user?.role === UserRole.ACCOUNTANT
     
     if (!canEdit) {
       alert('У вас нет прав для редактирования заказов. Редактировать могут только директор и бухгалтер.')
@@ -133,7 +134,7 @@ export default function OrdersPage() {
     if (!order) return
     
     // Проверяем права на удаление - только директор и бухгалтер
-    const canDelete = user?.role === 'director' || user?.role === 'accountant'
+    const canDelete = user?.role === UserRole.DIRECTOR || user?.role === UserRole.ACCOUNTANT
     
     if (!canDelete) {
       alert('У вас нет прав для удаления заказов. Удалять могут только директор и бухгалтер.')
@@ -182,7 +183,7 @@ export default function OrdersPage() {
   const handleSave = (data: CreateOrderRequest | UpdateOrderRequest) => {
     if (editingOrder) {
       // Проверяем права на редактирование существующего заказа - только директор и бухгалтер
-      const canEdit = user?.role === 'director' || user?.role === 'accountant'
+      const canEdit = user?.role === UserRole.DIRECTOR || user?.role === UserRole.ACCOUNTANT
       
       if (!canEdit) {
         alert('У вас нет прав для редактирования заказов. Редактировать могут только директор и бухгалтер.')
@@ -208,7 +209,7 @@ export default function OrdersPage() {
       
       // Проверяем, нуждается ли заказ в автоматическом подтверждении
       // Автоматическое подтверждение работает только для VIP контрагентов И только если заявку создает не менеджер
-      const shouldAutoApprove = customer?.autoApprove === true && user?.role !== 'manager'
+      const shouldAutoApprove = customer?.autoApprove === true && user?.role !== UserRole.MANAGER
       
       const newOrder: ConcreteOrder = {
         id: Date.now().toString(),
@@ -420,7 +421,7 @@ export default function OrdersPage() {
                           >
                             <Eye className="h-4 w-4" />
                           </button>
-                          {user?.role === 'director' && order.status === 'pending' && (
+                          {user?.role === UserRole.DIRECTOR && order.status === 'pending' && (
                             <button 
                               onClick={() => handleApprove(order)}
                               className="text-mono-600 hover:text-black"
@@ -429,7 +430,7 @@ export default function OrdersPage() {
                               <CheckCircle className="h-4 w-4" />
                             </button>
                           )}
-                          {user?.role === 'director' && order.status === 'pending' && (
+                          {user?.role === UserRole.DIRECTOR && order.status === 'pending' && (
                             <button 
                               onClick={() => handleSetPriority(order)}
                               className="text-orange-600 hover:text-orange-900"
@@ -438,7 +439,7 @@ export default function OrdersPage() {
                               <AlertCircle className="h-4 w-4" />
                             </button>
                           )}
-                          {(user?.role === 'director' || user?.role === 'accountant') && order.status === 'pending' && (
+                          {(user?.role === UserRole.DIRECTOR || user?.role === UserRole.ACCOUNTANT) && order.status === 'pending' && (
                             <button 
                               onClick={() => handleEdit(order)}
                               className="text-indigo-600 hover:text-indigo-900"
@@ -447,7 +448,7 @@ export default function OrdersPage() {
                               <Edit className="h-4 w-4" />
                             </button>
                           )}
-                          {(user?.role === 'director' || user?.role === 'accountant') && order.status === 'pending' && (
+                          {(user?.role === UserRole.DIRECTOR || user?.role === UserRole.ACCOUNTANT) && order.status === 'pending' && (
                             <button 
                               onClick={() => handleDelete(order.id)}
                               className="text-mono-600 hover:text-black"
@@ -478,7 +479,7 @@ export default function OrdersPage() {
                   >
                     <Eye className="h-4 w-4" />
                   </button>
-                  {user?.role === 'director' && order.status === 'pending' && (
+                  {user?.role === UserRole.DIRECTOR && order.status === 'pending' && (
                     <button 
                       onClick={() => handleApprove(order)}
                       className="p-1 text-mono-600 hover:text-mono-900 rounded hover:bg-mono-50 transition-colors duration-200"
@@ -487,7 +488,7 @@ export default function OrdersPage() {
                       <CheckCircle className="h-4 w-4" />
                     </button>
                   )}
-                  {user?.role === 'director' && order.status === 'pending' && (
+                  {user?.role === UserRole.DIRECTOR && order.status === 'pending' && (
                     <button 
                       onClick={() => handleSetPriority(order)}
                       className="p-1 text-orange-600 hover:text-orange-900 rounded hover:bg-orange-50 transition-colors duration-200"
@@ -496,7 +497,7 @@ export default function OrdersPage() {
                       <AlertCircle className="h-4 w-4" />
                     </button>
                   )}
-                  {(user?.role === 'director' || user?.role === 'accountant') && order.status === 'pending' && (
+                  {(user?.role === UserRole.DIRECTOR || user?.role === UserRole.ACCOUNTANT) && order.status === 'pending' && (
                     <button 
                       onClick={() => handleEdit(order)}
                       className="p-1 text-indigo-600 hover:text-indigo-900 rounded hover:bg-indigo-50 transition-colors duration-200"
@@ -505,7 +506,7 @@ export default function OrdersPage() {
                       <Edit className="h-4 w-4" />
                     </button>
                   )}
-                  {(user?.role === 'director' || user?.role === 'accountant') && order.status === 'pending' && (
+                  {(user?.role === UserRole.DIRECTOR || user?.role === UserRole.ACCOUNTANT) && order.status === 'pending' && (
                     <button 
                       onClick={() => handleDelete(order.id)}
                       className="p-1 text-mono-600 hover:text-black rounded hover:bg-mono-50 transition-colors duration-200"

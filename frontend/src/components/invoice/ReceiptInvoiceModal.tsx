@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { ReceiptInvoice, CreateReceiptInvoiceRequest, ReceiptInvoiceItem } from '../../types/receiptInvoice'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { useAuthStore } from '../../stores/authStore'
+import { UserRole } from '../../types/auth'
 import { Truck, Weight, Plus, Trash2, Package, Building2, User } from 'lucide-react'
 import Modal from '../Modal'
 import ScalesWidget from '../ScalesWidget'
@@ -165,7 +166,7 @@ export default function ReceiptInvoiceModal({
 
   // Получение номера машины водителя
   const getDriverVehicleNumber = (): string => {
-    if (user?.role !== 'driver') return ''
+    if (user?.role !== UserRole.DRIVER) return ''
     
     // Найдем водителя по логину
     const driver = drivers.find(d => d.login === user.login)

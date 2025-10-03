@@ -55,7 +55,7 @@ export default function RoleSwitcher() {
   })
 
   // Проверяем, является ли пользователь разработчиком
-  const isDeveloper = user?.role === UserRole.DEVELOPER || user?.role === 'developer' as UserRole
+  const isDeveloper = user?.role === UserRole.DEVELOPER
   
   if (!user) {
     console.log('RoleSwitcher: Not showing - no user')

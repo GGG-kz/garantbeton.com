@@ -3,6 +3,7 @@ import { ExpenseInvoice, CreateInvoiceRequest, InvoiceItem, DeliveryInfo, Vehicl
 import { Counterparty, Driver, Vehicle, Warehouse, Material, ConcreteGrade } from '../../types/directories'
 import { ConcreteOrder } from '../../types/orders'
 import { useAuthStore } from '../../stores/authStore'
+import { UserRole } from '../../types/auth'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { 
   FileText, 
@@ -54,7 +55,7 @@ export default function ExpenseInvoiceForm({
   console.log('Filtered orders:', orders.filter(order => order.status === 'confirmed' || order.status === 'in_production'))
   
   // Определяем, может ли пользователь видеть цены
-  const canViewPrices = user?.role === 'accountant' || user?.role === 'director' || user?.role === 'developer'
+  const canViewPrices = user?.role === UserRole.ACCOUNTANT || user?.role === UserRole.DIRECTOR || user?.role === UserRole.DEVELOPER
   
   // Генерируем номер накладной
   const generateInvoiceNumber = () => {

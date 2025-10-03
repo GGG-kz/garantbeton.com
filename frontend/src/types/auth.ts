@@ -1,15 +1,15 @@
 export enum UserRole {
-  DEVELOPER = 'developer',
-  ADMIN = 'admin',
-  MANAGER = 'manager',
-  DISPATCHER = 'dispatcher',
-  DRIVER = 'driver',
-  SUPPLY = 'supply',
-  ACCOUNTANT = 'accountant',
-  DIRECTOR = 'director',
-  OPERATOR = 'operator',
-  COOK = 'cook',
-  USER = 'user',
+  DEVELOPER = 'DEVELOPER',
+  ADMIN = 'ADMIN',
+  MANAGER = 'MANAGER',
+  DISPATCHER = 'DISPATCHER',
+  DRIVER = 'DRIVER',
+  SUPPLY = 'SUPPLY',
+  ACCOUNTANT = 'ACCOUNTANT',
+  DIRECTOR = 'DIRECTOR',
+  OPERATOR = 'OPERATOR',
+  COOK = 'COOK',
+  USER = 'USER',
 }
 
 export interface User {

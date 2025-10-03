@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuthStore } from '../stores/authStore'
+import { UserRole } from '../types/auth'
 import { Driver } from '../types/directories'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import PageLayout from '../components/PageLayout'
@@ -62,7 +63,7 @@ export default function DriverProfilePage() {
     return statusConfig[status]
   }
 
-  if (!user || user.role !== 'driver') {
+  if (!user || user.role !== UserRole.DRIVER) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">

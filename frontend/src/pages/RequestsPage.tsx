@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuthStore } from '../stores/authStore'
+import { UserRole } from '../types/auth'
 import PageLayout from '../components/PageLayout'
 import CreateRequestModal from '../components/requests/CreateRequestModal'
 import UserRequestsList from '../components/requests/UserRequestsList'
@@ -8,7 +9,6 @@ import ViewToggle from '../components/ViewToggle'
 import { InternalRequest, CreateRequestRequest } from '../types/requests'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { Plus, FileText, Users, CheckCircle } from 'lucide-react'
-import { UserRole } from '../types/auth'
 
 // Пустой массив - данные теперь хранятся только в localStorage
 const emptyRequests: InternalRequest[] = []
@@ -25,7 +25,7 @@ export default function RequestsPage() {
   
   // Определяем, является ли пользователь руководителем (видит все заявки)
   // Директор, бухгалтер, снабженец и разработчик видят все заявки
-  const isManager = user && ['director', 'accountant', 'supply', 'developer'].includes(user.role)
+  const isManager = user && [UserRole.DIRECTOR, UserRole.ACCOUNTANT, UserRole.SUPPLY, UserRole.DEVELOPER].includes(user.role)
 
   // Получаем заявки в зависимости от роли
   // Руководители видят все заявки, остальные - только свои
@@ -271,13 +271,13 @@ export default function RequestsPage() {
               Управление заявками
             </h4>
             <div className="text-sm text-mono-700 space-y-2">
-              {user.role === 'supply' && (
+              {user.role === UserRole.SUPPLY && (
                 <p>Как <strong>снабженец</strong>, вы можете <strong>указывать поставщика и цену</strong> для заявок, а также <strong>выполнять заказы</strong> после их оплаты.</p>
               )}
-              {user.role === 'director' && (
+              {user.role === UserRole.DIRECTOR && (
                 <p>Как <strong>директор</strong>, вы можете <strong>одобрять или отклонять</strong> заявки после указания цены снабженцем.</p>
               )}
-              {user.role === 'accountant' && (
+              {user.role === UserRole.ACCOUNTANT && (
                 <p>Как <strong>бухгалтер</strong>, вы можете <strong>оплачивать заказы</strong> после их одобрения директором.</p>
               )}
               <p>Используйте фильтры для быстрого поиска нужных заявок.</p>
