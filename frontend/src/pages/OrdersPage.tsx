@@ -33,8 +33,8 @@ const mockWarehouses: Warehouse[] = []
 export default function OrdersPage() {
   const { user } = useAuthStore()
   
-  // Проверяем права доступа - менеджер, директор, диспетчер, бухгалтер и разработчик
-  const canAccessOrders = user?.role === 'manager' || user?.role === 'director' || user?.role === 'dispatcher' || user?.role === 'accountant' || user?.role === 'developer'
+  // Проверяем права доступа - доступно всем ролям
+  const canAccessOrders = true
   
   if (!canAccessOrders) {
     return (
