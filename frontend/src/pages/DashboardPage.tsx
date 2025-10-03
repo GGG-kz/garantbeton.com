@@ -188,10 +188,7 @@ export default function DashboardPage() {
                   )}
                 </button>
                 
-                {/* ВРЕМЕННО: принудительно показываем переключатель ролей */}
-                <div className="bg-red-500 text-white px-3 py-2 rounded-lg">
-                  <RoleSwitcher />
-                </div>
+                <RoleSwitcher />
                 <UserMenu />
               </div>
             </div>
