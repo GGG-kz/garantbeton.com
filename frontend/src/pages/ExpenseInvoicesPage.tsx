@@ -421,7 +421,7 @@ export default function ExpenseInvoicesPage() {
                   </span>
                   <button
                     onClick={handleBulkDelete}
-                    className="flex items-center px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                    className="flex items-center px-3 py-2 bg-mono-600 text-white rounded-lg hover:bg-mono-700"
                   >
                     <Trash2 className="h-4 w-4 mr-2" />
                     Удалить
@@ -680,7 +680,7 @@ export default function ExpenseInvoicesPage() {
                         </button>
                         <button
                           onClick={() => handlePrint(invoice)}
-                          className="p-0.5 text-mono-600 hover:text-green-900 hover:bg-mono-100 rounded"
+                          className="p-0.5 text-mono-600 hover:text-mono-900 hover:bg-mono-100 rounded"
                           title="Печать"
                         >
                           <Printer className="h-3 w-3" />
@@ -694,7 +694,7 @@ export default function ExpenseInvoicesPage() {
                         </button>
                         <button
                           onClick={() => handleDelete(invoice.id)}
-                          className="p-0.5 text-mono-600 hover:text-red-900 hover:bg-red-100 rounded"
+                          className="p-0.5 text-mono-600 hover:text-black hover:bg-red-100 rounded"
                           title="Удалить"
                         >
                           <Trash2 className="h-3 w-3" />
@@ -853,7 +853,7 @@ export default function ExpenseInvoicesPage() {
                     </button>
                     <button
                       onClick={() => handlePrint(invoice)}
-                      className="p-2 text-mono-600 hover:bg-green-50 rounded-md"
+                      className="p-2 text-mono-600 hover:bg-mono-50 rounded-md"
                       title="Печать"
                     >
                       <Printer className="h-4 w-4" />
@@ -868,7 +868,7 @@ export default function ExpenseInvoicesPage() {
                   </div>
                   <button
                     onClick={() => handleDelete(invoice.id)}
-                    className="p-2 text-mono-600 hover:bg-red-50 rounded-md"
+                    className="p-2 text-mono-600 hover:bg-mono-50 rounded-md"
                     title="Удалить"
                   >
                     <Trash2 className="h-4 w-4" />

@@ -91,7 +91,7 @@ export default function MobileNavigation() {
               {/* Кнопка выхода */}
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-red-600 hover:bg-red-50"
+                className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-mono-600 hover:bg-mono-50"
               >
                 <LogOut className="h-5 w-5" />
                 <span className="font-medium">Выйти</span>

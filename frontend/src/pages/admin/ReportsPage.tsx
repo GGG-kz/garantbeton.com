@@ -283,7 +283,7 @@ export default function ReportsPage() {
                 <p className="text-sm text-mono-600">Всего пользователей</p>
                 <p className="text-2xl font-bold text-mono-900">{stats.totalUsers}</p>
               </div>
-              <Users className="h-8 w-8 text-blue-500" />
+              <Users className="h-8 w-8 text-mono-500" />
             </div>
           </div>
           
@@ -313,7 +313,7 @@ export default function ReportsPage() {
                 <p className="text-sm text-mono-600">Входов в систему</p>
                 <p className="text-2xl font-bold text-black">{stats.totalLogins}</p>
               </div>
-              <Activity className="h-8 w-8 text-blue-500" />
+              <Activity className="h-8 w-8 text-mono-500" />
             </div>
           </div>
           
@@ -398,7 +398,7 @@ export default function ReportsPage() {
               <ViewToggle viewMode={viewMode} onViewModeChange={setViewMode} />
               <button
                 onClick={handleExportData}
-                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center gap-2"
+                className="bg-mono-600 text-white px-4 py-2 rounded-lg hover:bg-mono-700 transition-colors duration-200 flex items-center gap-2"
               >
                 <Download className="h-4 w-4" />
                 Экспорт
@@ -587,8 +587,8 @@ export default function ReportsPage() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                             log.action === 'block' 
-                              ? 'bg-red-100 text-red-800' 
-                              : 'bg-mono-100 text-green-800'
+                              ? 'bg-red-100 text-mono-800' 
+                              : 'bg-mono-100 text-mono-800'
                           }`}>
                             {log.action === 'block' ? (
                               <>
@@ -629,8 +629,8 @@ export default function ReportsPage() {
                       <div className="absolute top-4 right-4">
                         <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
                           log.action === 'block' 
-                            ? 'bg-red-100 text-red-800' 
-                            : 'bg-mono-100 text-green-800'
+                            ? 'bg-red-100 text-mono-800' 
+                            : 'bg-mono-100 text-mono-800'
                         }`}>
                           {log.action === 'block' ? (
                             <>
@@ -710,10 +710,10 @@ export default function ReportsPage() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                             log.action === 'create' 
-                              ? 'bg-mono-100 text-green-800'
+                              ? 'bg-mono-100 text-mono-800'
                               : log.action === 'update'
                               ? 'bg-mono-100 text-black'
-                              : 'bg-red-100 text-red-800'
+                              : 'bg-red-100 text-mono-800'
                           }`}>
                             {log.action === 'create' && 'Создание'}
                             {log.action === 'update' && 'Обновление'}
@@ -749,10 +749,10 @@ export default function ReportsPage() {
                         </div>
                         <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                           log.action === 'create' 
-                            ? 'bg-mono-100 text-green-800'
+                            ? 'bg-mono-100 text-mono-800'
                             : log.action === 'update'
                             ? 'bg-mono-100 text-black'
-                            : 'bg-red-100 text-red-800'
+                            : 'bg-red-100 text-mono-800'
                         }`}>
                           {log.action === 'create' && 'Создание'}
                           {log.action === 'update' && 'Обновление'}

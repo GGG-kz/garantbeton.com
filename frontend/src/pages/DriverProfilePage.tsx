@@ -34,7 +34,7 @@ export default function DriverProfilePage() {
         label: 'Доступен',
         icon: CheckCircle,
         color: 'text-mono-600',
-        bgColor: 'bg-green-50',
+        bgColor: 'bg-mono-50',
         description: 'Готов к работе'
       },
       vacation: {
@@ -55,7 +55,7 @@ export default function DriverProfilePage() {
         label: 'Неактивен',
         icon: XCircle,
         color: 'text-mono-600',
-        bgColor: 'bg-red-50',
+        bgColor: 'bg-mono-50',
         description: 'Временно недоступен'
       }
     }
@@ -229,7 +229,7 @@ export default function DriverProfilePage() {
               <button
                 onClick={() => handleStatusChange('active')}
                 disabled={currentDriver.status === 'active'}
-                className="w-full flex items-center justify-center space-x-2 px-4 py-2 text-sm font-medium text-mono-700 bg-green-50 hover:bg-mono-100 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center space-x-2 px-4 py-2 text-sm font-medium text-mono-700 bg-mono-50 hover:bg-mono-100 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <CheckCircle className="h-4 w-4" />
                 <span>Отметить как доступен</span>

@@ -253,7 +253,7 @@ export default function ServicePricesPage() {
                         <div className="flex justify-end space-x-2">
                           <button
                             onClick={handleSave}
-                            className="text-mono-600 hover:text-green-900 p-1 rounded hover:bg-green-50"
+                            className="text-mono-600 hover:text-mono-900 p-1 rounded hover:bg-mono-50"
                             title="Сохранить"
                           >
                             <Save className="h-4 w-4" />
@@ -277,7 +277,7 @@ export default function ServicePricesPage() {
                           </button>
                           <button
                             onClick={() => handleDelete(service.id)}
-                            className="text-mono-600 hover:text-red-900 p-1 rounded hover:bg-red-50"
+                            className="text-mono-600 hover:text-black p-1 rounded hover:bg-mono-50"
                             title="Удалить"
                           >
                             <Trash2 className="h-4 w-4" />

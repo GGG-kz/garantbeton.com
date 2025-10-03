@@ -394,7 +394,7 @@ const DriverInvoicesPage: React.FC = () => {
       case 'completed':
         return <CheckCircle className="w-4 h-4 text-black" />;
       default:
-        return <Clock className="w-4 h-4 text-yellow-500" />;
+        return <Clock className="w-4 h-4 text-mono-500" />;
     }
   };
 
@@ -665,7 +665,7 @@ const DriverInvoicesPage: React.FC = () => {
                               </button>
                               <button
                                 onClick={() => handleView(invoice)}
-                                className="text-mono-600 hover:text-green-900"
+                                className="text-mono-600 hover:text-mono-900"
                                 title="Просмотреть"
                               >
                                 <Eye className="w-4 h-4" />
@@ -712,7 +712,7 @@ const DriverInvoicesPage: React.FC = () => {
                         </button>
                         <button
                           onClick={() => handleView(invoice)}
-                          className="p-2 text-mono-600 hover:bg-green-50 rounded-lg"
+                          className="p-2 text-mono-600 hover:bg-mono-50 rounded-lg"
                           title="Просмотреть"
                         >
                           <Eye className="w-4 h-4" />

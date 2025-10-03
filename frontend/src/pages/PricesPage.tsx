@@ -286,8 +286,8 @@ export default function PricesPage() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                       isPriceValid(price)
-                        ? 'bg-mono-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
+                        ? 'bg-mono-100 text-black'
+                        : 'bg-mono-100 text-black'
                     }`}>
                       {isPriceValid(price) ? 'Действует' : 'Истекла'}
                     </span>
@@ -310,7 +310,7 @@ export default function PricesPage() {
                       </button>
                       <button
                         onClick={() => handleDelete(price.id)}
-                        className="text-mono-600 hover:text-red-900 p-1 rounded transition-colors duration-200"
+                        className="text-mono-600 hover:text-black p-1 rounded transition-colors duration-200"
                         title="Удалить"
                       >
                         <Trash2 className="h-4 w-4" />

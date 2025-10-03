@@ -287,7 +287,7 @@ export default function UsersPage() {
                 <p className="text-sm text-mono-600">Всего пользователей</p>
                 <p className="text-2xl font-bold text-mono-900">{stats.total}</p>
               </div>
-              <Users className="h-8 w-8 text-blue-500" />
+              <Users className="h-8 w-8 text-mono-500" />
             </div>
           </div>
           
@@ -317,7 +317,7 @@ export default function UsersPage() {
                 <p className="text-sm text-mono-600">Онлайн</p>
                 <p className="text-2xl font-bold text-black">{stats.online}</p>
               </div>
-              <Eye className="h-8 w-8 text-blue-500" />
+              <Eye className="h-8 w-8 text-mono-500" />
             </div>
           </div>
         </div>
@@ -435,8 +435,8 @@ export default function UsersPage() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                           user.isActive 
-                            ? 'text-green-800 bg-mono-100' 
-                            : 'text-red-800 bg-red-100'
+                            ? 'text-mono-800 bg-mono-100' 
+                            : 'text-mono-800 bg-red-100'
                         }`}>
                           {user.isActive ? (
                             <>
@@ -473,8 +473,8 @@ export default function UsersPage() {
                             onClick={() => handleToggleUserStatus(user.id)}
                             className={`p-1 ${
                               user.isActive 
-                                ? 'text-mono-600 hover:text-red-900' 
-                                : 'text-mono-600 hover:text-green-900'
+                                ? 'text-mono-600 hover:text-black' 
+                                : 'text-mono-600 hover:text-mono-900'
                             }`}
                             title={user.isActive ? 'Заблокировать' : 'Разблокировать'}
                           >
@@ -482,7 +482,7 @@ export default function UsersPage() {
                           </button>
                           <button
                             onClick={() => handleDeleteUser(user.id)}
-                            className="text-mono-600 hover:text-red-900 p-1"
+                            className="text-mono-600 hover:text-black p-1"
                             title="Удалить"
                           >
                             <Trash2 className="h-4 w-4" />
@@ -516,8 +516,8 @@ export default function UsersPage() {
                     onClick={() => handleToggleUserStatus(user.id)}
                     className={`p-1 rounded hover:bg-mono-50 transition-colors duration-200 ${
                       user.isActive 
-                        ? 'text-mono-600 hover:text-red-900' 
-                        : 'text-mono-600 hover:text-green-900'
+                        ? 'text-mono-600 hover:text-black' 
+                        : 'text-mono-600 hover:text-mono-900'
                     }`}
                     title={user.isActive ? 'Заблокировать' : 'Разблокировать'}
                   >
@@ -525,7 +525,7 @@ export default function UsersPage() {
                   </button>
                   <button
                     onClick={() => handleDeleteUser(user.id)}
-                    className="text-mono-600 hover:text-red-900 p-1 rounded hover:bg-red-50 transition-colors duration-200"
+                    className="text-mono-600 hover:text-black p-1 rounded hover:bg-mono-50 transition-colors duration-200"
                     title="Удалить"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -566,8 +566,8 @@ export default function UsersPage() {
                   <div className="flex items-center">
                     <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
                       user.isActive 
-                        ? 'text-green-800 bg-mono-100' 
-                        : 'text-red-800 bg-red-100'
+                        ? 'text-mono-800 bg-mono-100' 
+                        : 'text-mono-800 bg-red-100'
                     }`}>
                       {user.isActive ? (
                         <>

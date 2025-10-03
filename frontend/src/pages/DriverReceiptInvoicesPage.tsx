@@ -118,7 +118,7 @@ export default function DriverReceiptInvoicesPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'draft': return 'bg-yellow-100 text-yellow-800'
-      case 'completed': return 'bg-mono-100 text-green-800'
+      case 'completed': return 'bg-mono-100 text-mono-800'
       default: return 'bg-mono-100 text-mono-800'
     }
   }
@@ -316,7 +316,7 @@ export default function DriverReceiptInvoicesPage() {
                           </button>
                           <button
                             onClick={() => handleEdit(invoice)}
-                            className="text-mono-600 hover:text-green-900"
+                            className="text-mono-600 hover:text-mono-900"
                             title="Редактировать"
                           >
                             <Edit className="h-4 w-4" />
@@ -330,7 +330,7 @@ export default function DriverReceiptInvoicesPage() {
                           </button>
                           <button
                             onClick={() => handleDelete(invoice)}
-                            className="text-mono-600 hover:text-red-900"
+                            className="text-mono-600 hover:text-black"
                             title="Удалить"
                           >
                             <Trash2 className="h-4 w-4" />

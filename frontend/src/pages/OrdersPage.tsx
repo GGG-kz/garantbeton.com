@@ -40,9 +40,9 @@ export default function OrdersPage() {
     return (
       <PageLayout title="Заказы бетона">
         <div className="p-8 text-center">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+          <div className="bg-mono-50 border border-mono-200 rounded-lg p-6 max-w-md mx-auto">
             <div className="text-mono-600 text-6xl mb-4">🚫</div>
-            <h2 className="text-xl font-semibold text-red-800 mb-2">Доступ запрещён</h2>
+            <h2 className="text-xl font-semibold text-mono-800 mb-2">Доступ запрещён</h2>
             <p className="text-mono-600">
               У вас нет прав для просмотра заказов бетона. Доступ разрешён только для менеджеров, директоров, диспетчеров и бухгалтеров.
             </p>
@@ -423,7 +423,7 @@ export default function OrdersPage() {
                           {user?.role === 'director' && order.status === 'pending' && (
                             <button 
                               onClick={() => handleApprove(order)}
-                              className="text-mono-600 hover:text-green-900"
+                              className="text-mono-600 hover:text-black"
                               title="Подтвердить заявку"
                             >
                               <CheckCircle className="h-4 w-4" />
@@ -450,7 +450,7 @@ export default function OrdersPage() {
                           {(user?.role === 'director' || user?.role === 'accountant') && order.status === 'pending' && (
                             <button 
                               onClick={() => handleDelete(order.id)}
-                              className="text-mono-600 hover:text-red-900"
+                              className="text-mono-600 hover:text-black"
                               title="Удалить"
                             >
                               <Trash2 className="h-4 w-4" />
@@ -481,7 +481,7 @@ export default function OrdersPage() {
                   {user?.role === 'director' && order.status === 'pending' && (
                     <button 
                       onClick={() => handleApprove(order)}
-                      className="p-1 text-mono-600 hover:text-green-900 rounded hover:bg-green-50 transition-colors duration-200"
+                      className="p-1 text-mono-600 hover:text-mono-900 rounded hover:bg-mono-50 transition-colors duration-200"
                       title="Подтвердить заявку"
                     >
                       <CheckCircle className="h-4 w-4" />
@@ -508,7 +508,7 @@ export default function OrdersPage() {
                   {(user?.role === 'director' || user?.role === 'accountant') && order.status === 'pending' && (
                     <button 
                       onClick={() => handleDelete(order.id)}
-                      className="p-1 text-mono-600 hover:text-red-900 rounded hover:bg-red-50 transition-colors duration-200"
+                      className="p-1 text-mono-600 hover:text-black rounded hover:bg-mono-50 transition-colors duration-200"
                       title="Удалить"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -533,8 +533,8 @@ export default function OrdersPage() {
 
                 {/* Информация о выполнении в карточке */}
                 {(order.assignedDriverName || order.assignedVehicleNumber) && (
-                  <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                    <h5 className="text-xs font-semibold text-green-800 mb-2">Выполнение</h5>
+                  <div className="mb-4 p-3 bg-mono-50 border border-green-200 rounded-lg">
+                    <h5 className="text-xs font-semibold text-mono-800 mb-2">Выполнение</h5>
                     <div className="space-y-1">
                       {order.assignedDriverName && (
                         <div className="flex items-center text-xs text-mono-700">
@@ -686,33 +686,33 @@ export default function OrdersPage() {
 
                     {/* Информация о выполнении заказа */}
                     {(viewingOrder.assignedDriverName || viewingOrder.assignedVehicleNumber) && (
-                      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                        <h4 className="text-sm font-semibold text-green-900 mb-3">Информация о выполнении</h4>
+                      <div className="bg-mono-50 border border-green-200 rounded-lg p-4">
+                        <h4 className="text-sm font-semibold text-mono-900 mb-3">Информация о выполнении</h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {viewingOrder.assignedDriverName && (
                             <div>
-                              <label className="block text-xs font-medium text-green-800">Водитель</label>
-                              <p className="mt-1 text-sm text-green-900">{viewingOrder.assignedDriverName}</p>
+                              <label className="block text-xs font-medium text-mono-800">Водитель</label>
+                              <p className="mt-1 text-sm text-mono-900">{viewingOrder.assignedDriverName}</p>
                             </div>
                           )}
                           {viewingOrder.assignedVehicleNumber && (
                             <div>
-                              <label className="block text-xs font-medium text-green-800">Транспорт</label>
-                              <p className="mt-1 text-sm text-green-900">{viewingOrder.assignedVehicleNumber}</p>
+                              <label className="block text-xs font-medium text-mono-800">Транспорт</label>
+                              <p className="mt-1 text-sm text-mono-900">{viewingOrder.assignedVehicleNumber}</p>
                             </div>
                           )}
                           {viewingOrder.departureTime && (
                             <div>
-                              <label className="block text-xs font-medium text-green-800">Время отправления</label>
-                              <p className="mt-1 text-sm text-green-900">
+                              <label className="block text-xs font-medium text-mono-800">Время отправления</label>
+                              <p className="mt-1 text-sm text-mono-900">
                                 {new Date(viewingOrder.departureTime).toLocaleString('ru-RU')}
                               </p>
                             </div>
                           )}
                           {viewingOrder.arrivalTime && (
                             <div>
-                              <label className="block text-xs font-medium text-green-800">Время прибытия</label>
-                              <p className="mt-1 text-sm text-green-900">
+                              <label className="block text-xs font-medium text-mono-800">Время прибытия</label>
+                              <p className="mt-1 text-sm text-mono-900">
                                 {new Date(viewingOrder.arrivalTime).toLocaleString('ru-RU')}
                               </p>
                             </div>
@@ -739,10 +739,10 @@ export default function OrdersPage() {
                 </div>
 
                 {canViewPrice && viewingOrder.totalPrice && (
-                  <div className="mt-6 p-4 bg-green-50 rounded-lg">
+                  <div className="mt-6 p-4 bg-mono-50 rounded-lg">
                     <div className="flex justify-between items-center">
                       <span className="text-sm font-medium text-mono-700">Общая стоимость:</span>
-                      <span className="text-lg font-bold text-green-900">
+                      <span className="text-lg font-bold text-mono-900">
                         {viewingOrder.totalPrice.toLocaleString('ru-RU')} ₸
                       </span>
                     </div>

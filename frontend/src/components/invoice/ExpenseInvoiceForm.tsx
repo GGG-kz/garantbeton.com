@@ -442,7 +442,7 @@ export default function ExpenseInvoiceForm({
                       receivedBy: ''
                     })
                   }}
-                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                  className="px-4 py-2 bg-mono-600 text-white rounded-md hover:bg-mono-700 transition-colors"
                 >
                   Очистить
                 </button>
@@ -490,7 +490,7 @@ export default function ExpenseInvoiceForm({
               <select
                 value={formData.supplier}
                 onChange={(e) => handleChange('supplier', e.target.value)}
-                className={`pl-10 w-full px-3 py-2 border ${errors.supplier ? 'border-red-500' : 'border-mono-300'} rounded-md`}
+                className={`pl-10 w-full px-3 py-2 border ${errors.supplier ? 'border-mono-500' : 'border-mono-300'} rounded-md`}
               >
                 <option value="">Выберите поставщика</option>
                 {counterparties.filter(c => c.type === 'supplier' && c.isActive).map(supplier => (
@@ -514,7 +514,7 @@ export default function ExpenseInvoiceForm({
                   handleChange('customerId', e.target.value)
                   handleChange('customerName', customer?.name || '')
                 }}
-                className={`pl-10 w-full px-3 py-2 border ${errors.customerId ? 'border-red-500' : 'border-mono-300'} rounded-md`}
+                className={`pl-10 w-full px-3 py-2 border ${errors.customerId ? 'border-mono-500' : 'border-mono-300'} rounded-md`}
               >
                 <option value="">Выберите покупателя</option>
                 {counterparties.filter(c => c.isActive).map(customer => (
@@ -541,7 +541,7 @@ export default function ExpenseInvoiceForm({
               type="text"
               value={formData.seal}
               onChange={(e) => handleChange('seal', e.target.value)}
-              className={`w-full px-3 py-2 border ${errors.seal ? 'border-red-500' : 'border-mono-300'} rounded-md`}
+              className={`w-full px-3 py-2 border ${errors.seal ? 'border-mono-500' : 'border-mono-300'} rounded-md`}
               placeholder="Введите номер пломбы"
             />
             {errors.seal && <p className="mt-1 text-sm text-mono-600">{errors.seal}</p>}
@@ -559,7 +559,7 @@ export default function ExpenseInvoiceForm({
                 handleChange('warehouseId', e.target.value)
                 handleChange('warehouseName', warehouse?.name || '')
               }}
-              className={`pl-10 w-full px-3 py-2 border ${errors.warehouseId ? 'border-red-500' : 'border-mono-300'} rounded-md`}
+              className={`pl-10 w-full px-3 py-2 border ${errors.warehouseId ? 'border-mono-500' : 'border-mono-300'} rounded-md`}
             >
               <option value="">Выберите склад</option>
               {warehouses.filter(w => w.isActive).map(warehouse => (
@@ -625,7 +625,7 @@ export default function ExpenseInvoiceForm({
                       <select
                         value={item.productName}
                         onChange={(e) => handleItemChange(item.id, 'productName', e.target.value)}
-                        className={`w-full border-0 focus:ring-0 ${errors[`item_${index}_name`] ? 'bg-red-50' : ''}`}
+                        className={`w-full border-0 focus:ring-0 ${errors[`item_${index}_name`] ? 'bg-mono-50' : ''}`}
                       >
                         <option value="">Выберите марку бетона</option>
                         {concreteGrades.filter(cg => cg.isActive).map(concreteGrade => (
@@ -640,7 +640,7 @@ export default function ExpenseInvoiceForm({
                         step="0.001"
                         value={item.quantity}
                         onChange={(e) => handleItemChange(item.id, 'quantity', parseFloat(e.target.value) || 0)}
-                        className={`w-full border-0 focus:ring-0 ${errors[`item_${index}_quantity`] ? 'bg-red-50' : ''}`}
+                        className={`w-full border-0 focus:ring-0 ${errors[`item_${index}_quantity`] ? 'bg-mono-50' : ''}`}
                         placeholder="0,000"
                       />
                       {errors[`item_${index}_quantity`] && <p className="text-xs text-mono-600">{errors[`item_${index}_quantity`]}</p>}
@@ -673,7 +673,7 @@ export default function ExpenseInvoiceForm({
                         type="button"
                         onClick={() => removeItem(item.id)}
                         disabled={formData.items.length <= 1}
-                        className="text-mono-600 hover:text-red-800 disabled:text-mono-400"
+                        className="text-mono-600 hover:text-black disabled:text-mono-400"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -796,7 +796,7 @@ export default function ExpenseInvoiceForm({
                     handleDeliveryChange('driverId', e.target.value)
                     handleDeliveryChange('driverName', driver?.fullName || '')
                   }}
-                  className={`pl-10 w-full px-3 py-2 border ${errors.driverId ? 'border-red-500' : 'border-mono-300'} rounded-md`}
+                  className={`pl-10 w-full px-3 py-2 border ${errors.driverId ? 'border-mono-500' : 'border-mono-300'} rounded-md`}
                 >
                   <option value="">Выберите водителя</option>
                   {drivers.filter(d => d.isActive).map(driver => (
@@ -818,7 +818,7 @@ export default function ExpenseInvoiceForm({
                     handleDeliveryChange('vehicleId', e.target.value)
                     handleDeliveryChange('vehicleNumber', vehicle?.licensePlate || '')
                   }}
-                  className={`pl-10 w-full px-3 py-2 border ${errors.vehicleId ? 'border-red-500' : 'border-mono-300'} rounded-md`}
+                  className={`pl-10 w-full px-3 py-2 border ${errors.vehicleId ? 'border-mono-500' : 'border-mono-300'} rounded-md`}
                 >
                   <option value="">Выберите автомобиль</option>
                   {vehicles.filter(v => v.isActive).map(vehicle => (

@@ -246,7 +246,7 @@ export default function AdminRequestsTable({ requests, viewMode, onUpdateRequest
             </div>
             <div className="text-mono-600">Оплачено</div>
           </div>
-          <div className="text-center p-3 bg-green-50 rounded-lg">
+          <div className="text-center p-3 bg-mono-50 rounded-lg">
             <div className="text-2xl font-bold text-mono-600">
               {filteredRequests.filter(r => r.status === 'completed').length}
             </div>
@@ -363,14 +363,14 @@ export default function AdminRequestsTable({ requests, viewMode, onUpdateRequest
                         <>
                           <button
                             onClick={() => handleStatusChange(request.id, 'approved')}
-                            className="text-mono-600 hover:text-green-900"
+                            className="text-mono-600 hover:text-mono-900"
                             title="Одобрить заявку"
                           >
                             <CheckCircle className="h-4 w-4" />
                           </button>
                           <button
                             onClick={() => handleStatusChange(request.id, 'rejected')}
-                            className="text-mono-600 hover:text-red-900"
+                            className="text-mono-600 hover:text-black"
                             title="Отклонить заявку"
                           >
                             <XCircle className="h-4 w-4" />
@@ -393,7 +393,7 @@ export default function AdminRequestsTable({ requests, viewMode, onUpdateRequest
                       {canComplete && request.status === 'paid' && (
                         <button
                           onClick={() => handleStatusChange(request.id, 'completed')}
-                          className="text-mono-600 hover:text-green-900"
+                          className="text-mono-600 hover:text-mono-900"
                           title="Отметить как выполненное"
                         >
                           <CheckCircle className="h-4 w-4" />
@@ -493,7 +493,7 @@ export default function AdminRequestsTable({ requests, viewMode, onUpdateRequest
                 {userRole === 'director' && request.status === 'priced' && (
                   <button
                     onClick={() => handleUpdateStatus(request.id, 'approved')}
-                    className="flex-1 bg-green-600 text-white px-3 py-2 rounded text-sm hover:bg-green-700 transition-colors duration-200"
+                    className="flex-1 bg-mono-600 text-white px-3 py-2 rounded text-sm hover:bg-mono-700 transition-colors duration-200"
                   >
                     Одобрить
                   </button>
@@ -511,7 +511,7 @@ export default function AdminRequestsTable({ requests, viewMode, onUpdateRequest
                 {(userRole === 'supply' || userRole === 'director') && request.status === 'paid' && (
                   <button
                     onClick={() => handleUpdateStatus(request.id, 'completed')}
-                    className="flex-1 bg-green-600 text-white px-3 py-2 rounded text-sm hover:bg-green-700 transition-colors duration-200"
+                    className="flex-1 bg-mono-600 text-white px-3 py-2 rounded text-sm hover:bg-mono-700 transition-colors duration-200"
                   >
                     Выполнить
                   </button>
@@ -591,8 +591,8 @@ export default function AdminRequestsTable({ requests, viewMode, onUpdateRequest
               )}
 
               {selectedRequest.completedBy && (
-                <div className="bg-green-50 p-3 rounded-lg">
-                  <span className="font-medium text-green-900">Выполнено:</span>
+                <div className="bg-mono-50 p-3 rounded-lg">
+                  <span className="font-medium text-mono-900">Выполнено:</span>
                   <p className="text-mono-700">{selectedRequest.completedBy} - {formatDate(selectedRequest.completedAt!)}</p>
                 </div>
               )}

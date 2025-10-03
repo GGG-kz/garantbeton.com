@@ -230,7 +230,7 @@ const WeighingPage: React.FC = () => {
 
             {/* Общие ошибки */}
             {error && (
-              <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="mt-6 p-4 bg-mono-50 border border-mono-200 rounded-lg">
                 <div className="flex items-center">
                   <span className="text-mono-600">❌ {error}</span>
                 </div>

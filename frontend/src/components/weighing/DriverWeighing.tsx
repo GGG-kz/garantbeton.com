@@ -164,7 +164,7 @@ const DriverWeighing: React.FC<DriverWeighingProps> = ({
 
       {/* Статистика водителя */}
       <div className="grid grid-cols-3 gap-4">
-        <div className="bg-green-50 p-4 rounded-lg text-center">
+        <div className="bg-mono-50 p-4 rounded-lg text-center">
           <div className="text-2xl font-bold text-mono-600">{driverStats.totalTrips}</div>
           <div className="text-sm text-mono-700">Завершено</div>
         </div>
@@ -244,8 +244,8 @@ const DriverWeighing: React.FC<DriverWeighingProps> = ({
 
       {/* Режим въезда */}
       {mode === 'arrival' && (
-        <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-          <h3 className="text-lg font-semibold text-green-900 mb-4">
+        <div className="p-4 bg-mono-50 border border-green-200 rounded-lg">
+          <h3 className="text-lg font-semibold text-mono-900 mb-4">
             🚛 Въезд на территорию
           </h3>
           
@@ -267,7 +267,7 @@ const DriverWeighing: React.FC<DriverWeighingProps> = ({
             <button
               onClick={createArrivalDraft}
               disabled={!currentWeight || !vehicleNumber.trim() || !!activeDraft || !isConnected}
-              className="w-full px-6 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-mono-400 transition-colors font-medium text-lg"
+              className="w-full px-6 py-4 bg-mono-600 text-white rounded-lg hover:bg-mono-700 disabled:bg-mono-400 transition-colors font-medium text-lg"
             >
               📝 Зафиксировать въезд
             </button>
@@ -275,7 +275,7 @@ const DriverWeighing: React.FC<DriverWeighingProps> = ({
             {activeDraft && (
               <div className="p-3 bg-white border border-green-300 rounded-lg">
                 <div className="text-center">
-                  <div className="text-lg font-bold text-green-800 mb-2">
+                  <div className="text-lg font-bold text-mono-800 mb-2">
                     ✅ Въезд зафиксирован!
                   </div>
                   <div className="text-sm text-mono-700">
@@ -404,7 +404,7 @@ const DriverWeighing: React.FC<DriverWeighingProps> = ({
               .map(draft => (
                 <div key={draft.id} className={`p-3 rounded-lg border ${
                   draft.status === 'completed' 
-                    ? 'bg-green-50 border-green-200' 
+                    ? 'bg-mono-50 border-green-200' 
                     : 'bg-yellow-50 border-yellow-200'
                 }`}>
                   <div className="flex items-center justify-between text-sm">
@@ -446,7 +446,7 @@ const DriverWeighing: React.FC<DriverWeighingProps> = ({
 
       {/* Сообщения */}
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+        <div className="p-4 bg-mono-50 border border-mono-200 rounded-lg">
           <div className="flex items-center">
             <span className="text-mono-600 font-medium">{error}</span>
           </div>
@@ -454,7 +454,7 @@ const DriverWeighing: React.FC<DriverWeighingProps> = ({
       )}
 
       {success && (
-        <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+        <div className="p-4 bg-mono-50 border border-green-200 rounded-lg">
           <div className="flex items-center">
             <span className="text-mono-600 font-medium">{success}</span>
           </div>

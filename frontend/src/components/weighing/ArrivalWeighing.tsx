@@ -203,7 +203,7 @@ const ArrivalWeighing: React.FC<ArrivalWeighingProps> = ({
             <button
               onClick={createDraft}
               disabled={!currentWeight || !vehicleNumber.trim() || !!activeDraft || !isConnected}
-              className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-mono-400 transition-colors"
+              className="flex-1 px-4 py-2 bg-mono-600 text-white rounded-lg hover:bg-mono-700 disabled:bg-mono-400 transition-colors"
             >
               📝 Добавить
             </button>
@@ -287,7 +287,7 @@ const ArrivalWeighing: React.FC<ArrivalWeighingProps> = ({
                       </button>
                       <button
                         onClick={() => deleteDraft(draft.id)}
-                        className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition-colors"
+                        className="px-3 py-1 bg-mono-600 text-white text-sm rounded hover:bg-mono-700 transition-colors"
                       >
                         Удалить
                       </button>
@@ -301,7 +301,7 @@ const ArrivalWeighing: React.FC<ArrivalWeighingProps> = ({
 
       {/* Сообщения */}
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+        <div className="p-4 bg-mono-50 border border-mono-200 rounded-lg">
           <div className="flex items-center">
             <span className="text-mono-600">❌ {error}</span>
           </div>
@@ -309,7 +309,7 @@ const ArrivalWeighing: React.FC<ArrivalWeighingProps> = ({
       )}
 
       {success && (
-        <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+        <div className="p-4 bg-mono-50 border border-green-200 rounded-lg">
           <div className="flex items-center">
             <span className="text-mono-600">✅ {success}</span>
           </div>

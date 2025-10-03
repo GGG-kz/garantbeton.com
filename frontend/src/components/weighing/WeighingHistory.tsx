@@ -39,7 +39,7 @@ const WeighingHistory: React.FC<WeighingHistoryProps> = ({
             key={draft.id}
             className={`p-3 rounded-lg border cursor-pointer transition-colors ${
               draft.status === 'completed'
-                ? 'bg-green-50 border-green-200 hover:bg-mono-100'
+                ? 'bg-mono-50 border-green-200 hover:bg-mono-100'
                 : 'bg-yellow-50 border-yellow-200 hover:bg-yellow-100'
             }`}
             onClick={() => onSelectDraft?.(draft)}

@@ -153,7 +153,7 @@ export default function ReceiptInvoicesPage() {
     switch (status) {
       case 'pending': return 'bg-yellow-100 text-yellow-800'
       case 'received': return 'bg-mono-100 text-black'
-      case 'completed': return 'bg-mono-100 text-green-800'
+      case 'completed': return 'bg-mono-100 text-mono-800'
       default: return 'bg-mono-100 text-mono-800'
     }
   }
@@ -331,7 +331,7 @@ export default function ReceiptInvoicesPage() {
                           </button>
                           <button 
                             onClick={() => handleDelete(invoice.id)}
-                            className="text-mono-600 hover:text-red-900"
+                            className="text-mono-600 hover:text-black"
                             title="Удалить"
                           >
                             <Trash2 className="h-4 w-4" />
@@ -367,7 +367,7 @@ export default function ReceiptInvoicesPage() {
                   </button>
                   <button 
                     onClick={() => handleDelete(invoice.id)}
-                    className="p-1 text-mono-600 hover:text-red-900 rounded hover:bg-red-50 transition-colors duration-200"
+                    className="p-1 text-mono-600 hover:text-black rounded hover:bg-mono-50 transition-colors duration-200"
                     title="Удалить"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -420,7 +420,7 @@ export default function ReceiptInvoicesPage() {
                   </button>
                   <button
                     onClick={() => handleExportPDF()}
-                    className="flex items-center space-x-1 px-3 py-1 text-mono-600 hover:text-green-800 transition-colors duration-200"
+                    className="flex items-center space-x-1 px-3 py-1 text-mono-600 hover:text-mono-800 transition-colors duration-200"
                   >
                     <Download className="h-4 w-4" />
                     <span className="text-sm">PDF</span>
@@ -475,7 +475,7 @@ export default function ReceiptInvoicesPage() {
                     </button>
                     <button
                       onClick={handleExportPDF}
-                      className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
+                      className="flex items-center space-x-2 px-4 py-2 bg-mono-600 text-white rounded-lg hover:bg-mono-700 transition-colors duration-200"
                     >
                       <Download className="h-4 w-4" />
                       <span>PDF</span>

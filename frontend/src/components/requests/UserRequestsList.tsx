@@ -165,12 +165,12 @@ export default function UserRequestsList({ requests, viewMode, onRefresh, onMark
               )}
 
               {request.price && (
-                <div className="mt-3 p-3 bg-green-50 rounded-lg">
+                <div className="mt-3 p-3 bg-mono-50 rounded-lg">
                   <div className="flex items-center text-sm text-mono-700 mb-1">
                     <DollarSign className="h-4 w-4 text-green-400 mr-2" />
                     <strong>Цена:</strong>
                   </div>
-                  <p className="text-lg font-semibold text-green-800 ml-6">
+                  <p className="text-lg font-semibold text-mono-800 ml-6">
                     {request.price.toLocaleString('ru-RU')} ₸
                   </p>
                 </div>

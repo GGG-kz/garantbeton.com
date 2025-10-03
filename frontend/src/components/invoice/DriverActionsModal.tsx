@@ -159,7 +159,7 @@ const DriverActionsModal: React.FC<DriverActionsModalProps> = ({
                   disabled={actions.departureConfirmed}
                   className={`px-4 py-2 rounded-lg text-sm font-medium ${
                     actions.departureConfirmed
-                      ? 'bg-mono-100 text-green-800'
+                      ? 'bg-mono-100 text-mono-800'
                       : 'bg-black text-white hover:bg-black'
                   }`}
                 >
@@ -184,7 +184,7 @@ const DriverActionsModal: React.FC<DriverActionsModalProps> = ({
                   disabled={actions.arrivalConfirmed}
                   className={`px-4 py-2 rounded-lg text-sm font-medium ${
                     actions.arrivalConfirmed
-                      ? 'bg-mono-100 text-green-800'
+                      ? 'bg-mono-100 text-mono-800'
                       : 'bg-black text-white hover:bg-black'
                   }`}
                 >
@@ -209,7 +209,7 @@ const DriverActionsModal: React.FC<DriverActionsModalProps> = ({
                   disabled={actions.departureFromObjectConfirmed}
                   className={`px-4 py-2 rounded-lg text-sm font-medium ${
                     actions.departureFromObjectConfirmed
-                      ? 'bg-mono-100 text-green-800'
+                      ? 'bg-mono-100 text-mono-800'
                       : 'bg-black text-white hover:bg-black'
                   }`}
                 >
@@ -234,7 +234,7 @@ const DriverActionsModal: React.FC<DriverActionsModalProps> = ({
                   disabled={actions.arrivalAtPlantConfirmed}
                   className={`px-4 py-2 rounded-lg text-sm font-medium ${
                     actions.arrivalAtPlantConfirmed
-                      ? 'bg-mono-100 text-green-800'
+                      ? 'bg-mono-100 text-mono-800'
                       : 'bg-black text-white hover:bg-black'
                   }`}
                 >
@@ -292,8 +292,8 @@ const DriverActionsModal: React.FC<DriverActionsModalProps> = ({
 
             {/* Rejection Reason */}
             {showRejectionReason && (
-              <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-                <label className="block text-sm font-medium text-red-800 mb-2">
+              <div className="mt-4 p-4 bg-mono-50 border border-mono-200 rounded-lg">
+                <label className="block text-sm font-medium text-mono-800 mb-2">
                   Причина отказа
                 </label>
                 <textarea

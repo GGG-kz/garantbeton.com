@@ -139,24 +139,24 @@ export default function DepartureWeighing({
 
       {/* Информация о найденном черновике */}
       {selectedDraft && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+        <div className="bg-mono-50 border border-green-200 rounded-lg p-4">
           <div className="flex items-center space-x-2 mb-3">
             <Truck className="h-5 w-5 text-mono-600" />
-            <h4 className="font-medium text-green-900">{selectedDraft.vehicleNumber}</h4>
+            <h4 className="font-medium text-mono-900">{selectedDraft.vehicleNumber}</h4>
           </div>
 
           {/* Текущий вес */}
           <div className="mb-4">
             <div className="flex items-center justify-between">
               <div>
-                <h5 className="text-sm font-medium text-green-900">Текущий вес</h5>
+                <h5 className="text-sm font-medium text-mono-900">Текущий вес</h5>
                 <p className="text-xl font-bold text-mono-600">
                   {currentWeight ? formatWeight(currentWeight) : '—'}
                 </p>
               </div>
               <button
                 onClick={onWeightRequest}
-                className="flex items-center space-x-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm"
+                className="flex items-center space-x-2 px-3 py-2 bg-mono-600 text-white rounded-lg hover:bg-mono-700 text-sm"
               >
                 <Weight className="h-4 w-4" />
                 <span>Получить вес</span>
@@ -180,7 +180,7 @@ export default function DepartureWeighing({
             </div>
             <div>
               <span className="text-mono-700">НЕТТО:</span>
-              <span className="ml-2 font-bold text-green-800">
+              <span className="ml-2 font-bold text-mono-800">
                 {selectedDraft.netWeight ? formatWeight(selectedDraft.netWeight) : '—'}
               </span>
             </div>
@@ -206,7 +206,7 @@ export default function DepartureWeighing({
           {/* Форма для завершения */}
           {selectedDraft.taraWeight && (
             <div className="space-y-3">
-              <h5 className="text-sm font-medium text-green-900">Завершить взвешивание</h5>
+              <h5 className="text-sm font-medium text-mono-900">Завершить взвешивание</h5>
               
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -261,7 +261,7 @@ export default function DepartureWeighing({
 
               <button
                 onClick={handleComplete}
-                className="w-full flex items-center justify-center space-x-2 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                className="w-full flex items-center justify-center space-x-2 py-3 bg-mono-600 text-white rounded-lg hover:bg-mono-700"
               >
                 <CheckCircle className="h-5 w-5" />
                 <span>Обновить и сохранить</span>

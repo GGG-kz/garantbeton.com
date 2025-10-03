@@ -141,7 +141,7 @@ export default function ArrivalWeighing({
             <div className="flex space-x-2">
               <button
                 onClick={handleCreateDraft}
-                className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                className="flex items-center space-x-2 px-4 py-2 bg-mono-600 text-white rounded-lg hover:bg-mono-700"
               >
                 <Save className="h-4 w-4" />
                 <span>Сохранить черновик</span>

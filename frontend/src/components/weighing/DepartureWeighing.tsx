@@ -298,7 +298,7 @@ const DepartureWeighing: React.FC<DepartureWeighingProps> = ({
               <button
                 onClick={completeWeighing}
                 disabled={!currentWeight || !isConnected}
-                className="flex-1 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-mono-400 transition-colors font-medium"
+                className="flex-1 px-6 py-3 bg-mono-600 text-white rounded-lg hover:bg-mono-700 disabled:bg-mono-400 transition-colors font-medium"
               >
                 ✅ Обновить и сохранить
               </button>
@@ -367,7 +367,7 @@ const DepartureWeighing: React.FC<DepartureWeighingProps> = ({
 
       {/* Сообщения */}
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+        <div className="p-4 bg-mono-50 border border-mono-200 rounded-lg">
           <div className="flex items-center">
             <span className="text-mono-600">❌ {error}</span>
           </div>
@@ -375,7 +375,7 @@ const DepartureWeighing: React.FC<DepartureWeighingProps> = ({
       )}
 
       {success && (
-        <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+        <div className="p-4 bg-mono-50 border border-green-200 rounded-lg">
           <div className="flex items-center">
             <span className="text-mono-600">✅ {success}</span>
           </div>

@@ -402,7 +402,7 @@ export default function OrderModal({ isOpen, onClose, onSave, order, title, user
                         <button
                           type="button"
                           onClick={() => handleRemoveService(service.serviceId)}
-                          className="text-mono-600 hover:text-red-800 transition-colors duration-200"
+                          className="text-mono-600 hover:text-mono-800 transition-colors duration-200"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>

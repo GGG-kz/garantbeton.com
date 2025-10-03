@@ -378,7 +378,7 @@ const DriverScalesPage: React.FC = () => {
             <button
               onClick={getWeight}
               disabled={!isConnected || isLoading}
-              className="flex-1 flex items-center justify-center space-x-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-mono-400 transition-colors"
+              className="flex-1 flex items-center justify-center space-x-2 px-4 py-3 bg-mono-600 text-white rounded-lg hover:bg-mono-700 disabled:bg-mono-400 transition-colors"
             >
               <span>⚖️</span>
               <span>Получить вес</span>
@@ -396,7 +396,7 @@ const DriverScalesPage: React.FC = () => {
 
           {/* Ошибки */}
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <div className="mb-6 p-4 bg-mono-50 border border-mono-200 rounded-lg">
               <div className="flex items-center space-x-2 text-mono-600">
                 <span>⚠️</span>
                 <span className="text-sm">{error}</span>
