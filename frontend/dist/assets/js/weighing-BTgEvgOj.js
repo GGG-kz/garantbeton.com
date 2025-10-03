@@ -1,1 +1,0 @@
-const t=(t,i)=>Math.max(0,t-i),i=t=>`${t.toFixed(2)} кг`,a=t=>new Date(t).toLocaleString("ru-RU",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});export{a,t as c,i as f};
