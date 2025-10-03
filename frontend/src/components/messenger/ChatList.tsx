@@ -15,6 +15,8 @@ interface ChatListProps {
 export default function ChatList({ chats, onChatSelect, selectedChatId, currentUserId, isMobile = false }: ChatListProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [showNewChatModal, setShowNewChatModal] = useState(false)
+  const [pinnedChats, setPinnedChats] = useState<string[]>([])
+  const [archivedChats, setArchivedChats] = useState<string[]>([])
 
   const filteredChats = chats.filter(chat =>
     chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -23,6 +25,33 @@ export default function ChatList({ chats, onChatSelect, selectedChatId, currentU
       p.id !== currentUserId
     )
   )
+
+  // Функции для работы с чатами
+  const togglePin = (chatId: string) => {
+    setPinnedChats(prev => 
+      prev.includes(chatId) 
+        ? prev.filter(id => id !== chatId)
+        : [...prev, chatId]
+    )
+  }
+
+  const toggleArchive = (chatId: string) => {
+    setArchivedChats(prev => 
+      prev.includes(chatId) 
+        ? prev.filter(id => id !== chatId)
+        : [...prev, chatId]
+    )
+  }
+
+  // Сортируем чаты: закрепленные сверху, затем обычные
+  const sortedChats = [...filteredChats].sort((a, b) => {
+    const aPinned = pinnedChats.includes(a.id)
+    const bPinned = pinnedChats.includes(b.id)
+    
+    if (aPinned && !bPinned) return -1
+    if (!aPinned && bPinned) return 1
+    return 0
+  })
 
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp)
@@ -106,7 +135,7 @@ export default function ChatList({ chats, onChatSelect, selectedChatId, currentU
           </div>
         ) : (
           <div className={`${isMobile ? 'space-y-0' : 'space-y-1'} ${isMobile ? 'p-0' : 'p-2'}`}>
-            {filteredChats.map((chat, index) => (
+            {sortedChats.map((chat, index) => (
               <div
                 key={chat.id}
                 onClick={() => onChatSelect(chat)}
@@ -138,11 +167,19 @@ export default function ChatList({ chats, onChatSelect, selectedChatId, currentU
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
-                      <h3 className={`text-sm font-semibold truncate ${
-                        selectedChatId === chat.id ? 'text-white' : 'text-black'
-                      }`}>
-                        {getChatName(chat)}
-                      </h3>
+                      <div className="flex items-center space-x-2">
+                        {pinnedChats.includes(chat.id) && (
+                          <span className="text-xs">📌</span>
+                        )}
+                        {archivedChats.includes(chat.id) && (
+                          <span className="text-xs">📁</span>
+                        )}
+                        <h3 className={`text-sm font-semibold truncate ${
+                          selectedChatId === chat.id ? 'text-white' : 'text-black'
+                        }`}>
+                          {getChatName(chat)}
+                        </h3>
+                      </div>
                       <div className="flex items-center space-x-2 flex-shrink-0">
                         {chat.lastMessageAt && (
                           <span className="text-xs text-mono-500 font-medium">
@@ -158,6 +195,30 @@ export default function ChatList({ chats, onChatSelect, selectedChatId, currentU
                             {chat.unreadCount > 99 ? '99+' : chat.unreadCount}
                           </span>
                         )}
+                        
+                        {/* Action buttons */}
+                        <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              togglePin(chat.id)
+                            }}
+                            className="p-1 hover:bg-mono-200 rounded text-xs"
+                            title={pinnedChats.includes(chat.id) ? "Открепить" : "Закрепить"}
+                          >
+                            {pinnedChats.includes(chat.id) ? "📌" : "📍"}
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              toggleArchive(chat.id)
+                            }}
+                            className="p-1 hover:bg-mono-200 rounded text-xs"
+                            title={archivedChats.includes(chat.id) ? "Разархивировать" : "Архивировать"}
+                          >
+                            {archivedChats.includes(chat.id) ? "📂" : "📁"}
+                          </button>
+                        </div>
                       </div>
                     </div>
 

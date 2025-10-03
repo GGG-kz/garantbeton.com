@@ -20,6 +20,10 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
   const [isTyping, setIsTyping] = useState(false)
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null)
   const [showMessageMenu, setShowMessageMenu] = useState(false)
+  const [editingMessage, setEditingMessage] = useState<Message | null>(null)
+  const [editText, setEditText] = useState('')
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   // Фильтруем сообщения для текущего чата и сортируем по времени (старые сверху)
@@ -113,6 +117,41 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
       setShowMessageMenu(true)
     }
   }
+
+  // Функции редактирования сообщений
+  const startEditing = (message: Message) => {
+    setEditingMessage(message)
+    setEditText(message.content)
+    setShowMessageMenu(false)
+  }
+
+  const saveEdit = () => {
+    if (editingMessage && editText.trim()) {
+      // Здесь должна быть логика сохранения изменений
+      console.log('Редактировать сообщение:', editingMessage.id, editText)
+      setEditingMessage(null)
+      setEditText('')
+    }
+  }
+
+  const cancelEdit = () => {
+    setEditingMessage(null)
+    setEditText('')
+  }
+
+  // Функции ответов на сообщения
+  const replyToMessage = (message: Message) => {
+    setReplyingTo(message)
+    setShowMessageMenu(false)
+  }
+
+  // Функция поиска сообщений
+  const filteredMessages = searchQuery 
+    ? chatMessages.filter(msg => 
+        msg.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        msg.senderName.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : chatMessages
 
   // Закрытие меню при клике вне его
   useEffect(() => {
@@ -221,6 +260,20 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
                 </svg>
               </button>
             )}
+
+            {/* Search messages */}
+            <div className="relative flex-1 max-w-md">
+              <input
+                type="text"
+                placeholder="Поиск сообщений..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-2 pl-10 text-sm border border-mono-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-mono-500 focus:border-transparent"
+              />
+              <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-mono-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
             
             <div className="h-12 w-12 rounded-lg bg-black flex items-center justify-center">
               {chat.type === 'group' ? (
@@ -250,7 +303,7 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {chatMessages.length === 0 ? (
+        {filteredMessages.length === 0 ? (
           <div className="text-center text-mono-500 mt-16 p-8 animate-fade-in">
             <div className="w-20 h-20 mx-auto mb-4 bg-mono-100 rounded-3xl flex items-center justify-center">
               <MessageCircle className="h-10 w-10 text-mono-400" />
@@ -259,8 +312,8 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
             <p className="text-sm mt-2 text-mono-500">Начните общение, отправив первое сообщение</p>
           </div>
         ) : (
-          chatMessages.map((message, index) => {
-            const prevMessage = chatMessages[index - 1]
+          filteredMessages.map((message, index) => {
+            const prevMessage = filteredMessages[index - 1]
             const isOwnMessage = message.senderId === user?.id
             const showDate = shouldShowDate(message, prevMessage)
             const showAvatar = shouldShowAvatar(message, prevMessage)
@@ -324,9 +377,35 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
                         } ${isOwnMessage ? 'cursor-pointer hover:opacity-90' : ''}`}
                         onClick={() => handleMessageClick(message)}
                       >
-                        <p className={`${isMobile ? 'text-sm' : 'text-sm'} leading-relaxed`}>
-                          {message.content}
-                        </p>
+                        {editingMessage?.id === message.id ? (
+                          <div className="space-y-2">
+                            <input
+                              type="text"
+                              value={editText}
+                              onChange={(e) => setEditText(e.target.value)}
+                              className="w-full px-2 py-1 text-sm bg-white bg-opacity-20 rounded border-none outline-none"
+                              autoFocus
+                            />
+                            <div className="flex space-x-2">
+                              <button
+                                onClick={saveEdit}
+                                className="px-3 py-1 bg-white bg-opacity-20 text-xs rounded hover:bg-opacity-30"
+                              >
+                                Сохранить
+                              </button>
+                              <button
+                                onClick={cancelEdit}
+                                className="px-3 py-1 bg-white bg-opacity-20 text-xs rounded hover:bg-opacity-30"
+                              >
+                                Отмена
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <p className={`${isMobile ? 'text-sm' : 'text-sm'} leading-relaxed`}>
+                            {message.content}
+                          </p>
+                        )}
                         
                         {/* Message ID and copy link button */}
                         <div className="mt-1 flex items-center justify-between">
@@ -431,7 +510,16 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
           >
             <Paperclip className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
           </button>
-          <div className="flex-1">
+          
+          <button
+            type="button"
+            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+            className={`btn-ghost ${isMobile ? 'p-2' : 'p-3'} ${isMobile ? 'rounded-full' : 'rounded-xl'} mobile-touch-target`}
+          >
+            <span className="text-lg">😀</span>
+          </button>
+          
+          <div className="flex-1 relative">
             <input
               type="text"
               value={newMessage}
@@ -439,7 +527,29 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
               placeholder="Напишите сообщение..."
               className={`input-field ${isMobile ? 'rounded-full' : 'rounded-2xl'} text-base resize-none ${isMobile ? 'px-4 py-3' : ''}`}
             />
+            
+            {/* Emoji Picker */}
+            {showEmojiPicker && (
+              <div className="absolute bottom-full left-0 mb-2 bg-white border border-mono-200 rounded-lg shadow-lg p-4 max-w-xs">
+                <div className="grid grid-cols-8 gap-1">
+                  {['😀', '😂', '😍', '🤔', '👍', '👎', '❤️', '🎉', '😢', '😡', '🤗', '😴', '😎', '🤯', '🔥', '💯'].map(emoji => (
+                    <button
+                      key={emoji}
+                      type="button"
+                      onClick={() => {
+                        setNewMessage(prev => prev + emoji)
+                        setShowEmojiPicker(false)
+                      }}
+                      className="p-2 hover:bg-mono-100 rounded text-lg"
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
+          
           <button
             type="submit"
             disabled={!newMessage.trim()}
@@ -469,6 +579,28 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
             </p>
             
             <div className="space-y-3">
+              <button
+                onClick={() => startEditing(selectedMessage)}
+                className="w-full p-3 text-left bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg transition-colors flex items-center space-x-3"
+              >
+                <Edit className="h-5 w-5" />
+                <div>
+                  <div className="font-medium">Редактировать</div>
+                  <div className="text-sm opacity-75">Изменить текст сообщения</div>
+                </div>
+              </button>
+
+              <button
+                onClick={() => replyToMessage(selectedMessage)}
+                className="w-full p-3 text-left bg-green-50 hover:bg-green-100 text-green-700 rounded-lg transition-colors flex items-center space-x-3"
+              >
+                <Reply className="h-5 w-5" />
+                <div>
+                  <div className="font-medium">Ответить</div>
+                  <div className="text-sm opacity-75">Ответить на это сообщение</div>
+                </div>
+              </button>
+              
               <button
                 onClick={() => deleteMessageForAll(selectedMessage.id)}
                 className="w-full p-3 text-left bg-red-50 hover:bg-red-100 text-red-700 rounded-lg transition-colors flex items-center space-x-3"
