@@ -208,117 +208,7 @@ export default function DashboardPage() {
 
       {/* Main Content */}
       <div className="space-y-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Role Info Card */}
-          <div className="lg:col-span-1">
-            <div className="card">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className={`p-3 rounded-lg ${roleInfo.bgColor}`}>
-                  <IconComponent className={`h-6 w-6 ${roleInfo.color}`} />
-                </div>
-                <div>
-                  <h2 className="text-lg font-semibold text-black">
-                    {roleInfo.title}
-                  </h2>
-                  <p className="text-sm text-mono-500">
-                    {user.login}
-                  </p>
-                </div>
-              </div>
-              
-              <p className="text-mono-600 text-sm leading-relaxed">
-                {roleInfo.description}
-              </p>
-              
-              {user.role === UserRole.DEVELOPER && (
-                <div className="mt-4 space-y-3">
-                  <div className="p-3 bg-mono-50 border-2 border-mono-200 rounded-lg">
-                    <p className="text-sm text-mono-700">
-                      Используйте переключатель ролей выше для тестирования разных интерфейсов
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => {
-                      addNotification({
-                        title: 'Тестовое уведомление',
-                        message: 'Это тестовое уведомление для проверки работы системы уведомлений',
-                        type: 'info',
-                        userId: user.id,
-                        role: user.role,
-                        priority: 'medium'
-                      })
-                    }}
-                    className="w-full btn-primary btn-sm"
-                  >
-                    Тест уведомления
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (window.confirm('Принудительно обновить кэш приложения? Это очистит все кэши и перезагрузит страницу.')) {
-                        forceUpdateCache()
-                      }
-                    }}
-                    className="w-full btn-danger btn-sm"
-                  >
-                    Принудительное обновление
-                  </button>
-                  
-                  <div className="border-t border-mono-200 pt-3 mt-3">
-                    <h4 className="text-sm font-medium text-mono-700 mb-2">Синхронизация данных</h4>
-                    <button
-                      onClick={() => {
-                        const result = exportAllData()
-                        alert(result)
-                      }}
-                      className="w-full btn-success btn-sm mb-2"
-                    >
-                      Экспорт данных
-                    </button>
-                    <button
-                      onClick={() => {
-                        const input = document.createElement('input')
-                        input.type = 'file'
-                        input.accept = '.json'
-                        input.onchange = async (e) => {
-                          const file = (e.target as HTMLInputElement).files?.[0]
-                          if (file) {
-                            const result = await importAllData(file)
-                            alert(result)
-                            if (result.includes('успешно')) {
-                              window.location.reload()
-                            }
-                          }
-                        }
-                        input.click()
-                      }}
-                      className="w-full btn-primary btn-sm mb-2"
-                    >
-                      Импорт данных
-                    </button>
-                    <button
-                      onClick={() => {
-                        if (window.confirm('Очистить ВСЕ данные приложения? Это действие необратимо!')) {
-                          const result = clearAllData()
-                          alert(result)
-                          window.location.reload()
-                        }
-                      }}
-                      className="w-full btn-danger btn-sm"
-                    >
-                      Очистить все данные
-                    </button>
-                  </div>
-                  
-                  <div className="text-xs text-mono-500 text-center mt-3">
-                    Версия: {APP_VERSION}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Dashboard Content */}
-          <div className="lg:col-span-2">
+        <div className="w-full">
             <div className="card">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-black">
@@ -340,11 +230,10 @@ export default function DashboardPage() {
               <div className="space-y-6">
                 <div className="card-primary">
                   <h4 className="font-medium text-black mb-2">
-                    Система успешно запущена!
+                    Добро пожаловать, {roleInfo.title}!
                   </h4>
                   <p className="text-sm text-mono-700">
-                    Вы успешно вошли в систему автоматизации бетонного завода. 
-                    Интерфейс адаптирован под вашу роль: <strong>{roleInfo.title}</strong>
+                    Вы вошли как: <strong>{user.login}</strong> | Роль: <strong>{roleInfo.title}</strong>
                   </p>
                 </div>
 
@@ -663,7 +552,6 @@ export default function DashboardPage() {
                 )}
               </div>
             </div>
-          </div>
         </div>
         {/* Notification Center */}
         <NotificationCenter 
