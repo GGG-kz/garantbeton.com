@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuthStore } from '../../stores/authStore'
+import { useUsersStore } from '../../stores/usersStore'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { AdminUser, CreateUserRequest, UpdateUserRequest, UserActivityLog } from '../../types/admin'
 import { UserRole } from '../../types/auth'
@@ -147,8 +148,37 @@ const roleColors: Record<UserRole, string> = {
 
 export default function UsersPage() {
   const { user } = useAuthStore()
-  const [users, setUsers] = useLocalStorage<AdminUser[]>('adminUsers', mockUsers)
+  const { users: storeUsers, addUser, updateUser, deleteUser } = useUsersStore()
   const [activityLogs, setActivityLogs] = useLocalStorage<UserActivityLog[]>('userActivityLogs', mockActivityLogs)
+  
+  // Объединяем пользователей из хранилища с моковыми данными
+  const [users, setUsers] = useState<AdminUser[]>([...mockUsers])
+  
+  // Синхронизируем пользователей из хранилища
+  useEffect(() => {
+    const combinedUsers = [...mockUsers]
+    
+    // Добавляем пользователей из хранилища (включая водителей)
+    storeUsers.forEach(storeUser => {
+      const existingUser = combinedUsers.find(u => u.id === storeUser.id)
+      if (!existingUser) {
+        combinedUsers.push({
+          id: storeUser.id,
+          login: storeUser.login,
+          fullName: storeUser.fullName || '',
+          email: storeUser.email || '',
+          role: storeUser.role,
+          isActive: storeUser.isActive !== false,
+          lastLoginAt: new Date().toISOString(),
+          createdAt: storeUser.createdAt,
+          updatedAt: storeUser.updatedAt || new Date().toISOString()
+        })
+      }
+    })
+    
+    setUsers(combinedUsers)
+  }, [storeUsers])
+  
   const [viewMode, setViewMode] = useLocalStorage<'cards' | 'list'>('usersViewMode', 'list')
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
@@ -184,15 +214,14 @@ export default function UsersPage() {
   })
 
   const handleCreateUser = (userData: CreateUserRequest) => {
-    const newUser: AdminUser = {
-      id: Date.now().toString(),
-      ...userData,
-      isActive: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    }
-    
-    setUsers(prev => [...prev, newUser])
+    // Добавляем в общее хранилище
+    addUser({
+      login: userData.login,
+      role: userData.role,
+      fullName: userData.fullName,
+      email: userData.email,
+      isActive: true
+    })
     
     // Добавляем запись в лог активности
     const activityLog: UserActivityLog = {
@@ -201,8 +230,8 @@ export default function UsersPage() {
       userName: user!.fullName || user!.login,
       action: 'create_user',
       resource: 'user',
-      resourceId: newUser.id,
-      details: `Создан пользователь "${newUser.login}" с ролью "${roleLabels[newUser.role]}"`,
+      resourceId: Date.now().toString(),
+      details: `Создан пользователь "${userData.login}" с ролью "${roleLabels[userData.role]}"`,
       timestamp: new Date().toISOString(),
     }
     setActivityLogs(prev => [activityLog, ...prev])
@@ -237,7 +266,8 @@ export default function UsersPage() {
   const handleDeleteUser = (userId: string) => {
     const userToDelete = users.find(u => u.id === userId)
     if (userToDelete) {
-      setUsers(prev => prev.filter(u => u.id !== userId))
+      // Удаляем из общего хранилища
+      deleteUser(userId)
       
       // Добавляем запись в лог активности
       const activityLog: UserActivityLog = {
@@ -256,12 +286,8 @@ export default function UsersPage() {
 
   const handleEditUser = (userData: UpdateUserRequest) => {
     if (selectedUser) {
-      setUsers(prev => prev.map(u => {
-        if (u.id === selectedUser.id) {
-          return { ...u, ...userData, updatedAt: new Date().toISOString() }
-        }
-        return u
-      }))
+      // Обновляем в общем хранилище
+      updateUser(selectedUser.id, userData)
       
       setIsEditModalOpen(false)
       setSelectedUser(null)
