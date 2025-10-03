@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import PageLayout from '../components/PageLayout'
 import CounterpartyModal from '../components/directories/CounterpartyModal'
-import { Plus, Building2, Users, Package, Truck, User, Database, X } from 'lucide-react'
+import WarehouseModal from '../components/directories/WarehouseModal'
+import { Plus, Building2, Users, Package, Truck, User, Database, X, Edit, Trash2 } from 'lucide-react'
 
 interface Counterparty {
   id: string
@@ -19,11 +20,23 @@ interface Counterparty {
   updatedAt: string
 }
 
+interface Warehouse {
+  id: string
+  name: string
+  address: string
+  coordinates?: string
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+}
+
 export default function DirectoriesPage() {
   const [activeTab, setActiveTab] = useState<'counterparties' | 'warehouses' | 'materials' | 'concrete-grades' | 'vehicles' | 'drivers'>('counterparties')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingCounterparty, setEditingCounterparty] = useState<Counterparty | null>(null)
+  const [editingWarehouse, setEditingWarehouse] = useState<Warehouse | null>(null)
   const [counterparties, setCounterparties] = useState<Counterparty[]>([])
+  const [warehouses, setWarehouses] = useState<Warehouse[]>([])
 
   const tabs = [
     { id: 'counterparties', label: 'Контрагенты', icon: Building2 },
@@ -35,40 +48,76 @@ export default function DirectoriesPage() {
   ]
 
   const handleAdd = () => {
-    setEditingCounterparty(null)
-    setIsModalOpen(true)
+    if (activeTab === 'counterparties') {
+      setEditingCounterparty(null)
+      setIsModalOpen(true)
+    } else if (activeTab === 'warehouses') {
+      setEditingWarehouse(null)
+      setIsModalOpen(true)
+    }
   }
 
-  const handleEdit = (counterparty: Counterparty) => {
-    setEditingCounterparty(counterparty)
-    setIsModalOpen(true)
+  const handleEdit = (item: Counterparty | Warehouse) => {
+    if (activeTab === 'counterparties') {
+      setEditingCounterparty(item as Counterparty)
+      setIsModalOpen(true)
+    } else if (activeTab === 'warehouses') {
+      setEditingWarehouse(item as Warehouse)
+      setIsModalOpen(true)
+    }
   }
 
-  const handleSave = (data: Omit<Counterparty, 'id' | 'createdAt' | 'updatedAt'>) => {
-    if (editingCounterparty) {
-      // Редактирование
-      setCounterparties(prev => prev.map(c => 
-        c.id === editingCounterparty.id 
-          ? { ...c, ...data, updatedAt: new Date().toISOString() }
-          : c
-      ))
-    } else {
-      // Создание
-      const newCounterparty: Counterparty = {
-        ...data,
-        id: Date.now().toString(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+  const handleSave = (data: any) => {
+    if (activeTab === 'counterparties') {
+      if (editingCounterparty) {
+        // Редактирование
+        setCounterparties(prev => prev.map(c => 
+          c.id === editingCounterparty.id 
+            ? { ...c, ...data, updatedAt: new Date().toISOString() }
+            : c
+        ))
+      } else {
+        // Создание
+        const newCounterparty: Counterparty = {
+          ...data,
+          id: Date.now().toString(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }
+        setCounterparties(prev => [...prev, newCounterparty])
       }
-      setCounterparties(prev => [...prev, newCounterparty])
+    } else if (activeTab === 'warehouses') {
+      if (editingWarehouse) {
+        // Редактирование
+        setWarehouses(prev => prev.map(w => 
+          w.id === editingWarehouse.id 
+            ? { ...w, ...data, updatedAt: new Date().toISOString() }
+            : w
+        ))
+      } else {
+        // Создание
+        const newWarehouse: Warehouse = {
+          ...data,
+          id: Date.now().toString(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }
+        setWarehouses(prev => [...prev, newWarehouse])
+      }
     }
     setIsModalOpen(false)
     setEditingCounterparty(null)
+    setEditingWarehouse(null)
   }
 
   const handleDelete = (id: string) => {
-    if (window.confirm('Вы уверены, что хотите удалить этого контрагента?')) {
-      setCounterparties(prev => prev.filter(c => c.id !== id))
+    const itemType = activeTab === 'counterparties' ? 'контрагента' : 'склад'
+    if (window.confirm(`Вы уверены, что хотите удалить этот ${itemType}?`)) {
+      if (activeTab === 'counterparties') {
+        setCounterparties(prev => prev.filter(c => c.id !== id))
+      } else if (activeTab === 'warehouses') {
+        setWarehouses(prev => prev.filter(w => w.id !== id))
+      }
     }
   }
 
@@ -159,14 +208,105 @@ export default function DirectoriesPage() {
                           className="text-mono-600 hover:text-black"
                           title="Редактировать"
                         >
-                          <Users className="h-4 w-4" />
+                          <Edit className="h-4 w-4" />
                         </button>
                         <button 
                           onClick={() => handleDelete(counterparty.id)}
                           className="text-mono-600 hover:text-black"
                           title="Удалить"
                         >
-                          <X className="h-4 w-4" />
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+
+  const renderWarehouses = () => (
+    <div className="space-y-6">
+      {/* Заголовок с кнопкой добавления */}
+      <div className="flex justify-between items-center">
+        <div className="flex items-center space-x-4">
+          <Database className="h-8 w-8 text-mono-600" />
+          <div>
+            <h2 className="text-2xl font-bold text-mono-900">Склады</h2>
+            <p className="text-mono-600">Всего: {warehouses.length}</p>
+          </div>
+        </div>
+        <button 
+          onClick={handleAdd}
+          className="flex items-center space-x-2 px-4 py-2 bg-mono-600 hover:bg-mono-700 text-white rounded-lg transition-colors duration-200"
+        >
+          <Plus className="h-4 w-4" />
+          <span>Добавить склад</span>
+        </button>
+      </div>
+
+      {/* Список складов */}
+      {warehouses.length === 0 ? (
+        <div className="text-center py-12">
+          <Database className="h-12 w-12 text-mono-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-mono-900 mb-2">Склады не найдены</h3>
+          <p className="text-mono-500">Создайте первый склад для начала работы</p>
+        </div>
+      ) : (
+        <div className="bg-white rounded-lg border border-mono-200 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-mono-200">
+              <thead className="bg-mono-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
+                    Наименование
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
+                    Адрес
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
+                    Координаты
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-mono-500 uppercase tracking-wider">
+                    Действия
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-mono-200">
+                {warehouses.map((warehouse) => (
+                  <tr key={warehouse.id} className="hover:bg-mono-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-mono-900">{warehouse.name}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm text-mono-900 max-w-xs truncate" title={warehouse.address}>
+                        {warehouse.address}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-mono-900">
+                        {warehouse.coordinates || '—'}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="flex justify-end space-x-2">
+                        <button 
+                          onClick={() => handleEdit(warehouse)}
+                          className="text-mono-600 hover:text-black"
+                          title="Редактировать"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </button>
+                        <button 
+                          onClick={() => handleDelete(warehouse.id)}
+                          className="text-mono-600 hover:text-black"
+                          title="Удалить"
+                        >
+                          <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
                     </td>
@@ -220,22 +360,32 @@ export default function DirectoriesPage() {
         {/* Содержимое вкладок */}
         <div className="min-h-[400px]">
           {activeTab === 'counterparties' && renderCounterparties()}
-          {activeTab === 'warehouses' && renderPlaceholder('Склады', 'Раздел в разработке')}
+          {activeTab === 'warehouses' && renderWarehouses()}
           {activeTab === 'materials' && renderPlaceholder('Материалы', 'Раздел в разработке')}
           {activeTab === 'concrete-grades' && renderPlaceholder('Марки бетона', 'Раздел в разработке')}
           {activeTab === 'vehicles' && renderPlaceholder('Транспорт', 'Раздел в разработке')}
           {activeTab === 'drivers' && renderPlaceholder('Водители', 'Раздел в разработке')}
         </div>
 
-        {/* Модальное окно для контрагентов */}
+        {/* Модальные окна */}
         <CounterpartyModal
-          isOpen={isModalOpen}
+          isOpen={isModalOpen && activeTab === 'counterparties'}
           onClose={() => {
             setIsModalOpen(false)
             setEditingCounterparty(null)
           }}
           onSave={handleSave}
           counterparty={editingCounterparty}
+        />
+        
+        <WarehouseModal
+          isOpen={isModalOpen && activeTab === 'warehouses'}
+          onClose={() => {
+            setIsModalOpen(false)
+            setEditingWarehouse(null)
+          }}
+          onSave={handleSave}
+          warehouse={editingWarehouse}
         />
       </div>
     </PageLayout>
