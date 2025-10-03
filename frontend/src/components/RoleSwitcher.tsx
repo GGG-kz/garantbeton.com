@@ -57,14 +57,25 @@ export default function RoleSwitcher() {
   // Проверяем, является ли пользователь разработчиком
   const isDeveloper = user?.role === UserRole.DEVELOPER
   
+  console.log('RoleSwitcher debug:', {
+    user: user?.login,
+    userRole: user?.role,
+    expectedRole: UserRole.DEVELOPER,
+    isDeveloper,
+    userRoleType: typeof user?.role,
+    expectedRoleType: typeof UserRole.DEVELOPER
+  })
+  
   if (!user) {
     console.log('RoleSwitcher: Not showing - no user')
     return null
   }
   
+  // Временно показываем для всех пользователей для отладки
   if (!isDeveloper) {
     console.log('RoleSwitcher: Not showing - not a developer. User role:', user.role, 'Expected:', UserRole.DEVELOPER)
-    return null
+    // Временно показываем для всех пользователей
+    // return null
   }
   
   console.log('RoleSwitcher: Showing for user:', user.login, 'role:', user.role, 'isDeveloper:', isDeveloper)
@@ -73,10 +84,10 @@ export default function RoleSwitcher() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-mono-100 text-mono-700 hover:bg-mono-200 transition-colors duration-200 text-sm font-medium"
+        className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors duration-200 text-sm font-medium border-2 border-red-700"
       >
         <IconComponent className="h-4 w-4" />
-        <span>{currentRole.label}</span>
+        <span>DEBUG: {currentRole.label}</span>
         <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
