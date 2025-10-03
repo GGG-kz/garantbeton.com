@@ -1,123 +1,81 @@
-import React, { useState } from 'react'
-import { ChevronDown, User, Shield, Calculator, Truck, Settings, Eye } from 'lucide-react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useAuthStore } from '../stores/authStore'
+import { UserRole } from '../types/auth'
+import { ChevronDown, Shield, Settings, BarChart3, Truck, Package, Calculator, Users, Monitor, ChefHat, User as UserIcon } from 'lucide-react'
 
-interface Role {
-  id: string
-  name: string
-  label: string
-  icon: React.ComponentType<{ className?: string }>
-  description: string
-}
-
-const roles: Role[] = [
-  {
-    id: 'admin',
-    name: 'Администратор',
-    label: 'Админ',
-    icon: Shield,
-    description: 'Полный доступ ко всем функциям'
-  },
-  {
-    id: 'director',
-    name: 'Директор',
-    label: 'Директор',
-    icon: User,
-    description: 'Управление и контроль'
-  },
-  {
-    id: 'accountant',
-    name: 'Бухгалтер',
-    label: 'Бухгалтер',
-    icon: Calculator,
-    description: 'Финансы и отчеты'
-  },
-  {
-    id: 'dispatcher',
-    name: 'Диспетчер',
-    label: 'Диспетчер',
-    icon: Settings,
-    description: 'Управление заявками и заказами'
-  },
-  {
-    id: 'driver',
-    name: 'Водитель',
-    label: 'Водитель',
-    icon: Truck,
-    description: 'Работа с накладными и взвешиванием'
-  },
-  {
-    id: 'developer',
-    name: 'Разработчик',
-    label: 'Dev',
-    icon: Eye,
-    description: 'Тестирование и отладка'
-  }
+const roles = [
+  { id: UserRole.DEVELOPER, label: 'Разработчик', icon: Shield, description: 'Полный доступ, переключение ролей' },
+  { id: UserRole.ADMIN, label: 'Администратор', icon: Settings, description: 'Управление пользователями и системой' },
+  { id: UserRole.DIRECTOR, label: 'Директор', icon: Users, description: 'Общее руководство и стратегическое планирование' },
+  { id: UserRole.MANAGER, label: 'Менеджер', icon: BarChart3, description: 'Управление производством и планированием заказов' },
+  { id: UserRole.DISPATCHER, label: 'Диспетчер', icon: Truck, description: 'Координация доставки и управление транспортом' },
+  { id: UserRole.DRIVER, label: 'Водитель', icon: Truck, description: 'Управление доставкой и отслеживание маршрутов' },
+  { id: UserRole.SUPPLY, label: 'Снабженец', icon: Package, description: 'Управление поставками сырья и материалов' },
+  { id: UserRole.ACCOUNTANT, label: 'Бухгалтер', icon: Calculator, description: 'Финансовый учет и отчетность' },
+  { id: UserRole.OPERATOR, label: 'Оператор', icon: Monitor, description: 'Работа с материалами, марками бетона, заявками и мессенджером' },
+  { id: UserRole.COOK, label: 'Повар', icon: ChefHat, description: 'Подача заявок на продукты и инвентарь, доступ к мессенджеру' },
+  { id: UserRole.USER, label: 'Пользователь', icon: UserIcon, description: 'Базовый доступ к системе' },
 ]
 
 export default function RoleSwitcher() {
   const [isOpen, setIsOpen] = useState(false)
   const { user } = useAuthStore()
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   const currentRole = roles.find(role => role.id === user?.role) || roles[0]
   const IconComponent = currentRole.icon
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
   const handleRoleChange = (roleId: string) => {
     if (user) {
-      // Используем switchRole из authStore
       const { switchRole } = useAuthStore.getState()
-      switchRole(roleId as any)
+      switchRole(roleId as UserRole)
       setIsOpen(false)
     }
   }
 
-  if (!user) return null
+  if (!user || user.originalRole !== UserRole.DEVELOPER) return null
 
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 px-3 py-2 bg-mono-100 hover:bg-mono-200 rounded-lg transition-colors duration-200"
-        title="Переключить роль для тестирования"
+        className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-mono-100 text-mono-700 hover:bg-mono-200 transition-colors duration-200 text-sm font-medium"
       >
-        <IconComponent className="h-4 w-4 text-mono-600" />
-        <span className="text-sm font-medium text-mono-700">
-          {currentRole.label}
-        </span>
-        <ChevronDown className={`h-4 w-4 text-mono-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <IconComponent className="h-4 w-4" />
+        <span>{currentRole.label}</span>
+        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-64 bg-white border border-mono-200 rounded-lg shadow-lg z-50">
+        <div className="absolute right-0 mt-2 w-64 bg-white border border-mono-200 rounded-lg shadow-lg z-50">
           <div className="p-2">
-            <div className="text-xs font-medium text-mono-500 mb-2 px-2">
-              Переключение роли для тестирования
-            </div>
-            {roles.map((role) => {
-              const RoleIcon = role.icon
-              const isActive = role.id === user?.role
-              
-              return (
-                <button
-                  key={role.id}
-                  onClick={() => handleRoleChange(role.id)}
-                  className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors duration-200 ${
-                    isActive 
-                      ? 'bg-mono-100 text-mono-900' 
-                      : 'hover:bg-mono-50 text-mono-700'
-                  }`}
-                >
-                  <RoleIcon className="h-4 w-4" />
-                  <div className="flex-1 text-left">
-                    <div className="text-sm font-medium">{role.name}</div>
-                    <div className="text-xs text-mono-500">{role.description}</div>
-                  </div>
-                  {isActive && (
-                    <div className="w-2 h-2 bg-mono-600 rounded-full"></div>
-                  )}
-                </button>
-              )
-            })}
+            {roles.map((role) => (
+              <button
+                key={role.id}
+                onClick={() => handleRoleChange(role.id)}
+                className={`w-full text-left flex items-center space-x-3 px-3 py-2 rounded-md transition-colors duration-200
+                  ${user.role === role.id ? 'bg-mono-600 text-white' : 'text-mono-700 hover:bg-mono-100'}
+                `}
+              >
+                <role.icon className="h-4 w-4" />
+                <div>
+                  <span className="block text-sm font-medium">{role.label}</span>
+                  <span className="block text-xs text-mono-500">{role.description}</span>
+                </div>
+              </button>
+            ))}
           </div>
           <div className="border-t border-mono-200 p-2">
             <div className="text-xs text-mono-500 text-center">

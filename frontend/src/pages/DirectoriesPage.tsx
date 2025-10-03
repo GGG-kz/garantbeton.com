@@ -63,7 +63,7 @@ interface ConcreteGrade {
   updatedAt: string
 }
 
-export default function DirectoriesPageMobile() {
+export default function DirectoriesPage() {
   const [activeTab, setActiveTab] = useState<'counterparties' | 'warehouses' | 'materials' | 'concrete-grades' | 'vehicles' | 'drivers'>('counterparties')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingCounterparty, setEditingCounterparty] = useState<Counterparty | null>(null)

@@ -128,6 +128,7 @@ const roleLabels: Record<UserRole, string> = {
   [UserRole.DIRECTOR]: 'Директор',
   [UserRole.OPERATOR]: 'Оператор',
   [UserRole.COOK]: 'Повар',
+  [UserRole.USER]: 'Пользователь',
 }
 
 const roleColors: Record<UserRole, string> = {
@@ -141,6 +142,7 @@ const roleColors: Record<UserRole, string> = {
   [UserRole.DIRECTOR]: 'text-mono-600 bg-mono-100',
   [UserRole.OPERATOR]: 'text-indigo-600 bg-indigo-100',
   [UserRole.COOK]: 'text-orange-600 bg-orange-100',
+  [UserRole.USER]: 'text-mono-600 bg-mono-100',
 }
 
 export default function UsersPage() {

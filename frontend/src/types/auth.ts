@@ -9,6 +9,7 @@ export enum UserRole {
   DIRECTOR = 'director',
   OPERATOR = 'operator',
   COOK = 'cook',
+  USER = 'user',
 }
 
 export interface User {
@@ -18,6 +19,7 @@ export interface User {
   fullName?: string
   email?: string
   avatar?: string
+  originalRole?: UserRole // Для хранения исходной роли разработчика
 }
 
 export interface AuthResponse {
