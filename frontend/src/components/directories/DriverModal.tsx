@@ -4,13 +4,12 @@ import { User, Phone, Key } from 'lucide-react'
 
 interface Driver {
   id: string
-  firstName: string
-  lastName: string
-  middleName?: string
+  fullName: string
   login: string
   phone: string
   isActive: boolean
   createdAt: string
+  userId?: string
 }
 
 interface DriverModalProps {
@@ -22,9 +21,7 @@ interface DriverModalProps {
 
 export default function DriverModal({ isOpen, onClose, onSave, driver }: DriverModalProps) {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    middleName: '',
+    fullName: '',
     login: '',
     password: '',
     phone: '',
@@ -34,9 +31,7 @@ export default function DriverModal({ isOpen, onClose, onSave, driver }: DriverM
   useEffect(() => {
     if (driver) {
       setFormData({
-        firstName: driver.firstName,
-        lastName: driver.lastName,
-        middleName: driver.middleName || '',
+        fullName: driver.fullName,
         login: driver.login,
         password: '',
         phone: driver.phone,
@@ -44,9 +39,7 @@ export default function DriverModal({ isOpen, onClose, onSave, driver }: DriverM
       })
     } else {
       setFormData({
-        firstName: '',
-        lastName: '',
-        middleName: '',
+        fullName: '',
         login: '',
         password: '',
         phone: '',
@@ -63,9 +56,7 @@ export default function DriverModal({ isOpen, onClose, onSave, driver }: DriverM
 
   const handleClose = () => {
     setFormData({
-      firstName: '',
-      lastName: '',
-      middleName: '',
+      fullName: '',
       login: '',
       password: '',
       phone: '',
@@ -81,42 +72,18 @@ export default function DriverModal({ isOpen, onClose, onSave, driver }: DriverM
       title={driver ? 'Редактировать водителя' : 'Добавить водителя'}
     >
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* ФИО в одной строке */}
         <div>
           <label className="block text-sm font-medium text-mono-700 mb-2">
-            Фамилия Имя Отчество *
+            ФИО *
           </label>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div>
-              <input
-                type="text"
-                value={formData.lastName}
-                onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
-                required
-                placeholder="Фамилия"
-                className="w-full px-3 py-2 border border-mono-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                value={formData.firstName}
-                onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
-                required
-                placeholder="Имя"
-                className="w-full px-3 py-2 border border-mono-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                value={formData.middleName}
-                onChange={(e) => setFormData(prev => ({ ...prev, middleName: e.target.value }))}
-                placeholder="Отчество"
-                className="w-full px-3 py-2 border border-mono-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-              />
-            </div>
-          </div>
+          <input
+            type="text"
+            value={formData.fullName}
+            onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
+            required
+            placeholder="Введите Фамилию Имя Отчество"
+            className="w-full px-3 py-2 border border-mono-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+          />
         </div>
 
         <div>

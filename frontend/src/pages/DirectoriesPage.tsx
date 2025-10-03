@@ -57,12 +57,12 @@ interface MaterialConsumption {
 
 interface Driver {
   id: string
-  firstName: string
-  lastName: string
+  fullName: string
   login: string
   phone: string
   isActive: boolean
   createdAt: string
+  userId?: string
 }
 
 interface ConcreteGrade {
@@ -495,7 +495,7 @@ export default function DirectoriesPage() {
           {drivers.map((driver) => (
             <MobileCard
               key={driver.id}
-              title={`${driver.firstName} ${driver.lastName}`}
+              title={driver.fullName}
               fields={[
                 { label: 'Логин', value: driver.login },
                 { label: 'Телефон', value: driver.phone },

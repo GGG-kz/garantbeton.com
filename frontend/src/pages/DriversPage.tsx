@@ -7,21 +7,19 @@ import { Plus, User, Phone, Key, UserCheck, Edit, Trash2 } from 'lucide-react'
 
 interface Driver {
   id: string
-  firstName: string
-  lastName: string
-  middleName?: string
+  fullName: string
   login: string
   phone: string
   isActive: boolean
   createdAt: string
   updatedAt?: string
+  userId?: string
 }
 
 const mockDrivers: Driver[] = [
   {
     id: '1',
-    firstName: 'Алексей',
-    lastName: 'Петров',
+    fullName: 'Петров Алексей Иванович',
     login: 'alexey.petrov',
     phone: '+7 777 123 4567',
     isActive: true,
@@ -29,8 +27,7 @@ const mockDrivers: Driver[] = [
   },
   {
     id: '2',
-    firstName: 'Михаил',
-    lastName: 'Сидоров',
+    fullName: 'Сидоров Михаил Петрович',
     login: 'mikhail.sidorov',
     phone: '+7 777 234 5678',
     isActive: true,
@@ -44,9 +41,7 @@ export default function DriversPage() {
   const [showModal, setShowModal] = useState(false)
   const [editingDriver, setEditingDriver] = useState<Driver | null>(null)
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    middleName: '',
+    fullName: '',
     login: '',
     password: '',
     phone: '',
@@ -76,9 +71,7 @@ export default function DriversPage() {
     if (driver) {
       setEditingDriver(driver)
       setFormData({
-        firstName: driver.firstName,
-        lastName: driver.lastName,
-        middleName: driver.middleName || '',
+        fullName: driver.fullName,
         login: driver.login,
         password: '',
         phone: driver.phone,
@@ -87,9 +80,7 @@ export default function DriversPage() {
     } else {
       setEditingDriver(null)
       setFormData({
-        firstName: '',
-        lastName: '',
-        middleName: '',
+        fullName: '',
         login: '',
         password: '',
         phone: '',
@@ -103,9 +94,7 @@ export default function DriversPage() {
     setShowModal(false)
     setEditingDriver(null)
     setFormData({
-      firstName: '',
-      lastName: '',
-      middleName: '',
+      fullName: '',
       login: '',
       password: '',
       phone: '',
@@ -119,9 +108,7 @@ export default function DriversPage() {
     if (editingDriver) {
       // Обновление существующего водителя
       updateDriver(editingDriver.id, {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        middleName: formData.middleName,
+        fullName: formData.fullName,
         login: formData.login,
         phone: formData.phone,
         isActive: formData.isActive
@@ -213,7 +200,7 @@ export default function DriversPage() {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-mono-900">
-                      {driver.lastName} {driver.firstName} {driver.middleName || ''}
+                      {driver.fullName}
                     </h3>
                     <p className="text-sm text-mono-500">
                       {driver.isActive ? 'Активен' : 'Неактивен'}
@@ -273,39 +260,16 @@ export default function DriversPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-mono-700 mb-2">
-              Фамилия Имя Отчество *
+              ФИО *
             </label>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <div>
-                <input
-                  type="text"
-                  value={formData.lastName}
-                  onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
-                  required
-                  placeholder="Фамилия"
-                  className="w-full px-3 py-2 border border-mono-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-                />
-              </div>
-              <div>
-                <input
-                  type="text"
-                  value={formData.firstName}
-                  onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
-                  required
-                  placeholder="Имя"
-                  className="w-full px-3 py-2 border border-mono-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-                />
-              </div>
-              <div>
-                <input
-                  type="text"
-                  value={formData.middleName}
-                  onChange={(e) => setFormData(prev => ({ ...prev, middleName: e.target.value }))}
-                  placeholder="Отчество"
-                  className="w-full px-3 py-2 border border-mono-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-                />
-              </div>
-            </div>
+            <input
+              type="text"
+              value={formData.fullName}
+              onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
+              required
+              placeholder="Введите Фамилию Имя Отчество"
+              className="w-full px-3 py-2 border border-mono-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+            />
           </div>
 
           <div>
