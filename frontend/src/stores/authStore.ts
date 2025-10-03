@@ -82,7 +82,9 @@ export const useAuthStore = create<AuthState>()(
             user: state.user.login,
             currentRole: state.user.role,
             originalRole: originalRole,
-            isDeveloper: originalRole === UserRole.DEVELOPER
+            storedOriginalRole: state.originalRole,
+            isDeveloper: originalRole === UserRole.DEVELOPER,
+            userRoleEnum: UserRole.DEVELOPER
           })
         }
       },

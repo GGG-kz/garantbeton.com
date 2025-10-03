@@ -68,7 +68,8 @@ export default function RoleSwitcher() {
     currentRole: user?.role,
     originalRole: user?.originalRole,
     isDeveloper,
-    shouldShow: isDeveloper
+    userRoleEnum: UserRole.DEVELOPER,
+    comparison: user?.originalRole === UserRole.DEVELOPER
   })
   
   if (!user) {
@@ -76,7 +77,10 @@ export default function RoleSwitcher() {
     return null
   }
   
-  if (!isDeveloper) {
+  // ВРЕМЕННО: показываем переключатель всем пользователям для отладки
+  const shouldShow = true // isDeveloper
+  
+  if (!shouldShow) {
     console.log('RoleSwitcher: Not showing - not a developer. Current role:', user.role, 'Original role:', user.originalRole)
     return null
   }
