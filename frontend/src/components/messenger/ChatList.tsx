@@ -8,10 +8,11 @@ interface ChatListProps {
   onChatSelect: (chat: Chat) => void
   selectedChatId?: string
   currentUserId: string
+  isMobile?: boolean
 }
 
 
-export default function ChatList({ chats, onChatSelect, selectedChatId, currentUserId }: ChatListProps) {
+export default function ChatList({ chats, onChatSelect, selectedChatId, currentUserId, isMobile = false }: ChatListProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [showNewChatModal, setShowNewChatModal] = useState(false)
 
@@ -65,11 +66,11 @@ export default function ChatList({ chats, onChatSelect, selectedChatId, currentU
   }
 
   return (
-    <div className="w-full md:w-80 bg-white border-r border-mono-200 flex flex-col h-full">
+    <div className={`w-full ${isMobile ? '' : 'md:w-80'} bg-white ${isMobile ? '' : 'border-r border-mono-200'} flex flex-col h-full`}>
       {/* Header */}
-      <div className="p-6 border-b border-mono-200 bg-mono-50">
+      <div className={`${isMobile ? 'p-4' : 'p-6'} border-b border-mono-200 bg-mono-50`}>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-black">Чаты</h2>
+          <h2 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-black`}>Чаты</h2>
           <button
             onClick={() => setShowNewChatModal(true)}
             className="btn-ghost p-2.5 rounded-xl mobile-touch-target"
@@ -104,27 +105,33 @@ export default function ChatList({ chats, onChatSelect, selectedChatId, currentU
             </p>
           </div>
         ) : (
-          <div className="space-y-1 p-2">
+          <div className={`${isMobile ? 'space-y-0' : 'space-y-1'} ${isMobile ? 'p-0' : 'p-2'}`}>
             {filteredChats.map((chat, index) => (
               <div
                 key={chat.id}
                 onClick={() => onChatSelect(chat)}
-                className={`group p-4 cursor-pointer transition-all duration-300 mobile-touch-target rounded-lg animate-slide-up ${
+                className={`group ${isMobile ? 'p-4 border-b border-mono-100' : 'p-4 rounded-lg'} cursor-pointer transition-all duration-300 mobile-touch-target animate-slide-up ${
                   selectedChatId === chat.id
-                    ? 'bg-black text-white'
-                    : 'hover:bg-mono-100 active:bg-mono-200'
+                    ? isMobile ? 'bg-mono-100' : 'bg-black text-white'
+                    : isMobile ? 'hover:bg-mono-50 active:bg-mono-100' : 'hover:bg-mono-100 active:bg-mono-200'
                 }`}
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div className="flex items-start space-x-3">
                   {/* Avatar */}
                   <div className="flex-shrink-0">
-                    <div className={`h-12 w-12 rounded-lg flex items-center justify-center transition-all duration-300 ${
+                    <div className={`${isMobile ? 'h-12 w-12 rounded-full' : 'h-12 w-12 rounded-lg'} flex items-center justify-center transition-all duration-300 ${
                       selectedChatId === chat.id 
-                        ? 'bg-white' 
-                        : 'bg-mono-200 group-hover:bg-mono-300'
+                        ? isMobile ? 'bg-mono-600' : 'bg-white'
+                        : isMobile ? 'bg-mono-200' : 'bg-mono-200 group-hover:bg-mono-300'
                     }`}>
-                      {getChatIcon(chat, selectedChatId === chat.id)}
+                      {isMobile ? (
+                        <span className="text-sm font-semibold text-white">
+                          {getChatName(chat).charAt(0).toUpperCase()}
+                        </span>
+                      ) : (
+                        getChatIcon(chat, selectedChatId === chat.id)
+                      )}
                     </div>
                   </div>
 

@@ -9,10 +9,11 @@ interface MessageListProps {
   messages: Message[]
   onSendMessage: (content: string, replyTo?: string) => void
   onBackToChats?: () => void
+  isMobile?: boolean
 }
 
 
-export default function MessageList({ chat, messages, onSendMessage, onBackToChats }: MessageListProps) {
+export default function MessageList({ chat, messages, onSendMessage, onBackToChats, isMobile = false }: MessageListProps) {
   const { user } = useAuthStore()
   const [newMessage, setNewMessage] = useState('')
   const [replyingTo, setReplyingTo] = useState<Message | null>(null)
@@ -116,9 +117,10 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
   }
 
   return (
-    <div className="flex-1 flex flex-col bg-white">
-      {/* Chat Header */}
-      <div className="p-6 border-b border-mono-200 bg-mono-50">
+    <div className={`flex-1 flex flex-col ${isMobile ? 'bg-mono-50' : 'bg-white'}`}>
+      {/* Chat Header - скрыт на мобильной версии, так как есть в MobileMessengerLayout */}
+      {!isMobile && (
+        <div className="p-6 border-b border-mono-200 bg-mono-50">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             {/* Mobile back button */}
@@ -157,6 +159,7 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
           </button>
         </div>
       </div>
+      )}
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -188,12 +191,12 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
 
                 {/* Message */}
                 <div className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} ${!showAvatar ? 'mt-2' : 'mt-4'} animate-slide-up`}>
-                  <div className={`flex max-w-xs md:max-w-sm lg:max-w-md ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'} items-end space-x-3`}>
+                  <div className={`flex ${isMobile ? 'max-w-[85%]' : 'max-w-xs md:max-w-sm lg:max-w-md'} ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'} items-end ${isMobile ? 'space-x-2' : 'space-x-3'}`}>
                     {/* Avatar */}
                     {showAvatar && !isOwnMessage && (
                       <div className="flex-shrink-0">
-                        <div className="h-8 w-8 rounded-full bg-gradient-to-br from-mono-200 to-mono-300 flex items-center justify-center shadow-soft">
-                          <span className="text-xs font-bold text-mono-700">
+                        <div className={`${isMobile ? 'h-8 w-8' : 'h-8 w-8'} rounded-full ${isMobile ? 'bg-mono-600' : 'bg-gradient-to-br from-mono-200 to-mono-300'} flex items-center justify-center ${isMobile ? '' : 'shadow-soft'}`}>
+                          <span className={`text-xs font-bold ${isMobile ? 'text-white' : 'text-mono-700'}`}>
                             {message.senderName.split(' ').map(n => n[0]).join('')}
                           </span>
                         </div>
@@ -223,13 +226,17 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
 
                       {/* Message bubble */}
                       <div
-                        className={`px-4 py-3 rounded-lg transition-all duration-300 ${
+                        className={`${isMobile ? 'px-3 py-2' : 'px-4 py-3'} ${isMobile ? 'rounded-2xl' : 'rounded-lg'} transition-all duration-300 ${
                           isOwnMessage
-                            ? 'bg-black text-white'
-                            : 'bg-white border-2 border-mono-200 text-black hover:border-mono-300'
+                            ? isMobile 
+                              ? 'bg-mono-600 text-white' 
+                              : 'bg-black text-white'
+                            : isMobile
+                              ? 'bg-white text-black shadow-sm'
+                              : 'bg-white border-2 border-mono-200 text-black hover:border-mono-300'
                         }`}
                       >
-                        <p className="text-sm leading-relaxed">{message.content}</p>
+                        <p className={`${isMobile ? 'text-sm' : 'text-sm'} leading-relaxed`}>{message.content}</p>
                       </div>
 
                       {/* Timestamp */}
@@ -271,13 +278,13 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
       )}
 
       {/* Message input */}
-      <div className="p-6 border-t border-mono-200 bg-mono-50">
-        <form onSubmit={handleSendMessage} className="flex items-end space-x-3">
+      <div className={`${isMobile ? 'p-4' : 'p-6'} border-t border-mono-200 ${isMobile ? 'bg-white' : 'bg-mono-50'}`}>
+        <form onSubmit={handleSendMessage} className={`flex items-end ${isMobile ? 'space-x-2' : 'space-x-3'}`}>
           <button
             type="button"
-            className="btn-ghost p-3 rounded-xl mobile-touch-target"
+            className={`btn-ghost ${isMobile ? 'p-2' : 'p-3'} ${isMobile ? 'rounded-full' : 'rounded-xl'} mobile-touch-target`}
           >
-            <Paperclip className="h-5 w-5" />
+            <Paperclip className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
           </button>
           <div className="flex-1">
             <input
@@ -285,15 +292,15 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Напишите сообщение..."
-              className="input-field rounded-2xl text-base resize-none"
+              className={`input-field ${isMobile ? 'rounded-full' : 'rounded-2xl'} text-base resize-none ${isMobile ? 'px-4 py-3' : ''}`}
             />
           </div>
           <button
             type="submit"
             disabled={!newMessage.trim()}
-            className="btn-primary p-3 rounded-2xl mobile-touch-target"
+            className={`btn-primary ${isMobile ? 'p-2' : 'p-3'} ${isMobile ? 'rounded-full' : 'rounded-2xl'} mobile-touch-target`}
           >
-            <Send className="h-5 w-5" />
+            <Send className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
           </button>
         </form>
       </div>

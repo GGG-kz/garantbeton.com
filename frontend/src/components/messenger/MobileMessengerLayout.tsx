@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Chat, Message } from '../../types/messenger'
 import ChatList from './ChatList'
 import MessageList from './MessageList'
+import { ArrowLeft, MoreVertical } from 'lucide-react'
 
 interface MobileMessengerLayoutProps {
   chats: Chat[]
@@ -32,33 +33,46 @@ export default function MobileMessengerLayout({
   }
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Mobile Navigation */}
-      <div className="md:hidden bg-white border-b border-mono-200">
-        <div className="flex">
-          <button
-            onClick={() => setView('chats')}
-            className={`flex-1 py-3 px-4 text-sm font-medium transition-colors duration-200 ${
-              view === 'chats'
-                ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50'
-                : 'text-mono-500 hover:text-mono-700'
-            }`}
-          >
-            Чаты
-          </button>
-          <button
-            onClick={() => setView('messages')}
-            disabled={!selectedChat}
-            className={`flex-1 py-3 px-4 text-sm font-medium transition-colors duration-200 ${
-              view === 'messages' && selectedChat
-                ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50'
-                : 'text-mono-500 hover:text-mono-700 disabled:text-mono-300'
-            }`}
-          >
-            {selectedChat ? selectedChat.name : 'Сообщения'}
+    <div className="h-screen flex flex-col bg-white">
+      {/* WhatsApp-style Header */}
+      {view === 'messages' && selectedChat ? (
+        <div className="bg-mono-800 text-white px-4 py-3 flex items-center justify-between border-b border-mono-700">
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={handleBackToChats}
+              className="p-2 hover:bg-mono-700 rounded-full transition-colors"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-mono-600 rounded-full flex items-center justify-center">
+                <span className="text-sm font-semibold">
+                  {selectedChat.name.charAt(0).toUpperCase()}
+                </span>
+              </div>
+              <div>
+                <h3 className="font-semibold text-sm">{selectedChat.name}</h3>
+                <p className="text-xs text-mono-300">
+                  {selectedChat.type === 'group' 
+                    ? `${selectedChat.participants.length} участников`
+                    : 'В сети'
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
+          <button className="p-2 hover:bg-mono-700 rounded-full transition-colors">
+            <MoreVertical className="h-5 w-5" />
           </button>
         </div>
-      </div>
+      ) : (
+        <div className="bg-mono-800 text-white px-4 py-3 flex items-center justify-between border-b border-mono-700">
+          <h2 className="text-lg font-semibold">Чаты</h2>
+          <button className="p-2 hover:bg-mono-700 rounded-full transition-colors">
+            <MoreVertical className="h-5 w-5" />
+          </button>
+        </div>
+      )}
 
       {/* Content */}
       <div className="flex-1 overflow-hidden">
@@ -68,6 +82,7 @@ export default function MobileMessengerLayout({
             onChatSelect={handleChatSelect}
             selectedChatId={selectedChat?.id}
             currentUserId={currentUserId}
+            isMobile={true}
           />
         ) : (
           <MessageList
@@ -75,6 +90,7 @@ export default function MobileMessengerLayout({
             messages={messages}
             onSendMessage={onSendMessage}
             onBackToChats={handleBackToChats}
+            isMobile={true}
           />
         )}
       </div>
