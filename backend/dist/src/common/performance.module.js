@@ -14,7 +14,7 @@ const compression_middleware_1 = require("./compression.middleware");
 let PerformanceModule = class PerformanceModule {
     configure(consumer) {
         consumer
-            .apply(compression_middleware_1.PerformanceMiddleware, compression_middleware_1.CompressionMiddleware)
+            .apply(compression_middleware_1.PerformanceMiddleware)
             .forRoutes('*');
     }
 };
@@ -25,7 +25,6 @@ exports.PerformanceModule = PerformanceModule = __decorate([
         providers: [
             cache_service_1.CacheService,
             database_service_1.DatabaseService,
-            compression_middleware_1.CompressionMiddleware,
             compression_middleware_1.PerformanceMiddleware,
         ],
         exports: [

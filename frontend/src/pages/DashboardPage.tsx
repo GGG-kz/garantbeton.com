@@ -349,8 +349,8 @@ export default function DashboardPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div
-                    onClick={() => alert('Справочники временно недоступны. Будет добавлено завтра.')}
-                    className="dashboard-card opacity-50 cursor-not-allowed"
+                    onClick={() => navigate('/directories')}
+                    className="dashboard-card"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-2">

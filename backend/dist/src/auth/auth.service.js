@@ -35,8 +35,9 @@ let AuthService = class AuthService {
         const user = await this.prisma.user.create({
             data: {
                 login,
-                password: passwordHash,
+                password_hash: passwordHash,
                 role: role,
+                updatedAt: new Date(),
             },
         });
         const tokens = await this.generateTokens(user.id, user.login, user.role);
@@ -57,7 +58,7 @@ let AuthService = class AuthService {
         if (!user) {
             throw new common_1.UnauthorizedException('Неверный логин или пароль');
         }
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+        const isPasswordValid = await bcrypt.compare(password, user.password_hash);
         if (!isPasswordValid) {
             throw new common_1.UnauthorizedException('Неверный логин или пароль');
         }

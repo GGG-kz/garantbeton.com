@@ -40,7 +40,6 @@ let DatabaseService = DatabaseService_1 = class DatabaseService extends client_1
     async onModuleInit() {
         await this.$connect();
         this.logger.log('Database connected successfully');
-        await this.createOptimizationIndexes();
     }
     async onModuleDestroy() {
         await this.$disconnect();

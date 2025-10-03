@@ -15,6 +15,7 @@ const users_module_1 = require("./users/users.module");
 const health_module_1 = require("./health/health.module");
 const performance_module_1 = require("./common/performance.module");
 const performance_controller_1 = require("./common/performance.controller");
+const requests_module_1 = require("./requests/requests.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -29,6 +30,7 @@ exports.AppModule = AppModule = __decorate([
             auth_module_1.AuthModule,
             users_module_1.UsersModule,
             health_module_1.HealthModule,
+            requests_module_1.RequestsModule,
         ],
         controllers: [performance_controller_1.PerformanceController],
     })

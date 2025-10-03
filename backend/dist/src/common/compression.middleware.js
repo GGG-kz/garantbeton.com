@@ -6,30 +6,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PerformanceMiddleware = exports.CompressionMiddleware = void 0;
+exports.PerformanceMiddleware = void 0;
 const common_1 = require("@nestjs/common");
-const compression_1 = require("compression");
-let CompressionMiddleware = class CompressionMiddleware {
-    constructor() {
-        this.handler = (0, compression_1.default)({
-            threshold: 1024,
-        });
-    }
-    use(req, res, next) {
-        this.handler(req, res, next);
-    }
-};
-exports.CompressionMiddleware = CompressionMiddleware;
-exports.CompressionMiddleware = CompressionMiddleware = __decorate([
-    (0, common_1.Injectable)()
-], CompressionMiddleware);
 let PerformanceMiddleware = class PerformanceMiddleware {
     use(req, res, next) {
         const start = process.hrtime.bigint();
         res.on('finish', () => {
-            const end = process.hrtime.bigint();
-            const durationMs = Number(end - start) / 1000000;
-            res.setHeader('X-Response-Time', `${durationMs.toFixed(2)}ms`);
+            try {
+                const end = process.hrtime.bigint();
+                const durationMs = Number(end - start) / 1000000;
+                if (!res.headersSent) {
+                    res.setHeader('X-Response-Time', `${durationMs.toFixed(2)}ms`);
+                }
+            }
+            catch (error) {
+                console.warn('PerformanceMiddleware: Could not set response time header:', error.message);
+            }
         });
         next();
     }

@@ -16,7 +16,7 @@ import {
 const navigationItems = [
   { path: '/dashboard', icon: Home, label: 'Главная' },
   { path: '/orders', icon: FileText, label: 'Заказы' },
-  // { path: '/directories', icon: Users, label: 'Справочники' }, // Временно отключено
+  { path: '/directories', icon: Users, label: 'Справочники' },
   { path: '/weighing', icon: Scale, label: 'Взвешивание' },
   { path: '/messenger', icon: MessageCircle, label: 'Сообщения' },
   { path: '/profile', icon: Settings, label: 'Профиль' }

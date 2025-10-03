@@ -20,8 +20,9 @@ async function clearDatabase() {
             data: {
                 id: developer.id,
                 login: developer.login,
-                password: developer.password,
+                password_hash: developer.password_hash,
                 role: developer.role,
+                updatedAt: new Date(),
             },
         });
         console.log('✅ БАЗА ДАННЫХ ПОЛНОСТЬЮ ОЧИЩЕНА!');

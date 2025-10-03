@@ -10,7 +10,12 @@ async function bootstrap() {
         exclude: ['health']
     });
     app.enableCors({
-        origin: ['http://localhost:3000', 'http://localhost:5173'],
+        origin: [
+            'http://localhost:3000',
+            'http://localhost:5173',
+            'https://garantbeton-frontend.onrender.com',
+            'https://garantbeton-com.onrender.com'
+        ],
         credentials: true,
     });
     app.useGlobalPipes(new common_1.ValidationPipe({
