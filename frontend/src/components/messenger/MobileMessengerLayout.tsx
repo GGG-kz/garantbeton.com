@@ -52,11 +52,15 @@ export default function MobileMessengerLayout({
               </div>
               <div>
                 <h3 className="font-semibold text-sm">{selectedChat.name}</h3>
-                <p className="text-xs text-mono-300">
-                  {selectedChat.type === 'group' 
-                    ? `${selectedChat.participants.length} участников`
-                    : 'В сети'
-                  }
+                <p className="text-xs text-mono-300 flex items-center">
+                  {selectedChat.type === 'group' ? (
+                    `${selectedChat.participants.length} участников`
+                  ) : (
+                    <>
+                      <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                      В сети
+                    </>
+                  )}
                 </p>
               </div>
             </div>

@@ -17,6 +17,7 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
   const { user } = useAuthStore()
   const [newMessage, setNewMessage] = useState('')
   const [replyingTo, setReplyingTo] = useState<Message | null>(null)
+  const [isTyping, setIsTyping] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   // Фильтруем сообщения для текущего чата и сортируем по времени (старые сверху)
@@ -40,6 +41,17 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
     setNewMessage('')
     setReplyingTo(null)
   }
+
+  // Симуляция печати при вводе
+  useEffect(() => {
+    if (newMessage.length > 0) {
+      setIsTyping(true)
+      const timer = setTimeout(() => setIsTyping(false), 2000)
+      return () => clearTimeout(timer)
+    } else {
+      setIsTyping(false)
+    }
+  }, [newMessage])
 
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp)
@@ -229,8 +241,8 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
                         className={`${isMobile ? 'px-3 py-2' : 'px-4 py-3'} ${isMobile ? 'rounded-2xl' : 'rounded-lg'} transition-all duration-300 ${
                           isOwnMessage
                             ? isMobile 
-                              ? 'bg-mono-600 text-white' 
-                              : 'bg-black text-white'
+                              ? 'bg-green-500 text-white' 
+                              : 'bg-green-500 text-white'
                             : isMobile
                               ? 'bg-white text-black shadow-sm'
                               : 'bg-white border-2 border-mono-200 text-black hover:border-mono-300'
@@ -239,10 +251,30 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
                         <p className={`${isMobile ? 'text-sm' : 'text-sm'} leading-relaxed`}>{message.content}</p>
                       </div>
 
-                      {/* Timestamp */}
-                      <span className="text-xs text-mono-500 mt-1 px-2 font-medium">
-                        {formatTime(message.timestamp)}
-                      </span>
+                      {/* Timestamp and read status */}
+                      <div className={`flex items-center ${isOwnMessage ? 'justify-end' : 'justify-start'} mt-1 px-2 space-x-1`}>
+                        <span className="text-xs text-mono-500 font-medium">
+                          {formatTime(message.timestamp)}
+                        </span>
+                        {isOwnMessage && (
+                          <div className="flex items-center space-x-1">
+                            {/* Single checkmark - sent */}
+                            <div className={`w-3 h-3 ${message.isRead ? 'text-blue-500' : 'text-white'}`}>
+                              <svg viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                              </svg>
+                            </div>
+                            {/* Double checkmark - read */}
+                            {message.isRead && (
+                              <div className="w-3 h-3 text-blue-500">
+                                <svg viewBox="0 0 16 16" fill="currentColor">
+                                  <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                                </svg>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -250,6 +282,27 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
             )
           })
         )}
+        
+        {/* Typing indicator */}
+        {isTyping && (
+          <div className="flex justify-start animate-slide-up">
+            <div className="flex max-w-xs md:max-w-sm lg:max-w-md flex-row items-end space-x-3">
+              <div className="flex-shrink-0">
+                <div className="h-8 w-8 rounded-full bg-mono-200 flex items-center justify-center">
+                  <span className="text-xs font-bold text-mono-700">?</span>
+                </div>
+              </div>
+              <div className="bg-white px-4 py-3 rounded-lg shadow-sm">
+                <div className="flex space-x-1">
+                  <div className="w-2 h-2 bg-mono-400 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-mono-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                  <div className="w-2 h-2 bg-mono-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
         <div ref={messagesEndRef} />
       </div>
 
