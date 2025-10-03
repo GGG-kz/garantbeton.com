@@ -24,6 +24,7 @@ const ApiTestPage = lazy(() => import('./pages/ApiTestPage'))
 // Admin страницы
 const UsersPage = lazy(() => import('./pages/admin/UsersPage'))
 const ReportsPage = lazy(() => import('./pages/admin/ReportsPage'))
+const DriversPage = lazy(() => import('./pages/DriversPage'))
 
 // Directories страницы - временно удалены
 
@@ -148,6 +149,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <ReportsPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/drivers" 
+            element={
+              <ProtectedRoute>
+                <DriversPage />
               </ProtectedRoute>
             } 
           />

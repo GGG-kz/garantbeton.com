@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
+import { UserRole } from '../../types/auth';
 import RoleSwitcher from '../RoleSwitcher';
 import { 
   Home, 
@@ -13,25 +14,35 @@ import {
   X,
   LogOut,
   Receipt,
-  Package
+  Package,
+  Truck
 } from 'lucide-react';
 
-const navigationItems = [
-  { path: '/dashboard', icon: Home, label: 'Главная' },
-  { path: '/orders', icon: FileText, label: 'Заказы' },
-  { path: '/directories', icon: Users, label: 'Справочники' },
-  { path: '/expense-invoices', icon: Receipt, label: 'Расходные накладные' },
-  { path: '/receipt-invoices', icon: Package, label: 'Приходные накладные' },
-  { path: '/weighing', icon: Scale, label: 'Взвешивание' },
-  { path: '/messenger', icon: MessageCircle, label: 'Сообщения' },
-  { path: '/profile', icon: Settings, label: 'Профиль' }
-];
+const getNavigationItems = (userRole: UserRole) => {
+  const baseItems = [
+    { path: '/dashboard', icon: Home, label: 'Главная' },
+    { path: '/orders', icon: FileText, label: 'Заказы' },
+    { path: '/directories', icon: Users, label: 'Справочники' },
+    { path: '/expense-invoices', icon: Receipt, label: 'Расходные накладные' },
+    { path: '/receipt-invoices', icon: Package, label: 'Приходные накладные' },
+    { path: '/weighing', icon: Scale, label: 'Взвешивание' },
+    { path: '/messenger', icon: MessageCircle, label: 'Сообщения' },
+    { path: '/profile', icon: Settings, label: 'Профиль' }
+  ];
+
+  // Добавляем водителей для админа и диспетчера
+  if (userRole === UserRole.ADMIN || userRole === UserRole.DISPATCHER) {
+    baseItems.splice(3, 0, { path: '/admin/drivers', icon: Truck, label: 'Водители' });
+  }
+
+  return baseItems;
+};
 
 export default function MobileNavigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout } = useAuthStore();
+  const { logout, user } = useAuthStore();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -77,7 +88,7 @@ export default function MobileNavigation() {
             </div>
             
             <nav className="space-y-2">
-              {navigationItems.map((item) => {
+              {getNavigationItems(user?.role || UserRole.USER).map((item) => {
                 const Icon = item.icon;
                 const isActive = location.pathname === item.path;
                 
@@ -114,7 +125,7 @@ export default function MobileNavigation() {
       {/* Нижняя навигация */}
       <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-mono-200">
         <div className="grid grid-cols-4 gap-1">
-          {navigationItems.slice(0, 4).map((item) => {
+          {getNavigationItems(user?.role || UserRole.USER).slice(0, 4).map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
             
