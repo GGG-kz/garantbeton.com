@@ -45,7 +45,7 @@ export default function RoleSwitcher() {
     }
   }
 
-  if (!user || user.originalRole !== UserRole.DEVELOPER) return null
+  if (!user || !user.originalRole || user.originalRole !== UserRole.DEVELOPER) return null
 
   return (
     <div className="relative" ref={dropdownRef}>

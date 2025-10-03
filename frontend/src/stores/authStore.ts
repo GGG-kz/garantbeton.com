@@ -63,7 +63,11 @@ export const useAuthStore = create<AuthState>()(
       initializeAuth: () => {
         const state = get()
         if (state.accessToken && state.user) {
-          set({ isAuthenticated: true })
+          set({ 
+            isAuthenticated: true,
+            // Восстанавливаем originalRole если пользователь разработчик
+            originalRole: state.user.role === UserRole.DEVELOPER ? UserRole.DEVELOPER : state.originalRole
+          })
         }
       },
 
