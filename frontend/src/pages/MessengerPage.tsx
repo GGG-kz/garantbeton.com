@@ -278,6 +278,8 @@ export default function MessengerPage() {
         onChatSelect={handleChatSelect}
         onSendMessage={handleSendMessage}
         currentUserId={user.id}
+        onUpdateMessages={setMessages}
+        onUpdateChat={setSelectedChat}
       />
     )
   }
@@ -301,6 +303,8 @@ export default function MessengerPage() {
               messages={messages}
               onSendMessage={handleSendMessage}
               onBackToChats={() => setSelectedChat(null)}
+              onUpdateMessages={setMessages}
+              onUpdateChat={setSelectedChat}
             />
           )}
         </div>
@@ -317,6 +321,8 @@ export default function MessengerPage() {
             chat={selectedChat}
             messages={messages}
             onSendMessage={handleSendMessage}
+            onUpdateMessages={setMessages}
+            onUpdateChat={setSelectedChat}
           />
         </div>
       </div>

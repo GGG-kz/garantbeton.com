@@ -11,6 +11,8 @@ interface MobileMessengerLayoutProps {
   onChatSelect: (chat: Chat) => void
   onSendMessage: (content: string, replyTo?: string) => void
   currentUserId: string
+  onUpdateMessages?: (messages: Message[]) => void
+  onUpdateChat?: (chat: Chat) => void
 }
 
 export default function MobileMessengerLayout({
@@ -19,7 +21,9 @@ export default function MobileMessengerLayout({
   selectedChat,
   onChatSelect,
   onSendMessage,
-  currentUserId
+  currentUserId,
+  onUpdateMessages,
+  onUpdateChat
 }: MobileMessengerLayoutProps) {
   const [view, setView] = useState<'chats' | 'messages'>('chats')
 
@@ -96,6 +100,8 @@ export default function MobileMessengerLayout({
             onSendMessage={onSendMessage}
             onBackToChats={handleBackToChats}
             isMobile={true}
+            onUpdateMessages={onUpdateMessages}
+            onUpdateChat={onUpdateChat}
           />
         )}
       </div>

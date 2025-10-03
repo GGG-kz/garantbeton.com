@@ -10,10 +10,12 @@ interface MessageListProps {
   onSendMessage: (content: string, replyTo?: string) => void
   onBackToChats?: () => void
   isMobile?: boolean
+  onUpdateMessages?: (messages: Message[]) => void
+  onUpdateChat?: (chat: Chat) => void
 }
 
 
-export default function MessageList({ chat, messages, onSendMessage, onBackToChats, isMobile = false }: MessageListProps) {
+export default function MessageList({ chat, messages, onSendMessage, onBackToChats, isMobile = false, onUpdateMessages, onUpdateChat }: MessageListProps) {
   const { user } = useAuthStore()
   const [newMessage, setNewMessage] = useState('')
   const [replyingTo, setReplyingTo] = useState<Message | null>(null)
@@ -98,21 +100,47 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
 
   // Функции удаления сообщений
   const deleteMessageForAll = (messageId: string) => {
-    // Здесь должна быть логика удаления сообщения для всех участников
-    console.log('Удалить сообщение для всех:', messageId)
+    if (!onUpdateMessages) return
+    
+    // Удаляем сообщение из локального состояния
+    const updatedMessages = messages.filter(msg => msg.id !== messageId)
+    onUpdateMessages(updatedMessages)
+    
+    // Обновляем lastMessage в чате, если это было последнее сообщение
+    if (chat && chat.lastMessage?.id === messageId && onUpdateChat) {
+      const remainingMessages = updatedMessages.filter(msg => msg.chatId === chat.id)
+      const newLastMessage = remainingMessages[remainingMessages.length - 1] || null
+      
+      onUpdateChat({
+        ...chat,
+        lastMessage: newLastMessage,
+        lastMessageAt: newLastMessage?.timestamp || chat.createdAt
+      })
+    }
+    
+    console.log('Сообщение удалено для всех:', messageId)
     setShowMessageMenu(false)
     setSelectedMessage(null)
   }
 
   const deleteMessageForMe = (messageId: string) => {
-    // Здесь должна быть логика удаления сообщения только для текущего пользователя
-    console.log('Удалить сообщение для меня:', messageId)
+    if (!onUpdateMessages) return
+    
+    // Помечаем сообщение как удаленное для текущего пользователя
+    const updatedMessages = messages.map(msg => 
+      msg.id === messageId 
+        ? { ...msg, content: 'Сообщение удалено', messageType: 'deleted' as const }
+        : msg
+    )
+    onUpdateMessages(updatedMessages)
+    
+    console.log('Сообщение удалено для меня:', messageId)
     setShowMessageMenu(false)
     setSelectedMessage(null)
   }
 
   const handleMessageClick = (message: Message) => {
-    if (message.senderId === user?.id) {
+    if (message.senderId === user?.id && message.messageType !== 'deleted') {
       setSelectedMessage(message)
       setShowMessageMenu(true)
     }
@@ -402,8 +430,10 @@ export default function MessageList({ chat, messages, onSendMessage, onBackToCha
                             </div>
                           </div>
                         ) : (
-                          <p className={`${isMobile ? 'text-sm' : 'text-sm'} leading-relaxed`}>
-                            {message.content}
+                          <p className={`${isMobile ? 'text-sm' : 'text-sm'} leading-relaxed ${
+                            message.messageType === 'deleted' ? 'italic text-mono-500' : ''
+                          }`}>
+                            {message.messageType === 'deleted' ? 'Сообщение удалено' : message.content}
                           </p>
                         )}
                         

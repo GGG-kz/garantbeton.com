@@ -9,7 +9,7 @@ export interface Message {
   chatId: string // ID чата (личного или группового)
   chatType: 'private' | 'group'
   content: string
-  messageType: 'text' | 'image' | 'file' | 'system'
+  messageType: 'text' | 'image' | 'file' | 'deleted' | 'system' | 'deleted'
   timestamp: string
   isRead: boolean
   isEdited?: boolean
@@ -53,7 +53,7 @@ export interface CreateMessageRequest {
   chatId: string
   chatType: 'private' | 'group'
   content: string
-  messageType: 'text' | 'image' | 'file'
+  messageType: 'text' | 'image' | 'file' | 'deleted'
   replyTo?: string
 }
 
