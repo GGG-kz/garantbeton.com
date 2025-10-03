@@ -370,8 +370,8 @@ export default function DashboardPage() {
 
 
 
-                  {/* Карточка заказов бетона - доступна менеджеру, директору, диспетчеру, бухгалтеру и разработчику */}
-                  {(user.role === UserRole.MANAGER || user.role === UserRole.DIRECTOR || user.role === UserRole.DISPATCHER || user.role === UserRole.ACCOUNTANT || user.role === UserRole.DEVELOPER) && (
+                  {/* Карточка заказов бетона - доступна всем ролям */}
+                  {(
                     <div
                       onClick={() => navigate('/orders')}
                       className="dashboard-card"
