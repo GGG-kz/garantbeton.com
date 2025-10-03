@@ -4,7 +4,7 @@ import { Price, CreatePriceRequest, Counterparty, ConcreteGrade, Material } from
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import PageLayout from '../components/PageLayout'
 import Modal from '../components/Modal'
-import PriceModal from '../components/directories/PriceModal'
+// import PriceModal from '../components/directories/PriceModal'
 import { Plus, Search, DollarSign, Building, Package, Edit, Trash2, Eye, Calendar } from 'lucide-react'
 
 // Пустой массив - данные теперь хранятся только в localStorage
@@ -352,13 +352,10 @@ export default function PricesPage() {
         title={editingPrice ? 'Редактировать цену' : 'Добавить цену'}
         size="lg"
       >
-        <PriceModal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          onSave={handleSave}
-          price={editingPrice}
-          title={editingPrice ? 'Редактировать цену' : 'Добавить цену'}
-        />
+        <div className="p-6 text-center">
+          <p className="text-gray-500">Форма цен временно недоступна</p>
+          <p className="text-sm text-gray-400 mt-2">Будет восстановлена завтра</p>
+        </div>
       </Modal>
 
       {/* Модальное окно для просмотра */}

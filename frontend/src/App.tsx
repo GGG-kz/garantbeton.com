@@ -24,14 +24,7 @@ const ApiTestPage = lazy(() => import('./pages/ApiTestPage'))
 const UsersPage = lazy(() => import('./pages/admin/UsersPage'))
 const ReportsPage = lazy(() => import('./pages/admin/ReportsPage'))
 
-// Directories страницы
-const DirectoriesPage = lazy(() => import('./pages/directories/DirectoriesPage'))
-const CounterpartiesPage = lazy(() => import('./pages/directories/CounterpartiesPage'))
-const ConcreteGradesPage = lazy(() => import('./pages/directories/ConcreteGradesPage'))
-const WarehousesPage = lazy(() => import('./pages/directories/WarehousesPage'))
-const MaterialsPage = lazy(() => import('./pages/directories/MaterialsPage'))
-const DriversPage = lazy(() => import('./pages/directories/DriversPage'))
-const VehiclesPage = lazy(() => import('./pages/directories/VehiclesPage'))
+// Directories страницы - временно удалены
 
 // Invoice страницы
 const ExpenseInvoicesPage = lazy(() => import('./pages/ExpenseInvoicesPage'))
@@ -157,62 +150,7 @@ function App() {
               </ProtectedRoute>
             } 
           />
-          <Route 
-            path="/directories" 
-            element={
-              <ProtectedRoute>
-                <DirectoriesPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/directories/counterparties" 
-            element={
-              <ProtectedRoute>
-                <CounterpartiesPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/directories/concrete-grades" 
-            element={
-              <ProtectedRoute>
-                <ConcreteGradesPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/directories/warehouses" 
-            element={
-              <ProtectedRoute>
-                <WarehousesPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/directories/materials" 
-            element={
-              <ProtectedRoute>
-                <MaterialsPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/directories/drivers" 
-            element={
-              <ProtectedRoute>
-                <DriversPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/directories/vehicles" 
-            element={
-              <ProtectedRoute>
-                <VehiclesPage />
-              </ProtectedRoute>
-            } 
-          />
+          {/* Directories routes - temporarily removed */}
           <Route 
             path="/scales-models" 
             element={
