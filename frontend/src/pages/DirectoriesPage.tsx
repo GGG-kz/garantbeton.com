@@ -3,6 +3,7 @@ import PageLayout from '../components/PageLayout'
 import CounterpartyModal from '../components/directories/CounterpartyModal'
 import WarehouseModal from '../components/directories/WarehouseModal'
 import MaterialModal from '../components/directories/MaterialModal'
+import ConcreteGradeModal from '../components/directories/ConcreteGradeModal'
 import { Plus, Building2, Users, Package, Truck, User, Database, X, Edit, Trash2 } from 'lucide-react'
 
 interface Counterparty {
@@ -42,15 +43,36 @@ interface Material {
   updatedAt: string
 }
 
+interface MaterialConsumption {
+  id: string
+  materialId: string
+  materialName: string
+  materialType: string
+  consumption: number
+  unit: string
+}
+
+interface ConcreteGrade {
+  id: string
+  name: string
+  description?: string
+  materialConsumptions: MaterialConsumption[]
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+}
+
 export default function DirectoriesPage() {
   const [activeTab, setActiveTab] = useState<'counterparties' | 'warehouses' | 'materials' | 'concrete-grades' | 'vehicles' | 'drivers'>('counterparties')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingCounterparty, setEditingCounterparty] = useState<Counterparty | null>(null)
   const [editingWarehouse, setEditingWarehouse] = useState<Warehouse | null>(null)
   const [editingMaterial, setEditingMaterial] = useState<Material | null>(null)
+  const [editingConcreteGrade, setEditingConcreteGrade] = useState<ConcreteGrade | null>(null)
   const [counterparties, setCounterparties] = useState<Counterparty[]>([])
   const [warehouses, setWarehouses] = useState<Warehouse[]>([])
   const [materials, setMaterials] = useState<Material[]>([])
+  const [concreteGrades, setConcreteGrades] = useState<ConcreteGrade[]>([])
 
   const tabs = [
     { id: 'counterparties', label: 'Контрагенты', icon: Building2 },
@@ -71,10 +93,13 @@ export default function DirectoriesPage() {
     } else if (activeTab === 'materials') {
       setEditingMaterial(null)
       setIsModalOpen(true)
+    } else if (activeTab === 'concrete-grades') {
+      setEditingConcreteGrade(null)
+      setIsModalOpen(true)
     }
   }
 
-  const handleEdit = (item: Counterparty | Warehouse | Material) => {
+  const handleEdit = (item: Counterparty | Warehouse | Material | ConcreteGrade) => {
     if (activeTab === 'counterparties') {
       setEditingCounterparty(item as Counterparty)
       setIsModalOpen(true)
@@ -83,6 +108,9 @@ export default function DirectoriesPage() {
       setIsModalOpen(true)
     } else if (activeTab === 'materials') {
       setEditingMaterial(item as Material)
+      setIsModalOpen(true)
+    } else if (activeTab === 'concrete-grades') {
+      setEditingConcreteGrade(item as ConcreteGrade)
       setIsModalOpen(true)
     }
   }
@@ -142,11 +170,30 @@ export default function DirectoriesPage() {
         }
         setMaterials(prev => [...prev, newMaterial])
       }
+    } else if (activeTab === 'concrete-grades') {
+      if (editingConcreteGrade) {
+        // Редактирование
+        setConcreteGrades(prev => prev.map(cg => 
+          cg.id === editingConcreteGrade.id 
+            ? { ...cg, ...data, updatedAt: new Date().toISOString() }
+            : cg
+        ))
+      } else {
+        // Создание
+        const newConcreteGrade: ConcreteGrade = {
+          ...data,
+          id: Date.now().toString(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }
+        setConcreteGrades(prev => [...prev, newConcreteGrade])
+      }
     }
     setIsModalOpen(false)
     setEditingCounterparty(null)
     setEditingWarehouse(null)
     setEditingMaterial(null)
+    setEditingConcreteGrade(null)
   }
 
   const handleDelete = (id: string) => {
@@ -167,6 +214,8 @@ export default function DirectoriesPage() {
         setWarehouses(prev => prev.filter(w => w.id !== id))
       } else if (activeTab === 'materials') {
         setMaterials(prev => prev.filter(m => m.id !== id))
+      } else if (activeTab === 'concrete-grades') {
+        setConcreteGrades(prev => prev.filter(cg => cg.id !== id))
       }
     }
   }
@@ -495,6 +544,112 @@ export default function DirectoriesPage() {
     </div>
   )
 
+  const renderConcreteGrades = () => (
+    <div className="space-y-6">
+      {/* Заголовок с кнопкой добавления */}
+      <div className="flex justify-between items-center">
+        <div className="flex items-center space-x-4">
+          <Package className="h-8 w-8 text-mono-600" />
+          <div>
+            <h2 className="text-2xl font-bold text-mono-900">Марки бетона</h2>
+            <p className="text-mono-600">Всего: {concreteGrades.length}</p>
+          </div>
+        </div>
+        <button 
+          onClick={handleAdd}
+          className="flex items-center space-x-2 px-4 py-2 bg-mono-600 hover:bg-mono-700 text-white rounded-lg transition-colors duration-200"
+        >
+          <Plus className="h-4 w-4" />
+          <span>Добавить марку бетона</span>
+        </button>
+      </div>
+
+      {/* Список марок бетона */}
+      {concreteGrades.length === 0 ? (
+        <div className="text-center py-12">
+          <Package className="h-12 w-12 text-mono-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-mono-900 mb-2">Марки бетона не найдены</h3>
+          <p className="text-mono-500">Создайте первую марку бетона для начала работы</p>
+        </div>
+      ) : (
+        <div className="bg-white rounded-lg border border-mono-200 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-mono-200">
+              <thead className="bg-mono-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
+                    Наименование
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
+                    Описание
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-mono-500 uppercase tracking-wider">
+                    Материалы
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-mono-500 uppercase tracking-wider">
+                    Действия
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-mono-200">
+                {concreteGrades.map((concreteGrade) => (
+                  <tr key={concreteGrade.id} className="hover:bg-mono-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-mono-900">{concreteGrade.name}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm text-mono-900 max-w-xs truncate" title={concreteGrade.description}>
+                        {concreteGrade.description || '—'}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm text-mono-900">
+                        {concreteGrade.materialConsumptions.length > 0 ? (
+                          <div className="space-y-1">
+                            {concreteGrade.materialConsumptions.slice(0, 2).map((consumption) => (
+                              <div key={consumption.id} className="text-xs">
+                                {consumption.materialName}: {consumption.consumption} {consumption.unit}
+                              </div>
+                            ))}
+                            {concreteGrade.materialConsumptions.length > 2 && (
+                              <div className="text-xs text-mono-500">
+                                +{concreteGrade.materialConsumptions.length - 2} еще
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-mono-400">Нет материалов</span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="flex justify-end space-x-2">
+                        <button 
+                          onClick={() => handleEdit(concreteGrade)}
+                          className="text-mono-600 hover:text-black"
+                          title="Редактировать"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </button>
+                        <button 
+                          onClick={() => handleDelete(concreteGrade.id)}
+                          className="text-mono-600 hover:text-black"
+                          title="Удалить"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+
   const renderPlaceholder = (title: string, description: string) => (
     <div className="text-center py-12">
       <div className="text-6xl mb-4">🚧</div>
@@ -537,7 +692,7 @@ export default function DirectoriesPage() {
           {activeTab === 'counterparties' && renderCounterparties()}
           {activeTab === 'warehouses' && renderWarehouses()}
           {activeTab === 'materials' && renderMaterials()}
-          {activeTab === 'concrete-grades' && renderPlaceholder('Марки бетона', 'Раздел в разработке')}
+          {activeTab === 'concrete-grades' && renderConcreteGrades()}
           {activeTab === 'vehicles' && renderPlaceholder('Транспорт', 'Раздел в разработке')}
           {activeTab === 'drivers' && renderPlaceholder('Водители', 'Раздел в разработке')}
         </div>
@@ -571,6 +726,17 @@ export default function DirectoriesPage() {
           }}
           onSave={handleSave}
           material={editingMaterial}
+        />
+        
+        <ConcreteGradeModal
+          isOpen={isModalOpen && activeTab === 'concrete-grades'}
+          onClose={() => {
+            setIsModalOpen(false)
+            setEditingConcreteGrade(null)
+          }}
+          onSave={handleSave}
+          concreteGrade={editingConcreteGrade}
+          materials={materials}
         />
       </div>
     </PageLayout>
