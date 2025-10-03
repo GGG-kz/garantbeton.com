@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
+import RoleSwitcher from '../RoleSwitcher';
 import { 
   Home, 
   FileText, 
@@ -64,7 +65,12 @@ export default function MobileNavigation() {
         {/* Menu */}
         <div className="relative w-64 h-full bg-white shadow-xl">
           <div className="p-6">
-            <h2 className="text-xl font-bold text-black mb-6">Навигация</h2>
+            <h2 className="text-xl font-bold text-black mb-4">Навигация</h2>
+            
+            {/* Переключатель ролей */}
+            <div className="mb-6">
+              <RoleSwitcher />
+            </div>
             
             <nav className="space-y-2">
               {navigationItems.map((item) => {

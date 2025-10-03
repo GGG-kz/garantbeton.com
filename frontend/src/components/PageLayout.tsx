@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 import BackButton from './BackButton'
 import UserMenu from './UserMenu'
+import RoleSwitcher from './RoleSwitcher'
 
 interface PageLayoutProps {
   children: ReactNode
@@ -23,7 +24,10 @@ export default function PageLayout({
         {/* Навигация и пользовательское меню в одной строке */}
         <div className="mb-6 animate-slide-up flex justify-between items-center">
           {showBackButton && <BackButton to={backTo} />}
-          <UserMenu />
+          <div className="flex items-center space-x-3">
+            <RoleSwitcher />
+            <UserMenu />
+          </div>
         </div>
 
         {/* Заголовок */}
