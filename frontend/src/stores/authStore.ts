@@ -80,42 +80,45 @@ export const useAuthStore = create<AuthState>()(
             originalRole: originalRole
           })
           
+          // Проверяем localStorage напрямую
+          const storedAuth = localStorage.getItem('auth-storage')
+          const parsedAuth = storedAuth ? JSON.parse(storedAuth) : null
+          
           console.log('initializeAuth debug:', {
             user: state.user.login,
             currentRole: state.user.role,
             originalRole: originalRole,
             storedOriginalRole: state.originalRole,
             isDeveloper: originalRole === UserRole.DEVELOPER,
-            userRoleEnum: UserRole.DEVELOPER
+            userRoleEnum: UserRole.DEVELOPER,
+            localStorageAuth: parsedAuth,
+            localStorageOriginalRole: parsedAuth?.state?.originalRole
           })
         }
       },
 
       switchRole: (role: UserRole) => {
         const state = get()
-        // Разрешаем переключение ролей только если пользователь разработчик (по исходной роли)
-        const isDeveloper = state.user?.originalRole === UserRole.DEVELOPER
-        
+        // ВРЕМЕННО: разрешаем переключение ролей ВСЕМ пользователям
         console.log('switchRole debug:', {
           currentRole: state.user?.role,
           originalRole: state.user?.originalRole,
           newRole: role,
-          isDeveloper,
           user: state.user?.login
         })
         
-        if (state.user && isDeveloper) {
+        if (state.user) {
           set({
             user: {
               ...state.user,
               role,
             },
             // Сохраняем originalRole при переключении
-            originalRole: state.originalRole
+            originalRole: state.originalRole || state.user.role
           })
-          console.log('Role switched successfully to:', role, 'originalRole preserved:', state.originalRole)
+          console.log('Role switched successfully to:', role)
         } else {
-          console.log('Role switch denied - not a developer')
+          console.log('Role switch denied - no user')
         }
       },
 

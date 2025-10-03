@@ -77,13 +77,8 @@ export default function RoleSwitcher() {
     return null
   }
   
-  // Показываем переключатель только разработчикам
-  const shouldShow = isDeveloper
-  
-  if (!shouldShow) {
-    console.log('RoleSwitcher: Not showing - not a developer. Current role:', user.role, 'Original role:', user.originalRole)
-    return null
-  }
+  // ВРЕМЕННО: показываем переключатель ВСЕМ пользователям
+  console.log('RoleSwitcher: FORCING SHOW for all users - user:', user.login, 'role:', user.role)
   
   console.log('RoleSwitcher: Showing for user:', user.login, 'current role:', user.role, 'original role:', user.originalRole)
 
