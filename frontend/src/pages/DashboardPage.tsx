@@ -370,8 +370,8 @@ export default function DashboardPage() {
 
 
 
-                  {/* Карточка заказов бетона - доступна только менеджеру, директору, диспетчеру и бухгалтеру */}
-                  {(user.role === UserRole.MANAGER || user.role === UserRole.DIRECTOR || user.role === UserRole.DISPATCHER || user.role === UserRole.ACCOUNTANT) && (
+                  {/* Карточка заказов бетона - доступна менеджеру, директору, диспетчеру, бухгалтеру и разработчику */}
+                  {(user.role === UserRole.MANAGER || user.role === UserRole.DIRECTOR || user.role === UserRole.DISPATCHER || user.role === UserRole.ACCOUNTANT || user.role === UserRole.DEVELOPER) && (
                     <div
                       onClick={() => navigate('/orders')}
                       className="dashboard-card"
@@ -388,8 +388,8 @@ export default function DashboardPage() {
                     </div>
                   )}
 
-                  {/* Карточка расходных накладных - доступна диспетчеру, менеджеру, директору, бухгалтеру, снабженцу и оператору */}
-                  {(user.role === UserRole.DISPATCHER || user.role === UserRole.MANAGER || user.role === UserRole.DIRECTOR || user.role === UserRole.ACCOUNTANT || user.role === UserRole.SUPPLY || user.role === UserRole.OPERATOR) && (
+                  {/* Карточка расходных накладных - доступна диспетчеру, менеджеру, директору, бухгалтеру, снабженцу, оператору и разработчику */}
+                  {(user.role === UserRole.DISPATCHER || user.role === UserRole.MANAGER || user.role === UserRole.DIRECTOR || user.role === UserRole.ACCOUNTANT || user.role === UserRole.SUPPLY || user.role === UserRole.OPERATOR || user.role === UserRole.DEVELOPER) && (
                     <div
                       onClick={() => navigate('/expense-invoices')}
                       className="dashboard-card"
@@ -406,8 +406,8 @@ export default function DashboardPage() {
                     </div>
                   )}
 
-                  {/* Карточка приходных накладных - доступна диспетчеру, менеджеру, директору, бухгалтеру, снабженцу и оператору */}
-                  {(user.role === UserRole.DISPATCHER || user.role === UserRole.MANAGER || user.role === UserRole.DIRECTOR || user.role === UserRole.ACCOUNTANT || user.role === UserRole.SUPPLY || user.role === UserRole.OPERATOR) && (
+                  {/* Карточка приходных накладных - доступна диспетчеру, менеджеру, директору, бухгалтеру, снабженцу, оператору и разработчику */}
+                  {(user.role === UserRole.DISPATCHER || user.role === UserRole.MANAGER || user.role === UserRole.DIRECTOR || user.role === UserRole.ACCOUNTANT || user.role === UserRole.SUPPLY || user.role === UserRole.OPERATOR || user.role === UserRole.DEVELOPER) && (
                     <div
                       onClick={() => navigate('/receipt-invoices')}
                       className="dashboard-card"
@@ -492,8 +492,8 @@ export default function DashboardPage() {
                     </p>
                   </div>
 
-                  {/* Карточка управления пользователями - только для администратора */}
-                  {user.role === UserRole.ADMIN && (
+                  {/* Карточка управления пользователями - для администратора и разработчика */}
+                  {(user.role === UserRole.ADMIN || user.role === UserRole.DEVELOPER) && (
                     <div
                       onClick={() => navigate('/admin/users')}
                       className="dashboard-card"
@@ -510,8 +510,8 @@ export default function DashboardPage() {
                     </div>
                   )}
 
-                  {/* Карточка отчётов - только для администратора */}
-                  {user.role === UserRole.ADMIN && (
+                  {/* Карточка отчётов - для администратора и разработчика */}
+                  {(user.role === UserRole.ADMIN || user.role === UserRole.DEVELOPER) && (
                     <div
                       onClick={() => navigate('/admin/reports')}
                       className="dashboard-card"
@@ -528,8 +528,8 @@ export default function DashboardPage() {
                     </div>
                   )}
 
-                  {/* Карточка цен - только для бухгалтера, директора и снабженца */}
-                  {(user.role === 'accountant' || user.role === 'director' || user.role === 'supply') && (
+                  {/* Карточка цен - для бухгалтера, директора, снабженца и разработчика */}
+                  {(user.role === 'accountant' || user.role === 'director' || user.role === 'supply' || user.role === UserRole.DEVELOPER) && (
                     <div
                       onClick={() => navigate('/prices')}
                       className="dashboard-card"
@@ -546,8 +546,8 @@ export default function DashboardPage() {
                     </div>
                   )}
 
-                  {/* Карточка управления ценами услуг - доступна менеджеру, директору и бухгалтеру */}
-                  {(user.role === 'manager' || user.role === 'director' || user.role === 'accountant') && (
+                  {/* Карточка управления ценами услуг - доступна менеджеру, директору, бухгалтеру и разработчику */}
+                  {(user.role === 'manager' || user.role === 'director' || user.role === 'accountant' || user.role === UserRole.DEVELOPER) && (
                     <div
                       onClick={() => navigate('/service-prices')}
                       className="dashboard-card"
