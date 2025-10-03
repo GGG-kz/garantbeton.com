@@ -2,9 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useAuthStore } from '../stores/authStore'
 import { UserRole } from '../types/auth'
-import RoleSwitcher from '../components/RoleSwitcher'
 import RoleInfo from '../components/RoleInfo'
-import UserMenu from '../components/UserMenu'
 import ResponsiveLayout from '../components/ResponsiveLayout'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useDirectoryStats } from '../hooks/useDirectoryStats'
@@ -187,9 +185,6 @@ export default function DashboardPage() {
                     </span>
                   )}
                 </button>
-                
-                <RoleSwitcher />
-                <UserMenu />
               </div>
             </div>
           </div>
