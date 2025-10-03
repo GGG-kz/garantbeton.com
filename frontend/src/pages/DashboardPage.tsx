@@ -211,7 +211,24 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Role Info Card */}
           <div className="lg:col-span-1">
-            <RoleInfo />
+            <div className="card">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className={`p-3 rounded-lg ${roleInfo.bgColor}`}>
+                  <IconComponent className={`h-6 w-6 ${roleInfo.color}`} />
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold text-black">
+                    {roleInfo.title}
+                  </h2>
+                  <p className="text-sm text-mono-500">
+                    {user.login}
+                  </p>
+                </div>
+              </div>
+              
+              <p className="text-mono-600 text-sm leading-relaxed">
+                {roleInfo.description}
+              </p>
               
               {user.role === UserRole.DEVELOPER && (
                 <div className="mt-4 space-y-3">
@@ -648,12 +665,12 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-
         {/* Notification Center */}
         <NotificationCenter 
           isOpen={showNotifications}
           onClose={() => setShowNotifications(false)}
         />
+      </div>
     </ResponsiveLayout>
   )
 }
