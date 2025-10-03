@@ -34,7 +34,7 @@ export default function PricesPage() {
 
   const filteredPrices = prices.filter(price => {
     const matchesSearch = 
-      price.counterpartyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (price.counterpartyName && price.counterpartyName.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (price.concreteGradeName && price.concreteGradeName.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (price.materialName && price.materialName.toLowerCase().includes(searchTerm.toLowerCase()))
     
@@ -73,7 +73,7 @@ export default function PricesPage() {
           ? { 
               ...price, 
               ...data, 
-              counterpartyName: getCounterpartyName(data.counterpartyId),
+              counterpartyName: data.counterpartyId ? getCounterpartyName(data.counterpartyId) : undefined,
               concreteGradeName: data.concreteGradeId ? getConcreteGradeName(data.concreteGradeId) : undefined,
               materialName: data.materialId ? getMaterialName(data.materialId) : undefined,
               updatedAt: new Date().toISOString() 
@@ -84,7 +84,7 @@ export default function PricesPage() {
       const newPrice: Price = {
         id: Date.now().toString(),
         ...data,
-        counterpartyName: getCounterpartyName(data.counterpartyId),
+        counterpartyName: data.counterpartyId ? getCounterpartyName(data.counterpartyId) : undefined,
         concreteGradeName: data.concreteGradeId ? getConcreteGradeName(data.concreteGradeId) : undefined,
         materialName: data.materialId ? getMaterialName(data.materialId) : undefined,
         isActive: true,

@@ -50,11 +50,15 @@ export interface Material extends BaseDirectoryItem {
 export interface Driver extends BaseDirectoryItem {
   firstName: string
   lastName: string
+  name: string
+  fullName?: string
+  login?: string
   phone: string
   licenseNumber: string
   licenseExpiry: string
   status: 'active' | 'vacation' | 'sick' | 'inactive'
   vehicleIds: string[]
+  hasChangedPassword?: boolean
 }
 
 export interface Vehicle extends BaseDirectoryItem {
@@ -62,6 +66,7 @@ export interface Vehicle extends BaseDirectoryItem {
   model: string
   year: number
   plateNumber: string
+  licensePlate?: string
   capacity: number
   status: 'active' | 'maintenance' | 'inactive'
   driverIds: string[]
@@ -69,10 +74,16 @@ export interface Vehicle extends BaseDirectoryItem {
 
 export interface Price extends BaseDirectoryItem {
   concreteGradeId: string
+  concreteGradeName?: string
+  materialId?: string
+  materialName?: string
+  counterpartyId?: string
+  counterpartyName?: string
   price: number
   currency: string
   validFrom: string
   validTo?: string
+  notes?: string
 }
 
 // Request types
@@ -93,3 +104,6 @@ export type UpdateDriverRequest = Partial<CreateDriverRequest>
 
 export type CreateVehicleRequest = Omit<Vehicle, 'id' | 'createdAt' | 'updatedAt'>
 export type UpdateVehicleRequest = Partial<CreateVehicleRequest>
+
+export type CreatePriceRequest = Omit<Price, 'id' | 'createdAt' | 'updatedAt'>
+export type UpdatePriceRequest = Partial<CreatePriceRequest>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { ExpenseInvoice, CreateInvoiceRequest, InvoiceItem, DeliveryInfo, VehicleTiming, INVOICE_SUPPLIER, INVOICE_DEFAULT_CONTRACT, INVOICE_PREFIX } from '../../types/invoice'
-// import { Counterparty, Driver, Vehicle, Warehouse, Material, ConcreteGrade } from '../../types/directories'
+import { Counterparty, Driver, Vehicle, Warehouse, Material, ConcreteGrade } from '../../types/directories'
 import { ConcreteOrder } from '../../types/orders'
 import { useAuthStore } from '../../stores/authStore'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
