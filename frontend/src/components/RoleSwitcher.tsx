@@ -54,16 +54,15 @@ export default function RoleSwitcher() {
     shouldShow: user && user.role === UserRole.DEVELOPER
   })
 
-  // Проверяем, является ли пользователь разработчиком
-  const isDeveloper = user?.role === UserRole.DEVELOPER
+  // Проверяем, является ли пользователь разработчиком по исходной роли
+  const isDeveloper = user?.originalRole === UserRole.DEVELOPER || user?.role === UserRole.DEVELOPER
   
   console.log('RoleSwitcher debug:', {
     user: user?.login,
-    userRole: user?.role,
-    expectedRole: UserRole.DEVELOPER,
+    currentRole: user?.role,
+    originalRole: user?.originalRole,
     isDeveloper,
-    userRoleType: typeof user?.role,
-    expectedRoleType: typeof UserRole.DEVELOPER
+    shouldShow: isDeveloper
   })
   
   if (!user) {
@@ -71,14 +70,12 @@ export default function RoleSwitcher() {
     return null
   }
   
-  // Временно показываем для всех пользователей для отладки
   if (!isDeveloper) {
-    console.log('RoleSwitcher: Not showing - not a developer. User role:', user.role, 'Expected:', UserRole.DEVELOPER)
-    // Временно показываем для всех пользователей
-    // return null
+    console.log('RoleSwitcher: Not showing - not a developer. Current role:', user.role, 'Original role:', user.originalRole)
+    return null
   }
   
-  console.log('RoleSwitcher: Showing for user:', user.login, 'role:', user.role, 'isDeveloper:', isDeveloper)
+  console.log('RoleSwitcher: Showing for user:', user.login, 'current role:', user.role, 'original role:', user.originalRole)
 
   return (
     <div className="relative" ref={dropdownRef}>

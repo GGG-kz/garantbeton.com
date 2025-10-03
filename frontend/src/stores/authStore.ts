@@ -80,8 +80,9 @@ export const useAuthStore = create<AuthState>()(
 
       switchRole: (role: UserRole) => {
         const state = get()
-        // Разрешаем переключение ролей только если пользователь разработчик
-        if (state.user && state.user.role === UserRole.DEVELOPER) {
+        // Разрешаем переключение ролей только если пользователь разработчик (по исходной роли)
+        const isDeveloper = state.user?.originalRole === UserRole.DEVELOPER || state.user?.role === UserRole.DEVELOPER
+        if (state.user && isDeveloper) {
           set({
             user: {
               ...state.user,
