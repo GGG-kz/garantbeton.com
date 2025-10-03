@@ -50,10 +50,17 @@ export default function RoleSwitcher() {
     user: user?.login,
     userRole: user?.role,
     originalRole: user?.originalRole,
-    shouldShow: user && user.originalRole && user.originalRole === UserRole.DEVELOPER
+    isDeveloper: user?.role === UserRole.DEVELOPER,
+    shouldShow: user && user.role === UserRole.DEVELOPER
   })
 
-  if (!user || user.role !== UserRole.DEVELOPER) return null
+  // Временно показываем для всех пользователей для отладки
+  if (!user) {
+    console.log('RoleSwitcher: Not showing - no user')
+    return null
+  }
+  
+  console.log('RoleSwitcher: Showing for user:', user.login, 'role:', user.role)
 
   return (
     <div className="relative" ref={dropdownRef}>
