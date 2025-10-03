@@ -53,7 +53,7 @@ export default function RoleSwitcher() {
     shouldShow: user && user.originalRole && user.originalRole === UserRole.DEVELOPER
   })
 
-  if (!user || !user.originalRole || user.originalRole !== UserRole.DEVELOPER) return null
+  if (!user || user.role !== UserRole.DEVELOPER) return null
 
   return (
     <div className="relative" ref={dropdownRef}>
