@@ -3,7 +3,7 @@ import { ExpenseInvoice, CreateInvoiceRequest } from '../types/invoice'
 import { useAuthStore } from '../stores/authStore'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import ViewToggle from '../components/ViewToggle'
-import ExpenseInvoiceForm from '../components/invoice/ExpenseInvoiceForm'
+import ExpenseInvoiceModal from '../components/invoice/ExpenseInvoiceModal'
 import ExpenseInvoicePrint from '../components/invoice/ExpenseInvoicePrint'
 import { 
   FileText, 
@@ -57,7 +57,7 @@ export default function ExpenseInvoicesPage() {
   }
   const [invoices, setInvoices] = useLocalStorage<ExpenseInvoice[]>('expenseInvoices', mockInvoices)
   const [viewMode, setViewMode] = useLocalStorage<'cards' | 'list'>('invoicesViewMode', 'list')
-  const [showForm, setShowForm] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingInvoice, setEditingInvoice] = useState<ExpenseInvoice | null>(null)
   const [showPrint, setShowPrint] = useState(false)
   const [printInvoice, setPrintInvoice] = useState<ExpenseInvoice | null>(null)
@@ -243,12 +243,12 @@ export default function ExpenseInvoicesPage() {
 
   const handleCreate = () => {
     setEditingInvoice(null)
-    setShowForm(true)
+    setIsModalOpen(true)
   }
 
   const handleEdit = (invoice: ExpenseInvoice) => {
     setEditingInvoice(invoice)
-    setShowForm(true)
+    setIsModalOpen(true)
   }
 
   const handleDelete = (invoiceId: string) => {
@@ -301,7 +301,7 @@ export default function ExpenseInvoicesPage() {
       setInvoices(prev => [newInvoice, ...prev])
     }
     
-    setShowForm(false)
+    setIsModalOpen(false)
     setEditingInvoice(null)
   }
 
@@ -317,29 +317,6 @@ export default function ExpenseInvoicesPage() {
     }).format(amount)
   }
 
-  if (showForm) {
-    return (
-      <PageLayout title={editingInvoice ? 'Редактировать накладную' : 'Создать накладную'}>
-        <ExpenseInvoiceForm
-          invoice={editingInvoice}
-          onSave={handleSave}
-          isEditing={!!editingInvoice}
-        />
-        <div className="mt-6 p-4 bg-mono-50 border-t border-mono-200 text-center">
-          <button
-            onClick={() => {
-              setShowForm(false)
-              setEditingInvoice(null)
-            }}
-            className="flex items-center mx-auto px-6 py-3 bg-black text-white rounded-lg hover:bg-black transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Назад к списку
-          </button>
-        </div>
-      </PageLayout>
-    )
-  }
 
   if (showPrint && printInvoice) {
     return (
@@ -962,6 +939,18 @@ export default function ExpenseInvoicesPage() {
           </>
         )}
       </div>
+
+      {/* Модальное окно для создания/редактирования накладной */}
+      <ExpenseInvoiceModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false)
+          setEditingInvoice(null)
+        }}
+        onSave={handleSave}
+        invoice={editingInvoice}
+        title={editingInvoice ? 'Редактировать накладную' : 'Создать накладную'}
+      />
     </PageLayout>
   )
 }
