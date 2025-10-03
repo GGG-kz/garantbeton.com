@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PageLayout from '../components/PageLayout'
 import CounterpartyModal from '../components/directories/CounterpartyModal'
 import WarehouseModal from '../components/directories/WarehouseModal'
@@ -6,6 +6,7 @@ import MaterialModal from '../components/directories/MaterialModal'
 import ConcreteGradeModal from '../components/directories/ConcreteGradeModal'
 import DriverModal from '../components/directories/DriverModal'
 import MobileCard from '../components/directories/MobileCard'
+import { useDriversStore } from '../stores/driversStore'
 import { Plus, Building2, Users, Package, Truck, User, Database, X, Edit, Trash2 } from 'lucide-react'
 
 interface Counterparty {
@@ -86,7 +87,9 @@ export default function DirectoriesPage() {
   const [warehouses, setWarehouses] = useState<Warehouse[]>([])
   const [materials, setMaterials] = useState<Material[]>([])
   const [concreteGrades, setConcreteGrades] = useState<ConcreteGrade[]>([])
-  const [drivers, setDrivers] = useState<Driver[]>([])
+  
+  // Используем общее хранилище для водителей
+  const { drivers, addDriver, updateDriver, deleteDriver } = useDriversStore()
 
   const tabs = [
     { id: 'counterparties', label: 'Контрагенты', icon: Building2 },
@@ -205,18 +208,9 @@ export default function DirectoriesPage() {
       }
     } else if (activeTab === 'drivers') {
       if (editingDriver) {
-        setDrivers(prev => prev.map(d => 
-          d.id === editingDriver.id 
-            ? { ...d, ...data, updatedAt: new Date().toISOString() }
-            : d
-        ))
+        updateDriver(editingDriver.id, data)
       } else {
-        const newDriver: Driver = {
-          ...data,
-          id: Date.now().toString(),
-          createdAt: new Date().toISOString()
-        }
-        setDrivers(prev => [...prev, newDriver])
+        addDriver(data)
       }
     }
     setIsModalOpen(false)
@@ -248,7 +242,7 @@ export default function DirectoriesPage() {
       } else if (activeTab === 'concrete-grades') {
         setConcreteGrades(prev => prev.filter(cg => cg.id !== id))
       } else if (activeTab === 'drivers') {
-        setDrivers(prev => prev.filter(d => d.id !== id))
+        deleteDriver(id)
       }
     }
   }

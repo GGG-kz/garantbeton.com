@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useAuthStore } from '../stores/authStore'
+import { useDriversStore } from '../stores/driversStore'
 import { UserRole } from '../types/auth'
 import Modal from '../components/Modal'
 import { Plus, User, Phone, Key, UserCheck, Edit, Trash2 } from 'lucide-react'
@@ -8,10 +9,12 @@ interface Driver {
   id: string
   firstName: string
   lastName: string
+  middleName?: string
   login: string
   phone: string
   isActive: boolean
   createdAt: string
+  updatedAt?: string
 }
 
 const mockDrivers: Driver[] = [
@@ -37,15 +40,17 @@ const mockDrivers: Driver[] = [
 
 export default function DriversPage() {
   const { user } = useAuthStore()
-  const [drivers, setDrivers] = useState<Driver[]>(mockDrivers)
+  const { drivers, addDriver, updateDriver, deleteDriver } = useDriversStore()
   const [showModal, setShowModal] = useState(false)
   const [editingDriver, setEditingDriver] = useState<Driver | null>(null)
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
+    middleName: '',
     login: '',
     password: '',
-    phone: ''
+    phone: '',
+    isActive: true
   })
 
   // Проверяем доступ
@@ -73,18 +78,22 @@ export default function DriversPage() {
       setFormData({
         firstName: driver.firstName,
         lastName: driver.lastName,
+        middleName: driver.middleName || '',
         login: driver.login,
         password: '',
-        phone: driver.phone
+        phone: driver.phone,
+        isActive: driver.isActive
       })
     } else {
       setEditingDriver(null)
       setFormData({
         firstName: '',
         lastName: '',
+        middleName: '',
         login: '',
         password: '',
-        phone: ''
+        phone: '',
+        isActive: true
       })
     }
     setShowModal(true)
@@ -96,9 +105,11 @@ export default function DriversPage() {
     setFormData({
       firstName: '',
       lastName: '',
+      middleName: '',
       login: '',
       password: '',
-      phone: ''
+      phone: '',
+      isActive: true
     })
   }
 
@@ -107,23 +118,17 @@ export default function DriversPage() {
     
     if (editingDriver) {
       // Обновление существующего водителя
-      setDrivers(prev => prev.map(driver => 
-        driver.id === editingDriver.id 
-          ? { ...driver, ...formData, password: undefined }
-          : driver
-      ))
-    } else {
-      // Создание нового водителя
-      const newDriver: Driver = {
-        id: Date.now().toString(),
+      updateDriver(editingDriver.id, {
         firstName: formData.firstName,
         lastName: formData.lastName,
+        middleName: formData.middleName,
         login: formData.login,
         phone: formData.phone,
-        isActive: true,
-        createdAt: new Date().toISOString()
-      }
-      setDrivers(prev => [...prev, newDriver])
+        isActive: formData.isActive
+      })
+    } else {
+      // Создание нового водителя
+      addDriver(formData)
     }
     
     handleCloseModal()
@@ -131,16 +136,15 @@ export default function DriversPage() {
 
   const handleDelete = (driverId: string) => {
     if (confirm('Вы уверены, что хотите удалить этого водителя?')) {
-      setDrivers(prev => prev.filter(driver => driver.id !== driverId))
+      deleteDriver(driverId)
     }
   }
 
   const toggleActive = (driverId: string) => {
-    setDrivers(prev => prev.map(driver => 
-      driver.id === driverId 
-        ? { ...driver, isActive: !driver.isActive }
-        : driver
-    ))
+    const driver = drivers.find(d => d.id === driverId)
+    if (driver) {
+      updateDriver(driverId, { isActive: !driver.isActive })
+    }
   }
 
   return (
@@ -209,7 +213,7 @@ export default function DriversPage() {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-mono-900">
-                      {driver.firstName} {driver.lastName}
+                      {driver.lastName} {driver.firstName} {driver.middleName || ''}
                     </h3>
                     <p className="text-sm text-mono-500">
                       {driver.isActive ? 'Активен' : 'Неактивен'}
@@ -267,34 +271,40 @@ export default function DriversPage() {
         title={editingDriver ? 'Редактировать водителя' : 'Добавить водителя'}
       >
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-mono-700 mb-2">
-                Имя *
-              </label>
-              <input
-                id="firstName"
-                type="text"
-                value={formData.firstName}
-                onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
-                required
-                placeholder="Введите имя"
-                className="w-full px-3 py-2 border border-mono-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-              />
-            </div>
-            <div>
-              <label htmlFor="lastName" className="block text-sm font-medium text-mono-700 mb-2">
-                Фамилия *
-              </label>
-              <input
-                id="lastName"
-                type="text"
-                value={formData.lastName}
-                onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
-                required
-                placeholder="Введите фамилию"
-                className="w-full px-3 py-2 border border-mono-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-              />
+          <div>
+            <label className="block text-sm font-medium text-mono-700 mb-2">
+              Фамилия Имя Отчество *
+            </label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div>
+                <input
+                  type="text"
+                  value={formData.lastName}
+                  onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
+                  required
+                  placeholder="Фамилия"
+                  className="w-full px-3 py-2 border border-mono-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  value={formData.firstName}
+                  onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
+                  required
+                  placeholder="Имя"
+                  className="w-full px-3 py-2 border border-mono-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  value={formData.middleName}
+                  onChange={(e) => setFormData(prev => ({ ...prev, middleName: e.target.value }))}
+                  placeholder="Отчество"
+                  className="w-full px-3 py-2 border border-mono-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                />
+              </div>
             </div>
           </div>
 
@@ -341,6 +351,19 @@ export default function DriversPage() {
               placeholder="+7 777 123 4567"
               className="w-full px-3 py-2 border border-mono-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
             />
+          </div>
+
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="isActive"
+              checked={formData.isActive}
+              onChange={(e) => setFormData(prev => ({ ...prev, isActive: e.target.checked }))}
+              className="h-4 w-4 text-black focus:ring-black border-mono-300 rounded"
+            />
+            <label htmlFor="isActive" className="ml-2 block text-sm text-mono-700">
+              Активен
+            </label>
           </div>
 
           <div className="flex justify-end space-x-3 pt-4">
